@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>GymPro - Sistema de Rutinas y Entrenamiento</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="css/styles.css">
+</head>
+<body>
+
+    <!-- ============================================================== -->
+    <!-- 1. VISTA DE INICIO DE SESIÓN (SIGN IN)                         -->
+    <!-- ============================================================== -->
+    <div class="section auth-page" id="signinSection">
+        <div class="auth-card">
+            <div class="auth-brand">
+                <span class="brand-icon">⚡</span>
+                <h2>GymPro</h2>
+                <p>Tu plataforma de entrenamientos y rutinas</p>
+            </div>
+
+            <h3>Iniciar Sesión</h3>
+            <form id="signinForm">
+                <div class="form-group">
+                    <label for="signinEmail">Correo electrónico</label>
+                    <input type="email" id="signinEmail" name="email" placeholder="correo@ejemplo.com" required autocomplete="email">
+                </div>
+                
+                <div class="form-group">
+                    <label for="signinPassword">Contraseña</label>
+                    <input type="password" id="signinPassword" name="password" placeholder="Ingresa tu contraseña" required autocomplete="current-password">
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block">Ingresar</button>
+            </form>
+
+            <div class="auth-switch">
+                <span>¿No tienes una cuenta?</span>
+                <button type="button" class="btn-link" onclick="goToScreen('signupSection')">Regístrate aquí</button>
+            </div>
+
+            <!-- Accesos rápidos para probar los 3 roles inmediatamente -->
+            <div class="demo-logins-box">
+                <span class="demo-logins-title">🚀 Cuentas de prueba rápidas:</span>
+                <div class="demo-buttons">
+                    <button type="button" class="btn-demo demo-admin" onclick="fillDemoCredentials('admin@gym.com', '123456')">
+                        👑 Admin
+                    </button>
+                    <button type="button" class="btn-demo demo-coach" onclick="fillDemoCredentials('coach@gym.com', '123456')">
+                        💪 Coach
+                    </button>
+                    <button type="button" class="btn-demo demo-client" onclick="fillDemoCredentials('cliente@gym.com', '123456')">
+                        🏃 Cliente
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- 2. VISTA DE REGISTRO (SIGN UP)                                 -->
+    <!-- ============================================================== -->
+    <div class="section auth-page hidden" id="signupSection">
+        <div class="auth-card">
+            <div class="auth-brand">
+                <span class="brand-icon">⚡</span>
+                <h2>GymPro</h2>
+                <p>Crea tu cuenta personalizada</p>
+            </div>
+
+            <h3>Crear una cuenta</h3>
+            <form id="signupForm">
+                <div class="form-group">
+                    <label for="signupName">Nombre completo</label>
+                    <input type="text" id="signupName" name="name" placeholder="Tu nombre" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="signupEmail">Correo electrónico</label>
+                    <input type="email" id="signupEmail" name="email" placeholder="correo@ejemplo.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="signupPassword">Contraseña</label>
+                    <input type="password" id="signupPassword" name="password" placeholder="Al menos 6 caracteres" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="signupRole">Elige tu rol en el Gimnasio:</label>
+                    <select id="signupRole" name="role" required>
+                        <option value="client">Cliente / Alumno</option>
+                        <option value="coach">Instructor / Coach</option>
+                        <option value="admin">Administrador</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block">Registrarse</button>
+            </form>
+
+            <div class="auth-switch">
+                <span>¿Ya tienes una cuenta?</span>
+                <button type="button" class="btn-link" onclick="goToScreen('signinSection')">Inicia sesión</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- 3. CONTENEDOR PRINCIPAL DE DASHBOARDS (SPA)                   -->
+    <!-- ============================================================== -->
+    <div class="section hidden" id="dashboardSection">
+
+        <!-- ============================================================== -->
+        <!-- DASHBOARD CLIENTE                                              -->
+        <!-- ============================================================== -->
+        <div class="dashboard-container hidden" id="clientDashboard">
+            <header class="app-header">
+                <div class="header-user-info">
+                    <div class="user-avatar-badge">🏃</div>
+                    <div>
+                        <h2>Hola, <span id="clientNameDisplay">Usuario</span></h2>
+                        <span class="badge badge-client">Cliente</span>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-outline-danger" id="clientLogoutBtn">Cerrar Sesión</button>
+            </header>
+
+            <!-- Banner de recuperación si hay una sesión activa guardada -->
+            <div id="activeWorkoutResumeBanner" class="resume-banner hidden">
+                <div class="resume-banner-content">
+                    <div class="resume-banner-text">
+                        <strong>⚠️ Tienes un entrenamiento en curso:</strong>
+                        <span id="activeWorkoutResumeName">Rutina</span> (Tiempo: <span id="activeWorkoutResumeTime">00:00</span>)
+                    </div>
+                    <div class="resume-banner-actions">
+                        <button type="button" class="btn-sm btn-success" onclick="resumeActiveWorkout()">▶ Reanudar</button>
+                        <button type="button" class="btn-sm btn-outline-danger" onclick="discardActiveWorkout()">✕ Descartar</button>
+                    </div>
+                </div>
+            </div>
+
+            <main class="dashboard-main">
+                <!-- Sección: Rutina asignada para hoy -->
+                <section class="dashboard-card" id="clientWorkoutRoutine">
+                    <div class="card-header-flex">
+                        <div>
+                            <h3>Tu Rutina Asignada</h3>
+                            <p class="subtitle">Sigue el plan de entrenamiento diseñado por tu coach.</p>
+                        </div>
+                    </div>
+                    <div id="clientRoutineList">
+                        <!-- Llenado dinámico por appClient.js -->
+                    </div>
+                </section>
+
+                <!-- Sección: Historial de progreso -->
+                <section class="dashboard-card" id="clientProgressWidget">
+                    <div class="card-header-flex">
+                        <div>
+                            <h3>Mi Historial y Progreso</h3>
+                            <p class="subtitle">Registro de sesiones completadas y pesos levantados.</p>
+                        </div>
+                    </div>
+                    <div id="clientProgressChart">
+                        <!-- Llenado dinámico por appClient.js -->
+                    </div>
+                </section>
+            </main>
+        </div>
+
+        <!-- ============================================================== -->
+        <!-- DASHBOARD INSTRUCTOR / COACH                                   -->
+        <!-- ============================================================== -->
+        <div class="dashboard-container hidden" id="coachDashboard">
+            <header class="app-header">
+                <div class="header-user-info">
+                    <div class="user-avatar-badge">💪</div>
+                    <div>
+                        <h2>Panel del Instructor</h2>
+                        <span class="badge badge-coach">Coach</span>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-outline-danger" id="instructorLogoutBtn">Cerrar Sesión</button>
+            </header>
+
+            <main class="dashboard-main">
+                <!-- Acciones y Creador de Rutinas -->
+                <section class="dashboard-card">
+                    <div class="card-header-flex">
+                        <div>
+                            <h3>Gestor de Rutinas</h3>
+                            <p class="subtitle">Crea planes con ejercicios, series, repeticiones y tiempos.</p>
+                        </div>
+                        <button type="button" class="btn btn-primary" onclick="openCreateRoutineModal()">
+                            + Crear Nueva Rutina
+                        </button>
+                    </div>
+                    <div id="coachRoutinesList" class="routines-grid">
+                        <!-- Llenado dinámico por coach.js -->
+                    </div>
+                </section>
+
+                <!-- Mis Alumnos -->
+                <section class="dashboard-card">
+                    <div class="card-header-flex">
+                        <div>
+                            <h3>Mis Alumnos / Clientes</h3>
+                            <p class="subtitle">Asigna rutinas y revisa el progreso detallado de cada cliente.</p>
+                        </div>
+                    </div>
+                    <div id="coachClientsList" class="clients-grid">
+                        <!-- Llenado dinámico por coach.js -->
+                    </div>
+                </section>
+            </main>
+        </div>
+
+        <!-- ============================================================== -->
+        <!-- DASHBOARD ADMINISTRADOR                                        -->
+        <!-- ============================================================== -->
+        <div class="dashboard-container hidden" id="adminDashboard">
+            <header class="app-header">
+                <div class="header-user-info">
+                    <div class="user-avatar-badge">👑</div>
+                    <div>
+                        <h2>Control de Administrador</h2>
+                        <span class="badge badge-admin">Administrador</span>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-outline-danger" id="adminLogoutBtn">Cerrar Sesión</button>
+            </header>
+
+            <main class="dashboard-main">
+                <!-- Métricas Globales -->
+                <section class="metric-grid" id="adminMetricsSummary">
+                    <div class="metric-card">
+                        <span class="metric-icon">🏃</span>
+                        <div class="metric-info">
+                            <h4>Clientes</h4>
+                            <p id="adminClientCount">0</p>
+                        </div>
+                    </div>
+                    <div class="metric-card">
+                        <span class="metric-icon">💪</span>
+                        <div class="metric-info">
+                            <h4>Instructores</h4>
+                            <p id="adminInstructorCount">0</p>
+                        </div>
+                    </div>
+                    <div class="metric-card">
+                        <span class="metric-icon">📋</span>
+                        <div class="metric-info">
+                            <h4>Rutinas Creadas</h4>
+                            <p id="adminRoutineCount">0</p>
+                        </div>
+                    </div>
+                    <div class="metric-card">
+                        <span class="metric-icon">🏆</span>
+                        <div class="metric-info">
+                            <h4>Sesiones Realizadas</h4>
+                            <p id="adminSessionCount">0</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Gestión de Usuarios (CRUD) -->
+                <section class="dashboard-card">
+                    <div class="card-header-flex">
+                        <div>
+                            <h3>Gestión de Usuarios (CRUD)</h3>
+                            <p class="subtitle">Crea, edita y elimina instructores y clientes del sistema.</p>
+                        </div>
+                        <button type="button" class="btn btn-primary" onclick="openCreateUserModal()">
+                            + Nuevo Usuario
+                        </button>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Correo</th>
+                                    <th>Rol</th>
+                                    <th>Clave</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminUsersTableBody">
+                                <!-- Llenado por admin.js -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Visor Global de Rutinas -->
+                <section class="dashboard-card">
+                    <div class="card-header-flex">
+                        <div>
+                            <h3>Todas las Rutinas del Sistema</h3>
+                            <p class="subtitle">Supervisa las rutinas creadas y sus asignaciones actuales.</p>
+                        </div>
+                    </div>
+                    <div id="adminAllRoutinesList" class="routines-grid">
+                        <!-- Llenado por admin.js -->
+                    </div>
+                </section>
+
+                <!-- Catálogo Global de Ejercicios -->
+                <section class="dashboard-card">
+                    <div class="card-header-flex">
+                        <div>
+                            <h3>Banco de Ejercicios Oficial</h3>
+                            <p class="subtitle">Catálogo disponible para que los instructores armen sus planes.</p>
+                        </div>
+                        <button type="button" class="btn btn-outline" onclick="openCreateExerciseModal()">
+                            + Agregar Ejercicio
+                        </button>
+                    </div>
+                    <div id="adminExercisesCatalogList" class="exercises-catalog-grid">
+                        <!-- Llenado por admin.js -->
+                    </div>
+                </section>
+            </main>
+        </div>
+
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- 4. MÓDULO ESPECIAL: "MODO ENTRENAMIENTO" (REPRODUCTOR GUIADO)   -->
+    <!-- ============================================================== -->
+    <div id="workoutModeContainer" class="workout-mode-container hidden">
+
+        <!-- 4.1 PANTALLA PREVIA: /entrenar/{rutina_id} -->
+        <div id="workoutStartView" class="workout-view-card hidden">
+            <button type="button" class="btn-back" onclick="cancelAndExitWorkout()">← Volver al Dashboard</button>
+            <div class="workout-preview-header">
+                <span class="workout-badge-tag">Entrenamiento Guiado</span>
+                <h1 id="workoutPreviewTitle">Nombre de la Rutina</h1>
+                <p id="workoutPreviewDesc" class="preview-description">Descripción de la rutina...</p>
+                <div class="workout-preview-meta">
+                    <span>👤 Coach: <strong id="workoutPreviewCoach">-</strong></span>
+                    <span>🏋️ <strong id="workoutPreviewExerciseCount">0</strong> ejercicios</span>
+                    <span>⏱ <strong id="workoutPreviewEstDuration">-- min</strong></span>
+                </div>
+            </div>
+
+            <h4>Ejercicios incluidos:</h4>
+            <div id="workoutPreviewExerciseList" class="workout-preview-list">
+                <!-- Llenado dinámico por workoutPlayer.js -->
+            </div>
+
+            <div class="workout-start-actions">
+                <button type="button" class="btn-start-giant" onclick="startWorkoutExecution()">
+                    🔥 Comenzar Entrenamiento
+                </button>
+            </div>
+        </div>
+
+        <!-- 4.2 PANTALLA ACTIVA (REPRODUCTOR EN VIVO): /entrenar/{rutina_id}/activo -->
+        <div id="workoutActiveView" class="workout-view-active hidden">
+            
+            <!-- Barra superior con cronómetro general de la sesión -->
+            <header class="workout-player-topbar">
+                <div class="topbar-left">
+                    <span class="topbar-routine-title" id="workoutActiveRoutineName">Rutina</span>
+                </div>
+                <div class="topbar-center">
+                    <div class="general-timer-box">
+                        <span class="general-timer-label">TOTAL SESIÓN</span>
+                        <span class="general-timer-value" id="workoutGeneralTimer">00:00</span>
+                    </div>
+                </div>
+                <div class="topbar-right">
+                    <button type="button" class="btn-sm btn-outline" id="workoutPauseBtn" onclick="togglePauseWorkout()">⏸ Pausar</button>
+                    <button type="button" class="btn-sm btn-outline-danger" onclick="cancelAndExitWorkout()">✕ Salir</button>
+                </div>
+            </header>
+
+            <!-- Banner flotante cuando está pausado -->
+            <div id="workoutPauseBanner" class="pause-banner hidden">
+                <div class="pause-banner-box">
+                    <h3>⏸ Entrenamiento Pausado</h3>
+                    <p>Tómate un respiro. Los cronómetros están detenidos.</p>
+                    <button type="button" class="btn btn-primary" onclick="togglePauseWorkout()">▶ Reanudar Entrenamiento</button>
+                </div>
+            </div>
+
+            <!-- Contenido principal del ejercicio en curso -->
+            <div class="workout-player-body">
+                
+                <div class="exercise-info-header">
+                    <span class="badge badge-info" id="workoutActiveExCategory">Pecho</span>
+                    <h2 id="workoutActiveExName">Press de Banca</h2>
+                    <div class="exercise-set-indicator" id="workoutActiveSetCounter">Serie 1 de 3</div>
+                </div>
+
+                <!-- Imagen o video del ejercicio -->
+                <div class="workout-media-wrapper">
+                    <img id="workoutActiveMediaImg" src="" alt="Ejercicio" style="display:none;">
+                </div>
+
+                <!-- CRONÓMETRO GIGANTE DEL EJERCICIO -->
+                <div class="workout-timer-display-box">
+                    <span class="timer-type-label" id="workoutExerciseTimerLabel">Tiempo del ejercicio</span>
+                    <div class="giant-timer-digits" id="workoutExerciseTimer">00:00</div>
+                </div>
+
+                <!-- Tarjeta de objetivos (reps/tiempo) y registro de peso real -->
+                <div class="workout-targets-card">
+                    <div class="target-item">
+                        <span class="target-item-label" id="workoutActiveTargetLabel">Reps objetivo</span>
+                        <strong class="target-item-val" id="workoutActiveTargetValue">10 reps</strong>
+                    </div>
+                    <div class="target-item">
+                        <span class="target-item-label">Peso sugerido</span>
+                        <strong class="target-item-val" id="workoutActiveWeightSuggested">35 kg</strong>
+                    </div>
+                    <div class="target-item real-weight-box">
+                        <label for="workoutActiveRealWeightInput">Peso real usado (kg)</label>
+                        <input type="number" id="workoutActiveRealWeightInput" step="0.5" min="0" value="0">
+                    </div>
+                </div>
+
+                <!-- Controles secundarios: Serie extra y saltar ejercicio -->
+                <div class="workout-secondary-actions">
+                    <button type="button" class="btn-sm btn-secondary" onclick="addExtraSet()">+ Serie extra</button>
+                    <button type="button" class="btn-sm btn-outline-warning" onclick="skipCurrentExercise()">⏭ Saltar ejercicio</button>
+                </div>
+
+                <!-- BOTÓN GIGANTE: COMPLETAR SERIE -->
+                <div class="workout-complete-set-container">
+                    <button type="button" class="btn-complete-giant" onclick="completeCurrentSet()">
+                        ✔ COMPLETAR SERIE
+                    </button>
+                </div>
+
+            </div>
+
+            <!-- OVERLAY MODAL DE DESCANSO ENTRE SERIES -->
+            <div id="workoutRestOverlay" class="workout-rest-modal hidden">
+                <div class="rest-modal-card">
+                    <span class="rest-icon">💤</span>
+                    <h2>TIEMPO DE DESCANSO</h2>
+                    <p id="workoutRestSubtitle">Siguiente: Serie 2 de 3</p>
+
+                    <!-- Cuenta regresiva grande de descanso -->
+                    <div class="giant-rest-digits" id="workoutRestCountdown">00:60</div>
+
+                    <div class="rest-adjust-buttons">
+                        <button type="button" class="btn-sm btn-outline" onclick="adjustRestTime(-15)">-15s</button>
+                        <button type="button" class="btn-sm btn-outline" onclick="adjustRestTime(+15)">+15s</button>
+                    </div>
+
+                    <button type="button" class="btn-skip-rest" onclick="skipRestTimer()">
+                        ⏭ Saltar descanso
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- 4.3 PANTALLA RESUMEN: /entrenar/{rutina_id}/resumen -->
+        <div id="workoutSummaryView" class="workout-view-card hidden">
+            <div class="summary-hero">
+                <div class="summary-trophy">🏆</div>
+                <h1>¡Entrenamiento Finalizado!</h1>
+                <p>Excelente esfuerzo. Has completado tu sesión de hoy con éxito.</p>
+            </div>
+
+            <div class="summary-metrics-grid" style="grid-template-columns: repeat(2, 1fr);">
+				<div class="summary-metric-card">
+					<span class="summary-metric-label">DURACIÓN TOTAL</span>
+					<strong class="summary-metric-val" id="workoutSummaryTotalDuration">00:00</strong>
+				</div>
+				<div class="summary-metric-card">
+					<span class="summary-metric-label">TIEMPO EFECTIVO</span>
+					<strong class="summary-metric-val" id="workoutSummaryEffectiveDuration">00:00</strong>
+				</div>
+				<div class="summary-metric-card">
+					<span class="summary-metric-label">SERIES HECHAS</span>
+					<strong class="summary-metric-val" id="workoutSummaryCompletedSets">0</strong>
+				</div>
+				<div class="summary-metric-card">
+					<span class="summary-metric-label">SALTADAS</span>
+					<strong class="summary-metric-val" id="workoutSummarySkippedSets">0</strong>
+				</div>
+			</div>
+
+            <h3>Desglose por Ejercicio</h3>
+            <div id="workoutSummaryExerciseBreakdown" class="summary-breakdown-list">
+                <!-- Llenado dinámico por workoutPlayer.js -->
+            </div>
+
+            <div class="summary-actions">
+                <button type="button" class="btn-finish-giant" onclick="finishAndSaveWorkoutSession()">
+                    💾 Finalizar y Guardar en Historial
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- 5. MODALES DE GESTIÓN (ADMIN & COACH)                          -->
+    <!-- ============================================================== -->
+
+    <!-- MODAL: CREAR / EDITAR USUARIO (ADMIN) -->
+    <div id="userFormModal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalUserTitle">Usuario</h3>
+                <button type="button" class="btn-close" onclick="closeUserModal()">✕</button>
+            </div>
+            <form onsubmit="handleSaveUserForm(event)">
+                <input type="hidden" id="modalUserId">
+                
+                <div class="form-group">
+                    <label for="modalUserName">Nombre completo</label>
+                    <input type="text" id="modalUserName" required placeholder="Ej. Juan Pérez">
+                </div>
+
+                <div class="form-group">
+                    <label for="modalUserEmail">Correo electrónico</label>
+                    <input type="email" id="modalUserEmail" required placeholder="correo@ejemplo.com">
+                </div>
+
+                <div class="form-group">
+                    <label for="modalUserPassword">Contraseña</label>
+                    <input type="password" id="modalUserPassword" required placeholder="Mínimo 6 caracteres">
+                </div>
+
+                <div class="form-group">
+                    <label for="modalUserRole">Rol asignado</label>
+                    <select id="modalUserRole" required>
+                        <option value="client">Cliente / Alumno</option>
+                        <option value="coach">Instructor / Coach</option>
+                        <option value="admin">Administrador</option>
+                    </select>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-outline" onclick="closeUserModal()">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar Usuario</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: AGREGAR EJERCICIO GLOBAL (ADMIN) -->
+    <div id="exerciseFormModal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Nuevo Ejercicio Oficial</h3>
+                <button type="button" class="btn-close" onclick="closeExerciseModal()">✕</button>
+            </div>
+            <form onsubmit="handleSaveExerciseForm(event)">
+                <div class="form-group">
+                    <label for="modalExName">Nombre del ejercicio</label>
+                    <input type="text" id="modalExName" required placeholder="Ej. Dominadas en barra">
+                </div>
+
+                <div class="form-group">
+                    <label for="modalExMuscleGroup">Grupo Muscular</label>
+                    <input type="text" id="modalExMuscleGroup" required placeholder="Ej. Espalda / Bíceps">
+                </div>
+
+                <div class="form-group">
+                    <label for="modalExType">Tipo de medición</label>
+                    <select id="modalExType" required>
+                        <option value="reps">Por repeticiones (peso y reps)</option>
+                        <option value="time">Por tiempo (isométrico, plancha, etc.)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="modalExDesc">Descripción / Técnica</label>
+                    <textarea id="modalExDesc" rows="3" placeholder="Instrucciones para ejecutar el ejercicio..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="modalExMedia">URL de Imagen o Video</label>
+                    <input type="url" id="modalExMedia" placeholder="https://ejemplo.com/imagen.jpg">
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-outline" onclick="closeExerciseModal()">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar Ejercicio</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: CREADOR / EDITOR DE RUTINAS (COACH) -->
+    <div id="routineBuilderModal" class="modal-overlay hidden">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h3 id="modalRoutineTitle">Creador de Rutina</h3>
+                <button type="button" class="btn-close" onclick="closeRoutineBuilderModal()">✕</button>
+            </div>
+            <form onsubmit="handleSaveRoutineForm(event)">
+                <input type="hidden" id="modalRoutineId">
+
+                <div class="form-row-2">
+                    <div class="form-group">
+                        <label for="modalRoutineName">Nombre de la Rutina</label>
+                        <input type="text" id="modalRoutineName" required placeholder="Ej. Torso Fuerza Hipertrofia">
+                    </div>
+                    <div class="form-group">
+                        <label for="modalRoutineDays">Días sugeridos</label>
+                        <input type="text" id="modalRoutineDays" placeholder="Ej. Lunes, Jueves">
+                    </div>
+                </div>
+
+                <div class="form-row-2">
+                    <div class="form-group">
+                        <label for="modalRoutineAssignClient">Asignar directamente a un alumno</label>
+                        <select id="modalRoutineAssignClient">
+                            <!-- Llenado por coach.js -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="modalRoutineDesc">Objetivo / Descripción</label>
+                        <input type="text" id="modalRoutineDesc" placeholder="Ej. Aumentar masa muscular en tren superior">
+                    </div>
+                </div>
+
+                <hr class="modal-divider">
+
+                <!-- Agregar ejercicios dinámicamente a la rutina -->
+                <h4>Ejercicios de la Rutina</h4>
+                <div class="builder-add-box">
+                    <div class="form-group" style="flex: 2;">
+                        <label for="builderSelectExercise">Seleccionar ejercicio del catálogo:</label>
+                        <select id="builderSelectExercise">
+                            <!-- Llenado por coach.js -->
+                        </select>
+                    </div>
+
+                    <div class="form-group" style="width: 80px;">
+                        <label for="builderInputSeries">Series</label>
+                        <input type="number" id="builderInputSeries" min="1" max="15" value="3">
+                    </div>
+
+                    <div class="form-group" id="builderFieldReps" style="width: 90px;">
+                        <label for="builderInputReps">Reps</label>
+                        <input type="number" id="builderInputReps" min="1" max="100" value="10">
+                    </div>
+
+                    <div class="form-group hidden" id="builderFieldTime" style="width: 90px;">
+                        <label for="builderInputTime">Segundos</label>
+                        <input type="number" id="builderInputTime" min="5" max="600" value="45">
+                    </div>
+
+                    <div class="form-group" id="builderFieldWeight" style="width: 90px;">
+                        <label for="builderInputWeight">Peso (kg)</label>
+                        <input type="number" id="builderInputWeight" min="0" step="0.5" value="20">
+                    </div>
+
+                    <div class="form-group" style="width: 100px;">
+                        <label for="builderInputRest">Descanso (s)</label>
+                        <input type="number" id="builderInputRest" min="10" max="300" value="60">
+                    </div>
+
+                    <button type="button" class="btn btn-secondary" style="align-self: flex-end; margin-bottom: 15px;" onclick="addExerciseToBuilderList()">
+                        + Añadir
+                    </button>
+                </div>
+
+                <!-- Tabla de ejercicios añadidos a esta rutina -->
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Ejercicio</th>
+                                <th>Series</th>
+                                <th>Objetivo</th>
+                                <th>Descanso</th>
+                                <th>Quitar</th>
+                            </tr>
+                        </thead>
+                        <tbody id="builderExercisesTableBody">
+                            <!-- Llenado dinámico por coach.js -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="modal-actions" style="margin-top: 20px;">
+                    <button type="button" class="btn btn-outline" onclick="closeRoutineBuilderModal()">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar Rutina Completa</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: ASIGNAR RUTINA A CLIENTE (COACH) -->
+    <div id="assignRoutineModal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Asignar Rutina</h3>
+                <button type="button" class="btn-close" onclick="closeAssignRoutineModal()">✕</button>
+            </div>
+            <form onsubmit="handleSaveAssignRoutine(event)">
+                <input type="hidden" id="assignRoutineClientId">
+                <p>Asignando rutina para el alumno: <strong id="assignRoutineClientName">-</strong></p>
+                
+                <div class="form-group" style="margin-top: 15px;">
+                    <label for="assignRoutineSelect">Selecciona la Rutina:</label>
+                    <select id="assignRoutineSelect" required>
+                        <!-- Llenado dinámico por coach.js -->
+                    </select>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-outline" onclick="closeAssignRoutineModal()">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Confirmar Asignación</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: VER HISTORIAL DE ALUMNO (COACH) -->
+    <div id="clientProgressModal" class="modal-overlay hidden">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <div>
+                    <h3 id="progressClientName">Progreso del Alumno</h3>
+                    <span id="progressClientEmail" class="text-muted">correo@ejemplo.com</span>
+                </div>
+                <button type="button" class="btn-close" onclick="closeClientProgressModal()">✕</button>
+            </div>
+            
+            <div id="progressClientSessionsList" class="progress-sessions-container">
+                <!-- Llenado dinámico por coach.js -->
+            </div>
+
+            <div class="modal-actions">
+                <button type="button" class="btn btn-outline" onclick="closeClientProgressModal()">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- SCRIPTS ORDENADOS DE FORMA MODULAR                             -->
+    <!-- ============================================================== -->
+    <script src="js/models/Usuario.js"></script>
+    <script src="js/models/Cliente.js"></script>
+    <script src="js/models/Instructor.js"></script>
+    <script src="js/models/Administrador.js"></script>
+    <script src="js/models/Ejercicio.js"></script>
+    <script src="js/models/Rutina.js"></script>
+    <script src="js/models/SesionEntrenamiento.js"></script>
+	<script src="js/api.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/workoutPlayer.js"></script>
+    <script src="js/admin.js"></script>
+    <script src="js/coach.js"></script>
+    <script src="js/appClient.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
