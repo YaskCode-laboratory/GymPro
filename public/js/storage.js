@@ -95,6 +95,19 @@ async function saveUser(user) {
     return saved;
 }
 
+async function updateUserAvatar(userId, avatarBase64) {
+    try {
+        await UsersAPI.updateAvatar(userId, avatarBase64);
+        // Actualizar caché local
+        var user = gymDatabase.users.find(function (u) { return u.id === userId; });
+        if (user) user.avatar = avatarBase64 || null;
+        return true;
+    } catch (err) {
+        console.error('Error actualizando avatar:', err);
+        throw err;
+    }
+}
+
 async function deleteUserById(userId) {
     await UsersAPI.delete(userId);
     gymDatabase.users = gymDatabase.users.filter(u => u.id !== userId);
