@@ -31,3 +31,13 @@ instructores y alumnos de un gimnasio.
 Busca ser una nueva alternativa a aplicaciones conocidas como Gym Up, Ejercicios en Casa: Sin equipo y Hevy, la cual permita el registro de usuarios con **tres roles diferenciados** y un
 **asistente de IA contextualizado** que conoce la rutina, el progreso y la
 fecha actual del usuario cliente/alumno.
+
+### 🎯 Problemática que resuelve
+
+| Problema | Solución GymPro |
+|----------|-----------------|
+| Rutinas en papel/Excel → pérdida de información | Rutinas digitales persistentes en SQLite |
+| Alumnos no saben qué hacer, cuánto descansar o con qué peso | Reproductor guiado con cronómetros y objetivos claros |
+| No hay historial confiable de progresión de cargas | Historial automático con pesos máximos por ejercicio |
+| Comunicación coach-alumno diluida en mensajería informal | Panel centralizado + asistente IA 24/7 |
+| Se desconoce si el alumno entrena los días que le tocan | Validación por días + bloqueo automático |
