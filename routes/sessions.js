@@ -1,6 +1,7 @@
 const express = require('express');
 const crypto = require('crypto');
 const { dbRun, dbGet, dbAll } = require('../db/database');
+const { logActivity } = require('../services/logger');
 
 const router = express.Router();
 
@@ -29,6 +30,7 @@ router.get('/', async (req, res) => {
                 fechaInicio: s.fecha_inicio,
                 fechaFin: s.fecha_fin,
                 duracionTotalSeg: s.duracion_total_seg,
+                duracionEfectivaSeg: s.duracion_efectiva_seg || 0,  // ← ✅ AQUÍ
                 completada: !!s.completed,
                 detalles: detalles.map(d => ({
                     ejercicioId: d.exercise_id,
@@ -68,6 +70,7 @@ router.get('/client/:clientId', async (req, res) => {
                 fechaInicio: s.fecha_inicio,
                 fechaFin: s.fecha_fin,
                 duracionTotalSeg: s.duracion_total_seg,
+                duracionEfectivaSeg: s.duracion_efectiva_seg || 0,  // ← ✅ AQUÍ
                 completada: !!s.completed,
                 detalles: detalles.map(d => ({
                     ejercicioId: d.exercise_id,
@@ -92,6 +95,7 @@ router.post('/', async (req, res) => {
         const {
             id, clienteId, rutinaId, rutinaNombre,
             fechaInicio, fechaFin, duracionTotalSeg,
+            duracionEfectivaSeg, // ← NUEVO
             completada, detalles
         } = req.body;
 
@@ -99,11 +103,15 @@ router.post('/', async (req, res) => {
 
         await dbRun(
             `INSERT INTO sessions
-             (id, client_id, routine_id, routine_name, fecha_inicio, fecha_fin, duracion_total_seg, completed)
-             VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+             (id, client_id, routine_id, routine_name, fecha_inicio, fecha_fin,
+              duracion_total_seg, duracion_efectiva_seg, completed)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
             [
                 sessionId, clienteId, rutinaId, rutinaNombre,
-                fechaInicio, fechaFin, duracionTotalSeg || 0, completada ? 1 : 0
+                fechaInicio, fechaFin,
+                duracionTotalSeg || 0,
+                duracionEfectivaSeg || 0,
+                completada ? 1 : 0
             ]
         );
 
@@ -111,7 +119,8 @@ router.post('/', async (req, res) => {
             for (const d of detalles) {
                 await dbRun(
                     `INSERT INTO session_details
-                     (session_id, exercise_id, exercise_name, serie_num, tiempo_ejercicio_seg, peso_real, completada, saltada)
+                     (session_id, exercise_id, exercise_name, serie_num,
+                      tiempo_ejercicio_seg, peso_real, completada, saltada)
                      VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
                     [
                         sessionId, d.ejercicioId, d.ejercicioNombre, d.serieNum,
@@ -121,6 +130,12 @@ router.post('/', async (req, res) => {
                 );
             }
         }
+
+        logActivity(
+            (req.body.userEmail || clienteId),
+            'REGISTRO',
+            `Sesión completada: "${rutinaNombre}" (${Math.round(duracionTotalSeg / 60)} min, ${Array.isArray(detalles) ? detalles.length : 0} series)`
+        );
 
         res.status(201).json({ message: 'Sesión guardada.', id: sessionId });
     } catch (err) {
