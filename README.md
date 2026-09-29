@@ -41,3 +41,55 @@ fecha actual del usuario cliente/alumno.
 | Los alumnos no llevan un control de su progreso | Historial automático con pesos máximos por ejercicio |
 | Se desconoce si el alumno entrena los días que le tocan | Validación por días + bloqueo automático |
 | Suscripciones o pagos a planes por mensualidades por uso de IA | Gratuita, los alumnos de un entrenador pueden interactuar con un asistente de IA para que le devuelva recomendaciones y evolución de su progreso. |
+
+## ✨ Características
+
+### 🔐 Autenticación y Seguridad
+
+- Registro e inicio de sesión con **email + contraseña**
+- Contraseñas cifradas con **bcrypt** (10 rondas de hashing)
+- Manejo de **3 roles**: `admin`, `coach`, `client`
+- Foto de perfil personalizable con **redimensionado automático** en el navegador
+- Sesión activa persistente para reanudar entrenamientos tras recargar
+
+### 👑 Panel de Administrador
+
+- **CRUD completo de usuarios** con tabla interactiva
+- Gestión del **catálogo global de ejercicios** (banco oficial)
+- Supervisión de **todas las rutinas** y sus asignaciones
+- **Métricas globales**: clientes, coaches, rutinas, sesiones
+- Acceso al **sistema de auditoría** (log de actividades)
+
+### 💪 Panel de Instructor / Coach
+
+- **Constructor visual de rutinas** con:
+  - Selector múltiple de días de la semana (chips)
+  - Series, reps/tiempo, descanso y peso sugerido por ejercicio
+  - Reordenamiento con `order_index`
+  - Asignación directa a un alumno o guardado como plantilla
+- **Gestión de alumnos** con vista de rutina actual y progreso
+- **Modal de progreso** con historial detallado y **resumen semanal** con tendencias (↑ ↓ =)
+- **Chat con IA** (CoachIA) para copiloto técnico
+
+### 🏃 Panel de Cliente / Alumno
+
+- **Vista de rutina asignada** con badge "🔥 Hoy toca" según día actual
+- **Validación de días**: si hoy no toca, el botón se bloquea con aviso
+- **Reproductor de entrenamiento guiado** con:
+  - Cronómetro general de sesión
+  - Cronómetro por ejercicio (ascendente o descendente)
+  - Cronómetro de descanso con ajuste ±15s
+  - Registro de peso real usado por serie
+  - Botones de pausa, saltar ejercicio, agregar serie extra
+- **Resumen final** con duración total vs efectiva y desglose por ejercicio
+- **Historial de sesiones** con chips de duración y pesos máximos
+- **Chat con IA** (GymBot) consciente de la fecha, rutina y progreso
+
+### 🤖 Asistente de IA
+
+- **GymBot** (para clientes): explicaciones de técnica, motivación, análisis de progreso
+- **CoachIA** (para coaches): diseño de rutinas, sugerencias técnicas, análisis de alumnos
+- **Contexto dinámico**: el backend inyecta datos reales de la BD en cada consulta
+- **Consciencia temporal**: sabe qué día es hoy y si toca entrenar
+- **Historial persistente** en `chat_messages`
+- **Reglas estrictas**: no inventa datos, no da consejos médicos
