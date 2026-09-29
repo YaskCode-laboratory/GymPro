@@ -127,4 +127,49 @@ fecha actual del usuario cliente/alumno.
 | **Git + GitHub** | Control de versiones |
 | **Google AI Studio** | Generación de API key de Gemini |
 
----
+## 🚀 Instalación
+
+### Requisitos previos
+
+- **Node.js** v20 o superior ([descargar](https://nodejs.org/))
+- **npm** v9 o superior (viene con Node.js)
+- **API Key de Google Gemini** ([obtener gratis](https://aistudio.google.com/app/apikey))
+
+### Pasos
+
+### 🔐 Preparación de la API de GEMINI IA en variables de entorno (`.env`)
+
+Luego abre el archivo `.env` con tu editor y coloca tu API key de Gemini:
+
+```bash
+# API Key de Google Gemini (obligatoria para el chat IA)
+GEMINI_API_KEY=tu_api_key_aqui
+
+# Modelo de IA a usar (opcional)
+AI_MODEL=gemini-2.5-flash
+AI_MAX_TOKENS=800
+AI_TEMPERATURE=0.7
+
+```
+
+### Puerto del servidor (opcional, por defecto 3000)
+
+```bash
+# 1. Clonar el repositorio
+git clone https://github.com/tu-usuario/gympro.git
+cd gympro
+
+# 2. Instalar dependencias
+npm install
+
+# 3. Configurar variables de entorno
+cp .env.example .env
+# Edita .env y coloca tu API key de Gemini
+
+# 4. Iniciar el servidor
+npm start
+
+# 5. Abrir en el navegador
+# http://localhost:3000
+```
+
