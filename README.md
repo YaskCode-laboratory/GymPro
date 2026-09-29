@@ -1,9 +1,12 @@
 <div align="center">
 <p align="center">
-  <img src="./resource/logo.png" alt="Descripción" width="400"/>
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="./resource/logo-blanco.png">
+    <source media="(prefers-color-scheme: light)" srcset="./resource/logo-negro.png">
+    <img src="./resource/logo-negro.png" alt="Logo" width="300">
+  </picture>
 </p>
-GymPro
-
+  
 ### Sistema Web de Gestión de Rutinas y Entrenamiento Guiado
 
 [![Node.js](https://img.shields.io/badge/Node.js-20+-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)](https://nodejs.org/)
