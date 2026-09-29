@@ -37,7 +37,7 @@ fecha actual del usuario cliente/alumno.
 | Problema | Solución GymPro |
 |----------|-----------------|
 | Aplicaciones como: Gym WP, Ejercicios en Casa: Sin equipo y Hevy no estan diseñas para el manejo de usurios por roles | Plataforma diseñada en el que cada usurio se registrara segun su rol que cumpla en la aplicación, el cual entrenador pueda asignar rutina a cliente |
-| Alumnos no saben qué hacer, cuánto descansar o con qué peso | Reproductor guiado con cronómetros y objetivos claros |
+| Alumnos no saben qué hacer, cuánto descansar o con qué peso | Reproductor guiado en tiempo real con cronómetros y registro automatico del progreso |
 | Los alumnos no llevan un control de su progreso | Historial automático con pesos máximos por ejercicio |
-| Comunicación coach-alumno diluida en mensajería informal | Panel centralizado + asistente IA 24/7 |
 | Se desconoce si el alumno entrena los días que le tocan | Validación por días + bloqueo automático |
+| Suscripciones o pagos a planes por mensualidades por uso de IA | Gratuita, los alumnos de un entrenador pueden interactuar con un asistente de IA para que le devuelva recomendaciones y evolución de su progreso. |
