@@ -90,3 +90,41 @@ fecha actual del usuario cliente/alumno.
 - **Consciencia temporal**: sabe qué día es hoy y si toca entrenar
 - **Historial de persistencia**: conversaciones guardadas como una sesión de chat.
 - **Reglas estrictas**: no inventa datos, no da consejos médicos
+
+## 🛠️ Stack Tecnológico
+
+### Backend
+
+| Tecnología | Versión | Rol |
+|-----------|---------|-----|
+| **Node.js** | 20+ | Entorno de ejecución |
+| **Express.js** | 4.x | Framework HTTP y enrutamiento REST |
+| **SQLite3** | 5.x | Motor de base de datos embebido |
+| **bcryptjs** | 2.4 | Hash de contraseñas |
+| **cors** | 2.8 | Habilitar peticiones cross-origin |
+| **dotenv** | 16.x | Gestión de variables de entorno |
+| **@google/genai** | 2.5 | SDK oficial del cliente Gemini |
+
+### Frontend
+
+| Tecnología | Rol |
+|-----------|-----|
+| **HTML5** | Estructura semántica |
+| **CSS3** | Variables CSS, Flexbox, Grid, animaciones |
+| **JavaScript ES6+** | Lógica cliente, fetch API, FileReader, Canvas |
+
+### Integraciones
+
+| Servicio | Rol |
+|----------|-----|
+| **Google Gemini 2.5 Flash** | Modelo de IA para el chat contextualizado |
+
+### Herramientas de desarrollo
+
+| Herramienta | Uso |
+|-------------|-----|
+| **Sublime Text** | Editor principal |
+| **Git + GitHub** | Control de versiones |
+| **Google AI Studio** | Generación de API key de Gemini |
+
+---
