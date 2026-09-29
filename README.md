@@ -31,6 +31,72 @@ Busca ser una nueva alternativa a aplicaciones conocidas como Gym Up, Ejercicios
 **asistente de IA contextualizado** que conoce la rutina, el progreso y la
 fecha actual del usuario cliente/alumno.
 
+### 📂 Estructura de carpetas
+
+Así está organizado el proyecto por dentro. Cada carpeta tiene una responsabilidad clara:
+
+```
+gympro/
+├── 📁 db/                          # Todo lo relacionado con la base de datos
+│   ├── database.js                 # Abre la conexión con la BD y crea los usuarios/ejercicios iniciales
+│   └── schema.sql                  # Define las tablas donde se guarda la información
+│
+├── 📁 middlewares/                 # Revisa cada acción del usuario y deja un registro para auditoría.
+│   └── auditMiddleware.js          # Anota en un archivo .log TODO lo que hacen los usuarios 
+│
+├── 📁 routes/                      # Acciones que el frontend puede pedirle al servidor
+│   ├── auth.js                     # Entrar, registrarse y salir de la app
+│   ├── users.js                    # Crear, ver, editar y borrar usuarios
+│   ├── exercises.js                # Administrar el catálogo de ejercicios disponibles
+│   ├── routines.js                 # Crear rutinas y asignarlas a los alumnos
+│   ├── sessions.js                 # Guardar y consultar el historial de entrenamientos
+│   └── ai.js                       # Hablar con el asistente de Inteligencia Artificial
+│
+├── 📁 services/                    # Lógica del sistema
+│   ├── aiService.js                # Se comunica con Google Gemini (la IA)
+│   ├── contextBuilder.js           # Le da datos reales al chat (tu rutina, tu progreso) para que la IA responda bien
+│   ├── prompts.js                  # Define la personalidad y reglas de cada asistente IA
+│   └── logger.js                   # Escribe el archivo de auditoría (activity.log)
+│
+├── 📁 public/                      # Todo lo que ve el usuario en el navegador
+│   ├── index.html                  # La página principal (login, dashboards, modales, chat)
+│   ├── 📁 css/
+│   │   └── styles.css              # Los colores, tamaños y diseño de la app
+│   └── 📁 js/                      # Toda la interactividad del navegador
+│       ├── api.js                  # Habla con el servidor (pide y envía datos)
+│       ├── storage.js              # Guarda temporalmente los datos en el navegador
+│       ├── aiChat.js               # La ventana flotante del chat con IA
+│       ├── app.js                  # Controla el login y la navegación principal
+│       ├── admin.js                # Panel del administrador
+│       ├── coach.js                # Panel del entrenador
+│       ├── appClient.js            # Panel del alumno
+│       ├── workoutPlayer.js        # El reproductor de entrenamiento con cronómetros
+│       └── 📁 models/              # Representación orientada a objetos del gimnasio (Usuario, Rutina, Ejercicio...)
+│
+├── 📁 docs/                        # Documentación y material de apoyo
+│   ├── diagrams/                   # Dibujos técnicos del sistema (UML, base de datos)
+│   └── screenshots/                # Capturas de pantalla de la app
+│
+├── .env                            # Configuración de variables del sistema (aquí se coloca la API key)
+├── package.json                    # Lista de dependencias y comandos del proyecto
+├── server.js                       # Arranca el servidor
+└── README.md                       # Archivo Readme.md
+```
+
+Esto se llama **arquitectura cliente-servidor** y es la base de casi todas las aplicaciones web modernas.
+### 🗺️ Descripción de carpetas principales
+
+| Carpeta | Propósito | Archivos clave |
+|---------|-----------|----------------|
+| `db/` | Persistencia en SQLite | `schema.sql`, `database.js` |
+| `middlewares/` | Interceptores de Express | `auditMiddleware.js` |
+| `routes/` | Endpoints REST agrupados por dominio | `auth.js`, `routines.js`, `ai.js` |
+| `services/` | Lógica de negocio y utilidades | `aiService.js`, `logger.js` |
+| `public/` | Frontend (HTML + CSS + JS vanilla) | `index.html`, `styles.css` |
+| `public/js/` | Lógica cliente modular por rol | `admin.js`, `coach.js`, `appClient.js` |
+| `public/js/models/` | Clases del dominio (POO) | `Usuario.js`, `Rutina.js` |
+| `docs/` | Documentación técnica del proyecto | Diagramas UML, capturas |
+
 ### 🎯 Problemática que resuelve
 
 | Problema | Solución GymPro |
@@ -171,4 +237,3 @@ npm start
 # 5. Abrir en el navegador
 # http://localhost:3000
 ```
-
