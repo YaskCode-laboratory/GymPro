@@ -1,5 +1,6 @@
 const express = require('express');
 const { dbRun, dbGet, dbAll } = require('../db/database');
+const { logActivity } = require('../services/logger');
 
 const router = express.Router();
 
@@ -52,6 +53,12 @@ router.post('/', async (req, res) => {
             `INSERT INTO exercises (id, name, muscle_group, type, description, media_url, default_rest_sec)
              VALUES (?, ?, ?, ?, ?, ?, ?)`,
             [exId, name, muscleGroup, type, description || '', mediaUrl || '', defaultRestSec || 60]
+        );
+
+        logActivity(
+            (req.body.adminEmail || 'admin'),
+            'REGISTRO',
+            `Nuevo ejercicio: "${name}" (${muscleGroup}, tipo: ${type})`
         );
 
         res.status(201).json({
