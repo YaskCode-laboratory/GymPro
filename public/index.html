@@ -6,7 +6,8 @@
     <title>GymPro - Sistema de Rutinas y Entrenamiento</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <meta name="color-scheme" content="dark">
     <link rel="stylesheet" type="text/css" href="css/styles.css">
 </head>
 <body>
@@ -17,7 +18,9 @@
     <div class="section auth-page" id="signinSection">
         <div class="auth-card">
             <div class="auth-brand">
-                <span class="brand-icon">⚡</span>
+                <span class="brand-icon">
+                    <img src="src/icon.png">
+                </span>
                 <h2>GymPro</h2>
                 <p>Tu plataforma de entrenamientos y rutinas</p>
             </div>
@@ -43,7 +46,7 @@
             </div>
 
             <!-- Accesos rápidos para probar los 3 roles inmediatamente -->
-            <div class="demo-logins-box">
+            <!--<div class="demo-logins-box">
                 <span class="demo-logins-title">🚀 Cuentas de prueba rápidas:</span>
                 <div class="demo-buttons">
                     <button type="button" class="btn-demo demo-admin" onclick="fillDemoCredentials('admin@gym.com', '123456')">
@@ -56,7 +59,7 @@
                         🏃 Cliente
                     </button>
                 </div>
-            </div>
+            </div>-->
         </div>
     </div>
 
@@ -66,7 +69,9 @@
     <div class="section auth-page hidden" id="signupSection">
         <div class="auth-card">
             <div class="auth-brand">
-                <span class="brand-icon">⚡</span>
+                <span class="brand-icon">
+                    <img src="src/icon.png">
+                </span>
                 <h2>GymPro</h2>
                 <p>Crea tu cuenta personalizada</p>
             </div>
@@ -93,7 +98,7 @@
                     <select id="signupRole" name="role" required>
                         <option value="client">Cliente / Alumno</option>
                         <option value="coach">Instructor / Coach</option>
-                        <option value="admin">Administrador</option>
+                        
                     </select>
                 </div>
 
@@ -118,13 +123,31 @@
         <div class="dashboard-container hidden" id="clientDashboard">
             <header class="app-header">
                 <div class="header-user-info">
-                    <div class="user-avatar-badge">🏃</div>
+                    <button type="button" class="user-avatar-btn" id="clientAvatarBtn" onclick="openAvatarModal()" title="Cambiar foto de perfil">
+                        <span class="user-avatar-badge" id="clientAvatarDisplay">🏃</span>
+                        <span class="avatar-edit-overlay">📷</span>
+                    </button>
                     <div>
                         <h2>Hola, <span id="clientNameDisplay">Usuario</span></h2>
                         <span class="badge badge-client">Cliente</span>
                     </div>
                 </div>
+
+                <!-- Botón de logout (visible en desktop) -->
                 <button type="button" class="btn btn-outline-danger" id="clientLogoutBtn">Cerrar Sesión</button>
+
+                <!-- NUEVO: Botón hamburguesa (solo móvil) -->
+                <button type="button" class="mobile-menu-toggle" onclick="toggleMobileMenu(event, 'clientMenu')">☰</button>
+
+                <!-- NUEVO: Menú desplegable móvil -->
+                <div class="mobile-header-actions" id="clientMenu">
+                    <button type="button" class="btn btn-outline" onclick="openAvatarModal(); closeMobileMenu('clientMenu');">
+                        📷 Cambiar foto
+                    </button>
+                    <button type="button" class="btn btn-outline-danger" onclick="handleLogout()">
+                        🚪 Cerrar Sesión
+                    </button>
+                </div>
             </header>
 
             <!-- Banner de recuperación si hay una sesión activa guardada -->
@@ -176,13 +199,28 @@
         <div class="dashboard-container hidden" id="coachDashboard">
             <header class="app-header">
                 <div class="header-user-info">
-                    <div class="user-avatar-badge">💪</div>
+                    <button type="button" class="user-avatar-btn" id="coachAvatarBtn" onclick="openAvatarModal()" title="Cambiar foto de perfil">
+                        <span class="user-avatar-badge" id="coachAvatarDisplay">💪</span>
+                        <span class="avatar-edit-overlay">📷</span>
+                    </button>
                     <div>
                         <h2>Panel del Instructor</h2>
                         <span class="badge badge-coach">Coach</span>
                     </div>
                 </div>
+
                 <button type="button" class="btn btn-outline-danger" id="instructorLogoutBtn">Cerrar Sesión</button>
+
+                <button type="button" class="mobile-menu-toggle" onclick="toggleMobileMenu(event, 'coachMenu')">☰</button>
+
+                <div class="mobile-header-actions" id="coachMenu">
+                    <button type="button" class="btn btn-outline" onclick="openAvatarModal(); closeMobileMenu('coachMenu');">
+                        📷 Cambiar foto
+                    </button>
+                    <button type="button" class="btn btn-outline-danger" onclick="handleLogout()">
+                        🚪 Cerrar Sesión
+                    </button>
+                </div>
             </header>
 
             <main class="dashboard-main">
@@ -223,13 +261,28 @@
         <div class="dashboard-container hidden" id="adminDashboard">
             <header class="app-header">
                 <div class="header-user-info">
-                    <div class="user-avatar-badge">👑</div>
+                    <button type="button" class="user-avatar-btn" id="adminAvatarBtn" onclick="openAvatarModal()" title="Cambiar foto de perfil">
+                        <span class="user-avatar-badge" id="adminAvatarDisplay">👑</span>
+                        <span class="avatar-edit-overlay">📷</span>
+                    </button>
                     <div>
                         <h2>Control de Administrador</h2>
                         <span class="badge badge-admin">Administrador</span>
                     </div>
                 </div>
+
                 <button type="button" class="btn btn-outline-danger" id="adminLogoutBtn">Cerrar Sesión</button>
+
+                <button type="button" class="mobile-menu-toggle" onclick="toggleMobileMenu(event, 'adminMenu')">☰</button>
+
+                <div class="mobile-header-actions" id="adminMenu">
+                    <button type="button" class="btn btn-outline" onclick="openAvatarModal(); closeMobileMenu('adminMenu');">
+                        📷 Cambiar foto
+                    </button>
+                    <button type="button" class="btn btn-outline-danger" onclick="handleLogout()">
+                        🚪 Cerrar Sesión
+                    </button>
+                </div>
             </header>
 
             <main class="dashboard-main">
@@ -325,8 +378,16 @@
                 </section>
             </main>
         </div>
-
     </div>
+
+    <!-- ============================================================== -->
+    <!-- BOTTOM NAVIGATION BAR (solo visible en móvil)                  -->
+    <!-- ============================================================== -->
+    <nav class="bottom-nav hidden" id="bottomNav">
+        <div class="bottom-nav-items" id="bottomNavItems">
+            <!-- Los items se generan dinámicamente según el rol -->
+        </div>
+    </nav>
 
     <!-- ============================================================== -->
     <!-- 4. MÓDULO ESPECIAL: "MODO ENTRENAMIENTO" (REPRODUCTOR GUIADO)   -->
@@ -594,83 +655,122 @@
     </div>
 
     <!-- MODAL: CREADOR / EDITOR DE RUTINAS (COACH) -->
-    <div id="routineBuilderModal" class="modal-overlay hidden">
-        <div class="modal-content modal-large">
-            <div class="modal-header">
-                <h3 id="modalRoutineTitle">Creador de Rutina</h3>
-                <button type="button" class="btn-close" onclick="closeRoutineBuilderModal()">✕</button>
+    <!-- MODAL: CREADOR / EDITOR DE RUTINAS (COACH) -->
+<div id="routineBuilderModal" class="modal-overlay hidden">
+    <div class="modal-content modal-large routine-modal">
+        <div class="modal-header">
+            <h3 id="modalRoutineTitle">Creador de Rutina</h3>
+            <button type="button" class="btn-close" onclick="closeRoutineBuilderModal()">✕</button>
+        </div>
+
+        <form onsubmit="handleSaveRoutineForm(event)" id="routineBuilderForm">
+            <input type="hidden" id="modalRoutineId">
+
+            <!-- ============================================
+                 SECCIÓN 1: Información básica de la rutina
+                 ============================================ -->
+            <div class="routine-section">
+                <div class="routine-section-header">
+                    <span class="routine-section-num">1</span>
+                    <h4>Información básica</h4>
+                </div>
+
+                <div class="form-group">
+                    <label for="modalRoutineName">Nombre de la Rutina</label>
+                    <input type="text" id="modalRoutineName" required placeholder="Ej. Torso Fuerza Hipertrofia">
+                </div>
+
+                <div class="form-group">
+                    <label>Días sugeridos de la semana</label>
+                    <div class="days-picker" id="routineDaysPicker">
+                        <button type="button" class="day-chip" data-day="Lunes" onclick="toggleDayChip(this)">Lun</button>
+                        <button type="button" class="day-chip" data-day="Martes" onclick="toggleDayChip(this)">Mar</button>
+                        <button type="button" class="day-chip" data-day="Miércoles" onclick="toggleDayChip(this)">Mié</button>
+                        <button type="button" class="day-chip" data-day="Jueves" onclick="toggleDayChip(this)">Jue</button>
+                        <button type="button" class="day-chip" data-day="Viernes" onclick="toggleDayChip(this)">Vie</button>
+                        <button type="button" class="day-chip" data-day="Sábado" onclick="toggleDayChip(this)">Sáb</button>
+                        <button type="button" class="day-chip" data-day="Domingo" onclick="toggleDayChip(this)">Dom</button>
+                    </div>
+                    <small class="text-muted" style="font-size: 0.75rem; margin-top: 4px;">
+                        Toca los días en los que el alumno debe entrenar. Si no seleccionas ninguno, la rutina estará disponible cualquier día.
+                    </small>
+                    <input type="hidden" id="modalRoutineDays" value="">
+                </div>
+
+                <div class="form-group">
+                    <label for="modalRoutineAssignClient">Asignar directamente a un alumno</label>
+                    <select id="modalRoutineAssignClient">
+                        <!-- Llenado por coach.js -->
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="modalRoutineDesc">Objetivo / Descripción</label>
+                    <input type="text" id="modalRoutineDesc" placeholder="Ej. Aumentar masa muscular en tren superior">
+                </div>
             </div>
-            <form onsubmit="handleSaveRoutineForm(event)">
-                <input type="hidden" id="modalRoutineId">
 
-                <div class="form-row-2">
-                    <div class="form-group">
-                        <label for="modalRoutineName">Nombre de la Rutina</label>
-                        <input type="text" id="modalRoutineName" required placeholder="Ej. Torso Fuerza Hipertrofia">
-                    </div>
-                    <div class="form-group">
-                        <label for="modalRoutineDays">Días sugeridos</label>
-                        <input type="text" id="modalRoutineDays" placeholder="Ej. Lunes, Jueves">
-                    </div>
+            <!-- ============================================
+                 SECCIÓN 2: Agregar ejercicios
+                 ============================================ -->
+            <div class="routine-section">
+                <div class="routine-section-header">
+                    <span class="routine-section-num">2</span>
+                    <h4>Agregar ejercicios</h4>
                 </div>
 
-                <div class="form-row-2">
-                    <div class="form-group">
-                        <label for="modalRoutineAssignClient">Asignar directamente a un alumno</label>
-                        <select id="modalRoutineAssignClient">
-                            <!-- Llenado por coach.js -->
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="modalRoutineDesc">Objetivo / Descripción</label>
-                        <input type="text" id="modalRoutineDesc" placeholder="Ej. Aumentar masa muscular en tren superior">
-                    </div>
-                </div>
-
-                <hr class="modal-divider">
-
-                <!-- Agregar ejercicios dinámicamente a la rutina -->
-                <h4>Ejercicios de la Rutina</h4>
                 <div class="builder-add-box">
-                    <div class="form-group" style="flex: 2;">
-                        <label for="builderSelectExercise">Seleccionar ejercicio del catálogo:</label>
+                    <div class="form-group builder-field-full">
+                        <label for="builderSelectExercise">Ejercicio del catálogo</label>
                         <select id="builderSelectExercise">
                             <!-- Llenado por coach.js -->
                         </select>
                     </div>
 
-                    <div class="form-group" style="width: 80px;">
-                        <label for="builderInputSeries">Series</label>
-                        <input type="number" id="builderInputSeries" min="1" max="15" value="3">
+                    <div class="builder-fields-grid">
+                        <div class="form-group">
+                            <label for="builderInputSeries">Series</label>
+                            <input type="number" id="builderInputSeries" min="1" max="15" value="3">
+                        </div>
+
+                        <div class="form-group" id="builderFieldReps">
+                            <label for="builderInputReps">Reps</label>
+                            <input type="number" id="builderInputReps" min="1" max="100" value="10">
+                        </div>
+
+                        <div class="form-group hidden" id="builderFieldTime">
+                            <label for="builderInputTime">Segundos</label>
+                            <input type="number" id="builderInputTime" min="5" max="600" value="45">
+                        </div>
+
+                        <div class="form-group" id="builderFieldWeight">
+                            <label for="builderInputWeight">Peso (kg)</label>
+                            <input type="number" id="builderInputWeight" min="0" step="0.5" value="20">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="builderInputRest">Descanso (s)</label>
+                            <input type="number" id="builderInputRest" min="10" max="300" value="60">
+                        </div>
                     </div>
 
-                    <div class="form-group" id="builderFieldReps" style="width: 90px;">
-                        <label for="builderInputReps">Reps</label>
-                        <input type="number" id="builderInputReps" min="1" max="100" value="10">
-                    </div>
-
-                    <div class="form-group hidden" id="builderFieldTime" style="width: 90px;">
-                        <label for="builderInputTime">Segundos</label>
-                        <input type="number" id="builderInputTime" min="5" max="600" value="45">
-                    </div>
-
-                    <div class="form-group" id="builderFieldWeight" style="width: 90px;">
-                        <label for="builderInputWeight">Peso (kg)</label>
-                        <input type="number" id="builderInputWeight" min="0" step="0.5" value="20">
-                    </div>
-
-                    <div class="form-group" style="width: 100px;">
-                        <label for="builderInputRest">Descanso (s)</label>
-                        <input type="number" id="builderInputRest" min="10" max="300" value="60">
-                    </div>
-
-                    <button type="button" class="btn btn-secondary" style="align-self: flex-end; margin-bottom: 15px;" onclick="addExerciseToBuilderList()">
-                        + Añadir
+                    <button type="button" class="btn btn-primary btn-block builder-add-btn" onclick="addExerciseToBuilderList()">
+                        + Añadir ejercicio a la rutina
                     </button>
                 </div>
+            </div>
 
-                <!-- Tabla de ejercicios añadidos a esta rutina -->
-                <div class="table-responsive">
+            <!-- ============================================
+                 SECCIÓN 3: Ejercicios agregados
+                 ============================================ -->
+            <div class="routine-section">
+                <div class="routine-section-header">
+                    <span class="routine-section-num">3</span>
+                    <h4>Ejercicios de la rutina (<span id="builderExercisesCount">0</span>)</h4>
+                </div>
+
+                <!-- Vista de tabla para desktop -->
+                <div class="table-responsive builder-table-desktop">
                     <table class="data-table">
                         <thead>
                             <tr>
@@ -687,13 +787,22 @@
                     </table>
                 </div>
 
-                <div class="modal-actions" style="margin-top: 20px;">
-                    <button type="button" class="btn btn-outline" onclick="closeRoutineBuilderModal()">Cancelar</button>
-                    <button type="submit" class="btn btn-primary">Guardar Rutina Completa</button>
+                <!-- Vista de cards para móvil -->
+                <div class="builder-exercises-mobile" id="builderExercisesMobileList">
+                    <!-- Llenado dinámico por coach.js (versión móvil) -->
                 </div>
-            </form>
+            </div>
+
+            <!-- ============================================
+                 ACCIONES FINALES
+                 ============================================ -->
+            <div class="modal-actions routine-modal-actions">
+                        <button type="button" class="btn btn-outline" onclick="closeRoutineBuilderModal()">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Guardar Rutina</button>
+                    </div>
+                </form>
+            </div>
         </div>
-    </div>
 
     <!-- MODAL: ASIGNAR RUTINA A CLIENTE (COACH) -->
     <div id="assignRoutineModal" class="modal-overlay hidden">
@@ -743,6 +852,80 @@
     </div>
 
     <!-- ============================================================== -->
+    <!-- MODAL: CAMBIAR FOTO DE PERFIL                                  -->
+    <!-- ============================================================== -->
+    <div id="avatarModal" class="modal-overlay hidden">
+        <div class="modal-content avatar-modal-content">
+            <div class="modal-header">
+                <h3>📸 Foto de Perfil</h3>
+                <button type="button" class="btn-close" onclick="closeAvatarModal()">✕</button>
+            </div>
+
+            <div class="avatar-preview-box">
+                <img id="avatarPreviewImg" src="" alt="Preview" style="display:none;">
+                <span id="avatarPreviewPlaceholder" class="avatar-preview-placeholder">👤</span>
+            </div>
+
+            <p class="text-muted" style="text-align:center; font-size: 0.85rem; margin-bottom: 16px;">
+                Formatos aceptados: JPG, PNG, GIF, WEBP. Máximo 2 MB.
+            </p>
+
+            <div class="avatar-actions">
+                <input type="file" id="avatarFileInput" accept="image/*" style="display:none;" onchange="handleAvatarFileChange(event)">
+                <button type="button" class="btn btn-primary btn-block" onclick="document.getElementById('avatarFileInput').click()">
+                    📁 Seleccionar imagen
+                </button>
+                <button type="button" class="btn btn-outline-danger btn-block" id="avatarRemoveBtn" onclick="handleRemoveAvatar()">
+                    🗑 Quitar foto actual
+                </button>
+            </div>
+
+            <div class="modal-actions" style="margin-top: 20px;">
+                <button type="button" class="btn btn-outline" onclick="closeAvatarModal()">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="avatarSaveBtn" onclick="handleSaveAvatar()" disabled>
+                    💾 Guardar Foto
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- CHAT DE IA (asistente flotante del cliente)                    -->
+    <!-- ============================================================== -->
+    <button type="button" class="ai-chat-fab hidden" id="aiChatFab" onclick="toggleAIChat()" title="Asistente IA">
+        <span class="ai-chat-fab-icon">🤖</span>
+        <span class="ai-chat-fab-pulse"></span>
+    </button>
+
+    <div class="ai-chat-panel hidden" id="aiChatPanel">
+        <div class="ai-chat-header">
+            <div class="ai-chat-title">
+                <span class="ai-chat-avatar">🤖</span>
+                <div>
+                    <strong id="aiChatTitle">GymBot</strong>
+                    <span class="ai-chat-subtitle" id="aiChatSubtitle">Tu asistente personal</span>
+                </div>
+            </div>
+            <div class="ai-chat-header-actions">
+                <button type="button" class="ai-chat-icon-btn" onclick="clearAIChatHistory()" title="Borrar conversación">🗑</button>
+                <button type="button" class="ai-chat-icon-btn" onclick="toggleAIChat()" title="Cerrar">✕</button>
+            </div>
+        </div>
+
+        <div class="ai-chat-messages" id="aiChatMessages"></div>
+
+        <div class="ai-chat-input-area">
+            <textarea
+                id="aiChatInput"
+                class="ai-chat-input"
+                placeholder="Escribe tu pregunta..."
+                rows="1"
+                onkeydown="handleAIChatKey(event)"></textarea>
+            <button type="button" class="ai-chat-send" id="aiChatSendBtn" onclick="sendAIChatMessage()">➤</button>
+        </div>
+    </div>
+
+    <!-- ============================================================== -->
     <!-- SCRIPTS ORDENADOS DE FORMA MODULAR                             -->
     <!-- ============================================================== -->
     <script src="js/models/Usuario.js"></script>
@@ -753,6 +936,7 @@
     <script src="js/models/Rutina.js"></script>
     <script src="js/models/SesionEntrenamiento.js"></script>
 	<script src="js/api.js"></script>
+    <script src="js/aiChat.js"></script>
     <script src="js/storage.js"></script>
     <script src="js/workoutPlayer.js"></script>
     <script src="js/admin.js"></script>
