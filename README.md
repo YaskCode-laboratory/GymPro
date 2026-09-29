@@ -36,8 +36,8 @@ fecha actual del usuario cliente/alumno.
 
 | Problema | Solución GymPro |
 |----------|-----------------|
-| Rutinas en papel/Excel → pérdida de información | Rutinas digitales persistentes en SQLite |
+| Aplicaciones como: Gym WP, Ejercicios en Casa: Sin equipo y Hevy no estan diseñas para el manejo de usurios por roles | Plataforma diseñada en el que cada usurio se registrara segun su rol que cumpla en la aplicación, el cual entrenador pueda asignar rutina a cliente |
 | Alumnos no saben qué hacer, cuánto descansar o con qué peso | Reproductor guiado con cronómetros y objetivos claros |
-| No hay historial confiable de progresión de cargas | Historial automático con pesos máximos por ejercicio |
+| Los alumnos no llevan un control de su progreso | Historial automático con pesos máximos por ejercicio |
 | Comunicación coach-alumno diluida en mensajería informal | Panel centralizado + asistente IA 24/7 |
 | Se desconoce si el alumno entrena los días que le tocan | Validación por días + bloqueo automático |
