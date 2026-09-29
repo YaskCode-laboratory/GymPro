@@ -11,6 +11,7 @@ CREATE TABLE IF NOT EXISTS users (
     email TEXT NOT NULL UNIQUE,
     password TEXT NOT NULL,
     role TEXT NOT NULL CHECK(role IN ('admin', 'coach', 'client')),
+     avatar TEXT DEFAULT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -67,8 +68,9 @@ CREATE TABLE IF NOT EXISTS sessions (
     routine_name TEXT,
     fecha_inicio TEXT NOT NULL,
     fecha_fin TEXT,
-    duracion_total_seg INTEGER DEFAULT 0,
-    completed INTEGER DEFAULT 0,
+    duracion_total_seg INTEGER DEFAULT 0, -- Tiempo del ejercicio + Descanso
+    duracion_efectiva_seg INTEGER DEFAULT 0,   -- ← tiempo de los ejercicios como tal
+    completed INTEGER DEFAULT 0, -- 0: no completado 1: completado
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (client_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (routine_id) REFERENCES routines(id) ON DELETE SET NULL
@@ -87,6 +89,20 @@ CREATE TABLE IF NOT EXISTS session_details (
     saltada INTEGER DEFAULT 0,
     FOREIGN KEY (session_id) REFERENCES sessions(id) ON DELETE CASCADE
 );
+
+-- ============================================
+-- CHAT CON IA (historial de conversaciones)
+-- ============================================
+CREATE TABLE IF NOT EXISTS chat_messages (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id TEXT NOT NULL,
+    role TEXT NOT NULL CHECK(role IN ('user', 'assistant')),
+    content TEXT NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE INDEX IF NOT EXISTS idx_chat_user ON chat_messages(user_id);
 
 -- Índices para mejorar el rendimiento
 CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
