@@ -15,6 +15,7 @@
 // ==========================================
 
 function renderAdminDashboard() {
+    updateHeaderAvatar();
     updateAdminMetrics();
     renderAdminUsersList();
     renderAdminRoutinesList();
@@ -72,8 +73,18 @@ function renderAdminUsersList(filterRole) {
             ? '<span class="text-muted" style="font-size: 11px;">(Tú)</span>'
             : '<button type="button" class="btn-sm btn-danger" onclick="confirmDeleteUser(\'' + user.id + '\')">🗑 Eliminar</button>';
 
+        // avatar del usuario en la tabla
+        var avatarHtml = user.avatar
+            ? '<div class="table-user-avatar"><img src="' + user.avatar + '" alt=""></div>'
+            : '<div class="table-user-avatar">' + (user.role === 'admin' ? '👑' : user.role === 'coach' ? '💪' : '🏃') + '</div>';
+
         tr.innerHTML =
-            '<td><strong>' + user.name + '</strong></td>' +
+            '<td>' +
+                '<div class="table-user-cell">' +
+                    avatarHtml +
+                    '<strong>' + user.name + '</strong>' +
+                '</div>' +
+            '</td>' +
             '<td>' + user.email + '</td>' +
             '<td><span class="badge ' + roleBadgeClass + '">' + roleName + '</span></td>' +
             '<td><code>••••••</code></td>' +
