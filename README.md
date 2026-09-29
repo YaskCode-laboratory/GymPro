@@ -11,7 +11,7 @@
 [![JavaScript](https://img.shields.io/badge/JavaScript-ES6+-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)](https://developer.mozilla.org/es/docs/Web/JavaScript)
 [![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
 
-**Plataforma desarrollada con tecnologías web. Para la asignacion de rutinas wellness de Entrenador a Cliente, llevar seguimiento de entrenamiento progresivo físico como plataforma unificada con tres roles diferenciados y asistente de IA contextualizados.**
+**Plataforma desarrollada con tecnologías web. Para la asignación de rutinas wellness de Entrenador a Cliente, llevar seguimiento de entrenamiento progresivo físico como plataforma unificada con tres roles diferenciados y asistente de IA contextualizado.**
 
 [Descripción](#-descripción) •
 [Características](#-características) •
@@ -27,7 +27,7 @@
 de entrenamiento, el seguimiento del progreso físico y la interacción entre
 instructores y alumnos de un gimnasio.
 
-Busca ser una nueva alternativa a aplicaciones conocidas como Gym Up, Ejercicios en Casa: Sin equipo y Hevy, la cual permita el registro de usuarios con **tres roles diferenciados** y un
+Busca ser una nueva alternativa a aplicaciones conocidas como Gym WP, Ejercicios en Casa: Sin equipo y Hevy, la cual permita el registro de usuarios con **tres roles diferenciados** y un
 **asistente de IA contextualizado** que conoce la rutina, el progreso y la
 fecha actual del usuario cliente/alumno.
 
@@ -42,7 +42,7 @@ gympro/
 │   └── schema.sql                  # Define las tablas donde se guarda la información
 │
 ├── 📁 middlewares/                 # Revisa cada acción del usuario y deja un registro para auditoría.
-│   └── auditMiddleware.js          # Anota en un archivo .log TODO lo que hacen los usuarios 
+│   └── auditMiddleware.js          # Anota en un archivo .log TODO lo que hacen los usuarios
 │
 ├── 📁 routes/                      # Acciones que el frontend puede pedirle al servidor
 │   ├── auth.js                     # Entrar, registrarse y salir de la app
@@ -84,6 +84,7 @@ gympro/
 ```
 
 Esto se llama **arquitectura cliente-servidor** y es la base de casi todas las aplicaciones web modernas.
+
 ### 🗺️ Descripción de carpetas principales
 
 | Carpeta | Propósito | Archivos clave |
@@ -101,8 +102,8 @@ Esto se llama **arquitectura cliente-servidor** y es la base de casi todas las a
 
 | Problema | Solución GymPro |
 |----------|-----------------|
-| Aplicaciones como: Gym WP, Ejercicios en Casa: Sin equipo y Hevy no estan diseñas para el manejo de usurios por roles | Plataforma diseñada en el que cada usurio se registrara segun su rol que cumpla en la aplicación, el cual entrenador pueda asignar rutina a cliente |
-| Alumnos no saben qué hacer, cuánto descansar o con qué peso | Reproductor guiado en tiempo real con cronómetros y registro automatico del progreso |
+| Aplicaciones como: Gym WP, Ejercicios en Casa: Sin equipo y Hevy no están diseñadas para el manejo de usuarios por roles | Plataforma diseñada en el que cada usuario se registrará según su rol que cumpla en la aplicación, el cual entrenador pueda asignar rutina a cliente |
+| Alumnos no saben qué hacer, cuánto descansar o con qué peso | Reproductor guiado en tiempo real con cronómetros y registro automático del progreso |
 | Los alumnos no llevan un control de su progreso | Historial automático con pesos máximos por ejercicio |
 | Se desconoce si el alumno entrena los días que le tocan | Validación por días + bloqueo automático |
 | Suscripciones o pagos a planes por mensualidades por uso de IA | Gratuita, los alumnos de un entrenador pueden interactuar con un asistente de IA para que le devuelva recomendaciones y evolución de su progreso. |
@@ -129,7 +130,7 @@ Esto se llama **arquitectura cliente-servidor** y es la base de casi todas las a
 - **Constructor visual de rutinas** con:
   - Selector múltiple de días de la semana (chips)
   - Series, reps/tiempo, descanso y peso sugerido por ejercicio
-  - Reordenamiento segun como se hayan añadido los ejercicios en la creacion de rutinas.
+  - Reordenamiento según como se hayan añadido los ejercicios en la creación de rutinas.
   - Asignación directa a un alumno o guardado como plantilla
 - **Gestión de alumnos** con vista de rutina actual y progreso
 - **Modal de progreso** con historial detallado y **resumen semanal** con tendencias (↑ ↓ =)
@@ -200,8 +201,6 @@ Esto se llama **arquitectura cliente-servidor** y es la base de casi todas las a
 - **npm** v9 o superior (viene con Node.js)
 - **API Key de Google Gemini** ([obtener gratis](https://aistudio.google.com/app/apikey))
 
-### Pasos
-
 ### 🔐 Preparación de la API de GEMINI IA en variables de entorno (`.env`)
 
 Luego abre el archivo `.env` con tu editor y coloca tu API key de Gemini:
@@ -214,7 +213,6 @@ GEMINI_API_KEY=tu_api_key_aqui
 AI_MODEL=gemini-2.5-flash
 AI_MAX_TOKENS=800
 AI_TEMPERATURE=0.7
-
 ```
 
 ### Clonar y ejecutar proyecto
