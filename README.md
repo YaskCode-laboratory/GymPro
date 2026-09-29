@@ -1,6 +1,8 @@
 <div align="center">
-
-# 🏋️ GymPro
+<p align="center">
+  <img src="./resource/logo.png" alt="Descripción" width="400"/>
+</p>
+GymPro
 
 ### Sistema Web de Gestión de Rutinas y Entrenamiento Guiado
 
