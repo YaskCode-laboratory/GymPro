@@ -12,6 +12,12 @@ async function apiFetch(endpoint, options = {}) {
         headers: { 'Content-Type': 'application/json' },
         ...options
     };
+
+    // Añadir el email del usuario logueado si existe
+    if (typeof loggedInUser !== 'undefined' && loggedInUser && loggedInUser.email) {
+        config.headers['X-User-Email'] = loggedInUser.email;
+    }
+
     if (config.body && typeof config.body === 'object') {
         config.body = JSON.stringify(config.body);
     }
@@ -43,6 +49,8 @@ const UsersAPI = {
     getById: (id) => apiFetch(`/users/${id}`),
     create: (user) => apiFetch('/users', { method: 'POST', body: user }),
     update: (id, user) => apiFetch(`/users/${id}`, { method: 'PUT', body: user }),
+    updateAvatar: (id, avatar) =>
+        apiFetch(`/users/${id}/avatar`, { method: 'PUT', body: { avatar: avatar } }),
     delete: (id) => apiFetch(`/users/${id}`, { method: 'DELETE' })
 };
 
@@ -80,4 +88,17 @@ const SessionsAPI = {
     getAll: () => apiFetch('/sessions'),
     getByClient: (clientId) => apiFetch(`/sessions/client/${clientId}`),
     save: (sesion) => apiFetch('/sessions', { method: 'POST', body: sesion })
+};
+
+// ============================================
+// AI CHAT
+// ============================================
+const AIAPI = {
+    chat: (userId, message) =>
+        apiFetch('/ai/chat', {
+            method: 'POST',
+            body: { userId, message }
+        }),
+    getHistory: (userId) => apiFetch(`/ai/history/${userId}`),
+    clearHistory: (userId) => apiFetch(`/ai/history/${userId}`, { method: 'DELETE' })
 };
