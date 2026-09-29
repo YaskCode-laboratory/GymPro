@@ -15,7 +15,7 @@
 
 [Descripción](#-descripción) •
 [Características](#-características) •
-[Demo](#-api-rest) •
+[Demo](https://gympro-24ly.onrender.com/) •
 [Stack Tecnológico](#%EF%B8%8F-stack-tecnológico) •
 [Instalación](#-instalación)
 
