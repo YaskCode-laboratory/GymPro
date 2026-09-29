@@ -20,6 +20,7 @@ var builderExercisesList = [];
 function renderCoachDashboard() {
     renderCoachClientsList();
     renderCoachRoutinesList();
+    updateHeaderAvatar();
 }
 
 /**
@@ -46,10 +47,15 @@ function renderCoachClientsList() {
 
         var clientSessions = getSesionesByClientId(client.id);
 
+        // ← Avatar con imagen o placeholder
+        var avatarHtml = client.avatar
+            ? '<img src="' + client.avatar + '" alt="' + client.name + '" class="client-avatar-img">'
+            : '<div class="client-avatar-placeholder">👤</div>';
+
         var card = document.createElement('div');
         card.className = 'coach-client-card';
         card.innerHTML =
-            '<div class="client-avatar">👤</div>' +
+            avatarHtml +
             '<div class="client-info">' +
                 '<h4>' + client.name + '</h4>' +
                 '<span class="client-email">' + client.email + '</span>' +
@@ -118,8 +124,10 @@ function openCreateRoutineModal() {
     document.getElementById('modalRoutineTitle').textContent = 'Crear Nueva Rutina';
     document.getElementById('modalRoutineId').value = '';
     document.getElementById('modalRoutineName').value = '';
-    document.getElementById('modalRoutineDays').value = 'Lunes, Miércoles, Viernes';
     document.getElementById('modalRoutineDesc').value = '';
+
+    // Reset del selector de días (sin días seleccionados)
+    resetDaysPicker();
 
     builderExercisesList = [];
     populateClientSelectOptions();
@@ -136,10 +144,11 @@ function openEditRoutineModal(rutinaId) {
     document.getElementById('modalRoutineTitle').textContent = 'Editar Rutina: ' + rutina.name;
     document.getElementById('modalRoutineId').value = rutina.id;
     document.getElementById('modalRoutineName').value = rutina.name;
-    document.getElementById('modalRoutineDays').value = rutina.dias || '';
     document.getElementById('modalRoutineDesc').value = rutina.description || '';
 
-    // Clonar lista de ejercicios
+    // Pre-seleccionar los días que ya tenía la rutina
+    setDaysPickerFromString(rutina.dias || '');
+
     builderExercisesList = JSON.parse(JSON.stringify(rutina.ejercicios || []));
 
     populateClientSelectOptions(rutina.assignedToClientId);
@@ -262,31 +271,224 @@ function removeExerciseFromBuilderList(index) {
 }
 
 function renderBuilderExercisesTable() {
+    // ============================================
+    // 1. Actualizar contador
+    // ============================================
+    var countEl = document.getElementById('builderExercisesCount');
+    if (countEl) countEl.textContent = builderExercisesList.length;
+
+    // ============================================
+    // 2. Render de la tabla (desktop)
+    // ============================================
     var tbody = document.getElementById('builderExercisesTableBody');
-    if (!tbody) return;
+    if (tbody) {
+        tbody.innerHTML = '';
 
-    tbody.innerHTML = '';
+        if (builderExercisesList.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding: 12px;" class="text-muted">Aún no has agregado ejercicios a esta rutina.</td></tr>';
+        } else {
+            builderExercisesList.forEach(function (item, idx) {
+                var tr = document.createElement('tr');
+                var objetivo = item.tipo === 'time'
+                    ? item.tiempo_objetivo_seg + ' seg'
+                    : item.reps + ' reps (@ ' + item.peso_sugerido + ' kg)';
 
-    if (builderExercisesList.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding: 12px;" class="text-muted">Aún no has agregado ejercicios a esta rutina.</td></tr>';
-        return;
+                tr.innerHTML =
+                    '<td><strong>' + (idx + 1) + '. ' + item.nombre + '</strong></td>' +
+                    '<td>' + item.series + ' series</td>' +
+                    '<td>' + objetivo + '</td>' +
+                    '<td>⏱ ' + item.descanso_seg + 's</td>' +
+                    '<td><button type="button" class="btn-sm btn-danger" onclick="removeExerciseFromBuilderList(' + idx + ')">✕</button></td>';
+                tbody.appendChild(tr);
+            });
+        }
     }
 
-    builderExercisesList.forEach(function (item, idx) {
-        var tr = document.createElement('tr');
-        var objetivo = item.tipo === 'time'
-            ? item.tiempo_objetivo_seg + ' seg'
-            : item.reps + ' reps (@ ' + item.peso_sugerido + ' kg)';
+    // ============================================
+    // 3. Render de las cards (móvil)
+    // ============================================
+    var mobileList = document.getElementById('builderExercisesMobileList');
+    if (mobileList) {
+        mobileList.innerHTML = '';
 
-        tr.innerHTML =
-            '<td><strong>' + (idx + 1) + '. ' + item.nombre + '</strong></td>' +
-            '<td>' + item.series + ' series</td>' +
-            '<td>' + objetivo + '</td>' +
-            '<td>⏱ ' + item.descanso_seg + 's</td>' +
-            '<td><button type="button" class="btn-sm btn-danger" onclick="removeExerciseFromBuilderList(' + idx + ')">✕</button></td>';
-        tbody.appendChild(tr);
-    });
+        if (builderExercisesList.length === 0) {
+            mobileList.innerHTML =
+                '<div class="builder-empty-state">' +
+                    '<span class="builder-empty-state-icon">🏋️</span>' +
+                    '<p>Aún no has agregado ejercicios.</p>' +
+                    '<small>Selecciona uno arriba y toca "+ Añadir".</small>' +
+                '</div>';
+        } else {
+            builderExercisesList.forEach(function (item, idx) {
+                var card = document.createElement('div');
+                card.className = 'builder-exercise-card';
+
+                // Objetivo según tipo
+                var objetivoValue = item.tipo === 'time'
+                    ? item.tiempo_objetivo_seg + 's'
+                    : item.reps + ' reps';
+
+                var objetivoLabel = item.tipo === 'time' ? 'Tiempo' : 'Reps';
+
+                var pesoHtml = item.tipo === 'time'
+                    ? ''
+                    : '<div class="builder-exercise-stat">' +
+                        '<span class="builder-exercise-stat-icon">🏋️</span>' +
+                        '<span class="builder-exercise-stat-label">Peso</span>' +
+                        '<span class="builder-exercise-stat-value">' + (item.peso_sugerido || 0) + 'kg</span>' +
+                      '</div>';
+
+                card.innerHTML =
+                    '<div class="builder-exercise-card-header">' +
+                        '<div class="builder-exercise-card-title">' +
+                            '<span class="builder-exercise-card-num">' + (idx + 1) + '</span>' +
+                            '<div class="builder-exercise-card-info">' +
+                                '<strong>' + item.nombre + '</strong>' +
+                                (item.muscleGroup ? '<span class="exercise-card-group">' + item.muscleGroup + '</span>' : '') +
+                            '</div>' +
+                        '</div>' +
+                        '<button type="button" class="builder-exercise-card-remove" onclick="removeExerciseFromBuilderList(' + idx + ')" title="Quitar ejercicio">' +
+                            '✕' +
+                        '</button>' +
+                    '</div>' +
+
+                    '<div class="builder-exercise-card-stats">' +
+                        '<div class="builder-exercise-stat">' +
+                            '<span class="builder-exercise-stat-icon">📊</span>' +
+                            '<span class="builder-exercise-stat-label">Series</span>' +
+                            '<span class="builder-exercise-stat-value">' + item.series + '</span>' +
+                        '</div>' +
+                        '<div class="builder-exercise-stat">' +
+                            '<span class="builder-exercise-stat-icon">🎯</span>' +
+                            '<span class="builder-exercise-stat-label">' + objetivoLabel + '</span>' +
+                            '<span class="builder-exercise-stat-value">' + objetivoValue + '</span>' +
+                        '</div>' +
+                        pesoHtml +
+                        '<div class="builder-exercise-stat">' +
+                            '<span class="builder-exercise-stat-icon">⏱</span>' +
+                            '<span class="builder-exercise-stat-label">Descanso</span>' +
+                            '<span class="builder-exercise-stat-value">' + item.descanso_seg + 's</span>' +
+                        '</div>' +
+                    '</div>';
+
+                mobileList.appendChild(card);
+            });
+        }
+    }
 }
+
+
+
+// ==========================================
+// SELECTOR DE DÍAS (CHIPS) EN EL MODAL
+// ==========================================
+
+// Orden canónico de los días para mostrar
+var DIAS_SEMANA = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+
+/**
+ * Alterna el estado activo de un chip de día.
+ */
+function toggleDayChip(btn) {
+    btn.classList.toggle('active');
+    syncDaysHiddenInput();
+}
+
+/**
+ * Sincroniza el <input type="hidden"> con los chips activos,
+ * manteniendo el formato "Lunes, Miércoles, Viernes".
+ */
+function syncDaysHiddenInput() {
+    var activeChips = document.querySelectorAll('#routineDaysPicker .day-chip.active');
+    var dias = [];
+    activeChips.forEach(function (chip) {
+        dias.push(chip.getAttribute('data-day'));
+    });
+
+    // Ordenar según el orden canónico de la semana
+    dias.sort(function (a, b) {
+        return DIAS_SEMANA.indexOf(a) - DIAS_SEMANA.indexOf(b);
+    });
+
+    document.getElementById('modalRoutineDays').value = dias.join(', ');
+}
+
+/**
+ * Limpia todos los chips activos.
+ */
+function resetDaysPicker() {
+    var chips = document.querySelectorAll('#routineDaysPicker .day-chip');
+    chips.forEach(function (chip) { chip.classList.remove('active'); });
+    document.getElementById('modalRoutineDays').value = '';
+}
+
+/**
+ * Marca como activos los chips cuyos días aparezcan en el string dado.
+ * Acepta formatos: "Lunes, Miércoles", "lunes,miércoles", "Lunes,Miércoles,Viernes".
+ */
+function setDaysPickerFromString(diasStr) {
+    resetDaysPicker();
+
+    if (!diasStr) return;
+
+    // Normalizar: minúsculas, sin tildes, sin espacios extra
+    var normalizados = diasStr.split(',')
+        .map(function (d) { return normalizeDayName(d.trim()); })
+        .filter(function (d) { return d !== ''; });
+
+    var chips = document.querySelectorAll('#routineDaysPicker .day-chip');
+    chips.forEach(function (chip) {
+        var day = chip.getAttribute('data-day');
+        if (normalizados.indexOf(normalizeDayName(day)) !== -1) {
+            chip.classList.add('active');
+        }
+    });
+
+    syncDaysHiddenInput();
+}
+
+/**
+ * Normaliza el nombre de un día para comparar:
+ * "Miércoles" -> "miercoles", "Sábado" -> "sabado"
+ */
+function normalizeDayName(name) {
+    return name
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '') // quitar tildes
+        .trim();
+}
+
+
+
+/**
+ * Devuelve el nombre del día actual en español: "Lunes", "Martes", etc.
+ */
+function getTodayDayName() {
+    var dias = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+    return dias[new Date().getDay()];
+}
+
+/**
+ * Determina si una rutina debe ejecutarse HOY según sus días configurados.
+ * - Si la rutina no tiene días configurados ("") -> TRUE (disponible siempre).
+ * - Si tiene días -> TRUE si hoy está en la lista.
+ */
+function isRoutineScheduledForToday(rutina) {
+    if (!rutina || !rutina.dias || rutina.dias.trim() === '') {
+        return true; // Sin restricción
+    }
+
+    var hoy = normalizeDayName(getTodayDayName());
+
+    var diasArray = rutina.dias.split(',')
+        .map(function (d) { return normalizeDayName(d.trim()); })
+        .filter(function (d) { return d !== ''; });
+
+    return diasArray.indexOf(hoy) !== -1;
+}
+
+
 
 async function handleSaveRoutineForm(e) {
     e.preventDefault();
@@ -404,6 +606,11 @@ async function handleSaveAssignRoutine(e) {
 // MODAL: VER HISTORIAL Y PROGRESO DEL ALUMNO
 // ==========================================
 
+/**
+ * MODAL: VER HISTORIAL Y PROGRESO DEL ALUMNO (COACH)
+ * Muestra cada sesión con su duración total, tiempo efectivo,
+ * y el desglose serie por serie.
+ */
 function openClientProgressModal(clientId) {
     var client = getUserById(clientId);
     if (!client) return;
@@ -418,20 +625,82 @@ function openClientProgressModal(clientId) {
     if (sesiones.length === 0) {
         container.innerHTML = '<p class="text-muted" style="padding: 15px;">Este alumno aún no ha completado ninguna sesión de entrenamiento.</p>';
     } else {
+        // Orden descendente: las más recientes primero
         var reversedSesiones = sesiones.slice().reverse();
 
+        // ============================================
+        // BANNER DE TOTALES ACUMULADOS DEL ALUMNO
+        // ============================================
+        var totalSesiones = sesiones.length;
+        var totalSegConDescansos = sesiones.reduce(function (acc, s) {
+            return acc + (s.duracionTotalSeg || 0);
+        }, 0);
+        var totalSegEfectivos = sesiones.reduce(function (acc, s) {
+            return acc + (s.duracionEfectivaSeg || s.duracionTotalSeg || 0);
+        }, 0);
+        var totalSeries = 0;
+        sesiones.forEach(function (s) {
+            if (s.detalles) {
+                totalSeries += s.detalles.filter(function (d) { return d.completada; }).length;
+            }
+        });
+
+        var totalsBanner = document.createElement('div');
+        totalsBanner.className = 'coach-progress-totals-banner';
+        totalsBanner.innerHTML =
+            '<div class="coach-total-item">' +
+                '<span class="coach-total-value">' + totalSesiones + '</span>' +
+                '<span class="coach-total-label">Sesiones</span>' +
+            '</div>' +
+            '<div class="coach-total-item">' +
+                '<span class="coach-total-value">' + totalSeries + '</span>' +
+                '<span class="coach-total-label">Series totales</span>' +
+            '</div>' +
+            '<div class="coach-total-item">' +
+                '<span class="coach-total-value">' + formatTime(totalSegConDescansos) + '</span>' +
+                '<span class="coach-total-label">Tiempo total</span>' +
+            '</div>' +
+            '<div class="coach-total-item">' +
+                '<span class="coach-total-value">' + formatTime(totalSegEfectivos) + '</span>' +
+                '<span class="coach-total-label">Tiempo efectivo</span>' +
+            '</div>';
+        container.appendChild(totalsBanner);
+
+        var weeklySummaryEl = renderWeeklySummary(sesiones);
+        if (weeklySummaryEl) {
+            container.appendChild(weeklySummaryEl);
+        }
+
+        // ============================================
+        // LISTADO DE SESIONES
+        // ============================================
         reversedSesiones.forEach(function (s) {
             var card = document.createElement('div');
             card.className = 'progress-session-card';
 
             var fechaFormat = s.fechaInicio
-                ? new Date(s.fechaInicio).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })
+                ? new Date(s.fechaInicio).toLocaleDateString('es-ES', {
+                    day: 'numeric', month: 'short', year: 'numeric',
+                    hour: '2-digit', minute: '2-digit'
+                })
                 : 'Fecha no registrada';
-            var duracionMin = Math.round((s.duracionTotalSeg || 0) / 60);
 
+            // Duraciones
+            var durTotal = s.duracionTotalSeg || 0;
+            var durEfectiva = s.duracionEfectivaSeg || 0;
+            if (durEfectiva === 0) durEfectiva = durTotal;
+            var durDescanso = Math.max(0, durTotal - durEfectiva);
+
+            // Conteo de series
+            var seriesHechas = s.detalles ? s.detalles.filter(function (d) { return d.completada; }).length : 0;
+            var seriesSaltadas = s.detalles ? s.detalles.filter(function (d) { return d.saltada; }).length : 0;
+
+            // Tabla de detalles serie por serie
             var detallesHtml = '';
             if (s.detalles && s.detalles.length > 0) {
-                detallesHtml = '<div class="progress-details-table"><table><thead><tr><th>Ejercicio</th><th>Serie</th><th>Peso Real</th><th>Tiempo</th><th>Estado</th></tr></thead><tbody>';
+                detallesHtml = '<div class="progress-details-table"><table><thead><tr>' +
+                    '<th>Ejercicio</th><th>Serie</th><th>Peso Real</th><th>Tiempo</th><th>Estado</th>' +
+                    '</tr></thead><tbody>';
                 s.detalles.forEach(function (d) {
                     var status = d.saltada ? '❌ Saltada' : '✔ Completada';
                     detallesHtml +=
@@ -447,14 +716,45 @@ function openClientProgressModal(clientId) {
             }
 
             card.innerHTML =
+                // Cabecera de la sesión
                 '<div class="progress-session-header">' +
                     '<div>' +
                         '<h4>' + s.rutinaNombre + '</h4>' +
                         '<span class="session-date">📅 ' + fechaFormat + '</span>' +
                     '</div>' +
-                    '<div class="session-duration">⏱ ' + duracionMin + ' minutos (' + formatTime(s.duracionTotalSeg) + ')</div>' +
+                    '<div class="session-pill-time">' +
+                        '✔ ' + seriesHechas + ' series' +
+                        (seriesSaltadas > 0 ? ' · ❌ ' + seriesSaltadas : '') +
+                    '</div>' +
                 '</div>' +
+
+                // ─── CHIPS DE DURACIÓN (total / efectiva / descanso) ───
+                '<div class="coach-duration-row">' +
+                    '<div class="duration-chip duration-total">' +
+                        '<span class="duration-chip-icon">⏱</span>' +
+                        '<div class="duration-chip-text">' +
+                            '<span class="duration-chip-label">Duración total</span>' +
+                            '<strong class="duration-chip-value">' + formatTime(durTotal) + '</strong>' +
+                        '</div>' +
+                    '</div>' +
+                    '<div class="duration-chip duration-effective">' +
+                        '<span class="duration-chip-icon">💪</span>' +
+                        '<div class="duration-chip-text">' +
+                            '<span class="duration-chip-label">Tiempo efectivo</span>' +
+                            '<strong class="duration-chip-value">' + formatTime(durEfectiva) + '</strong>' +
+                        '</div>' +
+                    '</div>' +
+                    '<div class="duration-chip duration-rest">' +
+                        '<span class="duration-chip-icon">💤</span>' +
+                        '<div class="duration-chip-text">' +
+                            '<span class="duration-chip-label">Descanso</span>' +
+                            '<strong class="duration-chip-value">' + formatTime(durDescanso) + '</strong>' +
+                        '</div>' +
+                    '</div>' +
+                '</div>' +
+
                 detallesHtml;
+
             container.appendChild(card);
         });
     }
@@ -465,3 +765,234 @@ function openClientProgressModal(clientId) {
 function closeClientProgressModal() {
     document.getElementById('clientProgressModal').classList.add('hidden');
 }
+
+function closeClientProgressModal() {
+    document.getElementById('clientProgressModal').classList.add('hidden');
+}
+
+// ==========================================
+// RESUMEN SEMANAL DEL ALUMNO (COACH)
+// ==========================================
+
+/**
+ * Calcula el resumen semanal agrupando las sesiones por semana ISO.
+ * Devuelve un array ordenado de la semana más reciente a la más antigua,
+ * con comparación respecto a la semana anterior.
+ */
+function buildWeeklySummary(sesiones) {
+    if (!sesiones || sesiones.length === 0) return [];
+
+    // Agrupar por semana
+    var semanasMap = {};
+
+    sesiones.forEach(function (s) {
+        var fecha = s.fechaInicio ? new Date(s.fechaInicio) : null;
+        if (!fecha || isNaN(fecha.getTime())) return;
+
+        var weekKey = getWeekKey(fecha);
+
+        if (!semanasMap[weekKey]) {
+            semanasMap[weekKey] = {
+                weekKey: weekKey,
+                weekStart: getWeekStart(fecha),
+                sesiones: 0,
+                series: 0,
+                seriesSaltadas: 0,
+                segTotal: 0,
+                segEfectivo: 0,
+                pesoTotal: 0,
+                pesoMaximo: 0
+            };
+        }
+
+        var w = semanasMap[weekKey];
+        w.sesiones++;
+        w.segTotal += (s.duracionTotalSeg || 0);
+        w.segEfectivo += (s.duracionEfectivaSeg || s.duracionTotalSeg || 0);
+
+        if (s.detalles) {
+            s.detalles.forEach(function (d) {
+                if (d.completada) {
+                    w.series++;
+                    if (d.pesoReal && d.pesoReal > 0) {
+                        w.pesoTotal += d.pesoReal;
+                        if (d.pesoReal > w.pesoMaximo) w.pesoMaximo = d.pesoReal;
+                    }
+                }
+                if (d.saltada) w.seriesSaltadas++;
+            });
+        }
+    });
+
+    // Convertir a array y ordenar por fecha descendente
+    var semanas = Object.values(semanasMap);
+    semanas.sort(function (a, b) { return b.weekStart - a.weekStart; });
+
+    // Calcular comparación con la semana anterior
+    for (var i = 0; i < semanas.length; i++) {
+        var w = semanas[i];
+        var prev = semanas[i + 1]; // la siguiente en el array (semana anterior)
+
+        if (prev) {
+            w.diffSesiones = w.sesiones - prev.sesiones;
+            w.diffSegEfectivo = w.segEfectivo - prev.segEfectivo;
+            w.diffSeries = w.series - prev.series;
+        } else {
+            w.diffSesiones = null; // sin comparación (primera semana registrada)
+            w.diffSegEfectivo = null;
+            w.diffSeries = null;
+        }
+    }
+
+    // Devolver solo las últimas 4 semanas para no saturar el modal
+    return semanas.slice(0, 4);
+}
+
+/**
+ * Devuelve el lunes (00:00) de la semana a la que pertenece `fecha`.
+ */
+function getWeekStart(fecha) {
+    var d = new Date(fecha);
+    d.setHours(0, 0, 0, 0);
+    var day = d.getDay(); // 0=dom, 1=lun, ..., 6=sab
+    var diff = (day === 0 ? -6 : 1 - day); // si es domingo, restar 6 días
+    d.setDate(d.getDate() + diff);
+    return d.getTime();
+}
+
+/**
+ * Devuelve una clave única de semana, ej: "2026-W38".
+ */
+function getWeekKey(fecha) {
+    var d = new Date(fecha);
+    d.setHours(0, 0, 0, 0);
+    // ISO week: jueves de la semana
+    var target = new Date(d);
+    var dayNr = (d.getDay() + 6) % 7;
+    target.setDate(target.getDate() - dayNr + 3);
+    var year = target.getFullYear();
+    var firstThursday = new Date(year, 0, 4);
+    var firstDayNr = (firstThursday.getDay() + 6) % 7;
+    firstThursday.setDate(firstThursday.getDate() - firstDayNr + 3);
+    var weekNum = 1 + Math.round((target - firstThursday) / (7 * 24 * 3600 * 1000));
+    return year + '-W' + (weekNum < 10 ? '0' + weekNum : weekNum);
+}
+
+/**
+ * Renderiza el bloque HTML del resumen semanal.
+ */
+function renderWeeklySummary(sesiones) {
+    var semanas = buildWeeklySummary(sesiones);
+    if (semanas.length === 0) return null;
+
+    var wrapper = document.createElement('div');
+    wrapper.className = 'weekly-summary-container';
+
+    var header = document.createElement('div');
+    header.className = 'weekly-summary-header';
+    header.innerHTML =
+        '<h4>📊 Resumen semanal</h4>' +
+        '<span class="text-muted" style="font-size: 0.8rem;">Últimas ' + semanas.length + ' semana' + (semanas.length > 1 ? 's' : '') + '</span>';
+    wrapper.appendChild(header);
+
+    var grid = document.createElement('div');
+    grid.className = 'weekly-cards-grid';
+
+    semanas.forEach(function (w, idx) {
+        var card = document.createElement('div');
+        card.className = 'weekly-card' + (idx === 0 ? ' weekly-card-current' : '');
+
+        var rangoTexto = formatWeekRange(w.weekStart);
+        var esSemanaActual = idx === 0;
+
+        // Diferencias vs semana anterior
+        var diffSesionesHtml = renderDiffBadge(w.diffSesiones);
+        var diffEfectivoHtml = renderDiffBadge(w.diffSegEfectivo, true);
+        var diffSeriesHtml = renderDiffBadge(w.diffSeries);
+
+        card.innerHTML =
+            '<div class="weekly-card-header">' +
+                '<div>' +
+                    '<span class="weekly-card-badge">' +
+                        (esSemanaActual ? '📍 Esta semana' : 'Semana') +
+                    '</span>' +
+                    '<div class="weekly-card-range">' + rangoTexto + '</div>' +
+                '</div>' +
+            '</div>' +
+
+            '<div class="weekly-metrics">' +
+                '<div class="weekly-metric">' +
+                    '<span class="weekly-metric-value">' + w.sesiones + '</span>' +
+                    '<span class="weekly-metric-label">Sesiones</span>' +
+                    diffSesionesHtml +
+                '</div>' +
+                '<div class="weekly-metric">' +
+                    '<span class="weekly-metric-value">' + w.series + '</span>' +
+                    '<span class="weekly-metric-label">Series</span>' +
+                    diffSeriesHtml +
+                '</div>' +
+                '<div class="weekly-metric">' +
+                    '<span class="weekly-metric-value">' + formatTime(w.segEfectivo) + '</span>' +
+                    '<span class="weekly-metric-label">Efectivo</span>' +
+                    diffEfectivoHtml +
+                '</div>' +
+            '</div>' +
+
+            '<div class="weekly-footer">' +
+                '<span>⏱ Total: <strong>' + formatTime(w.segTotal) + '</strong></span>' +
+                (w.pesoMaximo > 0 ? '<span>🏋️ Peso máx: <strong>' + w.pesoMaximo + ' kg</strong></span>' : '') +
+            '</div>';
+
+        grid.appendChild(card);
+    });
+
+    wrapper.appendChild(grid);
+    return wrapper;
+}
+
+/**
+ * Renderiza un badge de diferencia (↑ / ↓ / =) con color correspondiente.
+ */
+function renderDiffBadge(diff, isTime) {
+    if (diff === null || diff === undefined) {
+        return '<span class="weekly-diff weekly-diff-neutral">—</span>';
+    }
+    if (diff === 0) {
+        return '<span class="weekly-diff weekly-diff-neutral">= igual</span>';
+    }
+
+    var valor;
+    if (isTime) {
+        valor = formatTime(Math.abs(diff));
+    } else {
+        valor = Math.abs(diff);
+    }
+
+    if (diff > 0) {
+        return '<span class="weekly-diff weekly-diff-up">↑ +' + valor + '</span>';
+    } else {
+        return '<span class="weekly-diff weekly-diff-down">↓ -' + valor + '</span>';
+    }
+}
+
+/**
+ * Formatea el rango de una semana como "12 - 18 oct".
+ */
+function formatWeekRange(weekStartMs) {
+    var start = new Date(weekStartMs);
+    var end = new Date(weekStartMs);
+    end.setDate(end.getDate() + 6);
+
+    var meses = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+
+    var d1 = start.getDate();
+    var d2 = end.getDate();
+    var m1 = meses[start.getMonth()];
+    var m2 = meses[end.getMonth()];
+
+    if (start.getMonth() === end.getMonth()) {
+        return d1 + ' - ' + d2 + ' ' + m1;
+    }
+    return d1 + ' ' + m1 + ' - ' + d2 + ' ' + m2;
+}
+
