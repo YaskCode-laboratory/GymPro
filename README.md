@@ -11,7 +11,7 @@
 [![JavaScript](https://img.shields.io/badge/JavaScript-ES6+-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)](https://developer.mozilla.org/es/docs/Web/JavaScript)
 [![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
 
-**Desarrollada con tecnologías web. Para la asignación de rutinas wellness de Entrenador a Cliente, llevar seguimiento de entrenamiento progresivo físico como plataforma para tres roles diferenciados (Administardor, Entrenador y Alumno) y asistente de IA contextualizado.**
+**Para la asignación de rutinas de gimnasio de Entrenador a Cliente, llevar seguimiento de entrenamiento progresivo físico como plataforma para tres roles diferenciados (Administardor, Entrenador y Alumno) y asistente de IA contextualizado.**
 
 [Descripción](#-descripción) •
 [Características](#-características) •
