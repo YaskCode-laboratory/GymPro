@@ -152,7 +152,7 @@ AI_TEMPERATURE=0.7
 
 ```
 
-### Puerto del servidor (opcional, por defecto 3000)
+### Clonar y ejecutar proyecto
 
 ```bash
 # 1. Clonar el repositorio
