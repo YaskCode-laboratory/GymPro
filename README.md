@@ -48,28 +48,26 @@ fecha actual del usuario cliente/alumno.
 
 - Registro e inicio de sesión con **email + contraseña**
 - Contraseñas cifradas con **bcrypt** (10 rondas de hashing)
-- Manejo de **3 roles**: `admin`, `coach`, `client`
+- Manejo de **3 roles**: `Administrador`, `Entrenador`, `Cliente`
 - Foto de perfil personalizable con **redimensionado automático** en el navegador
 - Sesión activa persistente para reanudar entrenamientos tras recargar
 
 ### 👑 Panel de Administrador
 
 - **CRUD completo de usuarios** con tabla interactiva
-- Gestión del **catálogo global de ejercicios** (banco oficial)
+- Gestión del **catálogo global de ejercicios**
 - Supervisión de **todas las rutinas** y sus asignaciones
-- **Métricas globales**: clientes, coaches, rutinas, sesiones
-- Acceso al **sistema de auditoría** (log de actividades)
+- **Métricas globales**: clientes, entrenadores, rutinas, sesiones
 
 ### 💪 Panel de Instructor / Coach
 
 - **Constructor visual de rutinas** con:
   - Selector múltiple de días de la semana (chips)
   - Series, reps/tiempo, descanso y peso sugerido por ejercicio
-  - Reordenamiento con `order_index`
+  - Reordenamiento segun como se hayan añadido los ejercicios en la creacion de rutinas.
   - Asignación directa a un alumno o guardado como plantilla
 - **Gestión de alumnos** con vista de rutina actual y progreso
 - **Modal de progreso** con historial detallado y **resumen semanal** con tendencias (↑ ↓ =)
-- **Chat con IA** (CoachIA) para copiloto técnico
 
 ### 🏃 Panel de Cliente / Alumno
 
@@ -87,9 +85,8 @@ fecha actual del usuario cliente/alumno.
 
 ### 🤖 Asistente de IA
 
-- **GymBot** (para clientes): explicaciones de técnica, motivación, análisis de progreso
-- **CoachIA** (para coaches): diseño de rutinas, sugerencias técnicas, análisis de alumnos
+- **GymBot**: explicaciones de técnica, motivación, análisis de progreso para clientes.
 - **Contexto dinámico**: el backend inyecta datos reales de la BD en cada consulta
 - **Consciencia temporal**: sabe qué día es hoy y si toca entrenar
-- **Historial persistente** en `chat_messages`
+- **Historial de persistencia**: conversaciones guardadas como una sesión de chat.
 - **Reglas estrictas**: no inventa datos, no da consejos médicos
