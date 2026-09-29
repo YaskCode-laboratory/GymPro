@@ -13,12 +13,11 @@
 
 **Plataforma desarrollada con tecnologías web. Para la asignacion de rutinas wellness de Entrenador a Cliente, llevar seguimiento de entrenamiento progresivo físico como plataforma unificada con tres roles diferenciados y asistente de IA contextualizados.**
 
-[Características](#-descripción) •
-[Demo](#-capturas-de-pantalla) •
-[Instalación](#-instalación) •
-[Arquitectura](#-arquitectura) •
-[API](#-api-rest) •
-[Documentación](#-documentación)
+[Descripción](#-descripción) •
+[Características](#-características) •
+[Demo](#-api-rest) •
+[Stack Tecnológico](#%EF%B8%8F-stack-tecnológico) •
+[Instalación](#-instalación)
 
 </div>
 
