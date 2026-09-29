@@ -4,6 +4,8 @@ const cors = require('cors');
 
 // Inicializar DB (ejecuta schema + seed)
 require('./db/database');
+require('dotenv').config();
+const auditMiddleware = require('./middlewares/auditMiddleware');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -16,12 +18,16 @@ app.use(express.urlencoded({ extended: true }));
 // Servir archivos estáticos del frontend
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Middleware de auditoría (registra todas las peticiones en activity.log)
+app.use(auditMiddleware);
+
 // Rutas API
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/users', require('./routes/users'));
 app.use('/api/exercises', require('./routes/exercises'));
 app.use('/api/routines', require('./routes/routines'));
 app.use('/api/sessions', require('./routes/sessions'));
+app.use('/api/ai', require('./routes/ai'));
 
 // Health check
 app.get('/api/health', (req, res) => {
