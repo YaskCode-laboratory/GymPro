@@ -21,3 +21,13 @@
 [Documentación](#-documentación)
 
 </div>
+
+## 📌 Descripción
+
+**GymPro** es una aplicación web que centraliza la gestión de rutinas
+de entrenamiento, el seguimiento del progreso físico y la interacción entre
+instructores y alumnos de un gimnasio.
+
+Busca ser una nueva alternativa a aplicaciones conocidas como Gym Up, Ejercicios en Casa: Sin equipo y Hevy, la cual permita el registro de usuarios con **tres roles diferenciados** y un
+**asistente de IA contextualizado** que conoce la rutina, el progreso y la
+fecha actual del usuario cliente/alumno.
