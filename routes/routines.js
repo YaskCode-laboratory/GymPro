@@ -1,5 +1,6 @@
 const express = require('express');
 const { dbRun, dbGet, dbAll } = require('../db/database');
+const { logActivity } = require('../services/logger');
 
 const router = express.Router();
 
@@ -122,6 +123,17 @@ router.post('/', async (req, res) => {
         }
 
         const saved = await dbGet('SELECT * FROM routines WHERE id = ?', [rutinaId]);
+
+        // Determinar si es creación o edición
+        const accion = existing ? 'Rutina editada' : 'Rutina creada';
+        const numEjercicios = Array.isArray(ejercicios) ? ejercicios.length : 0;
+
+        logActivity(
+            (req.body.userEmail || coachName || 'coach'),
+            'REGISTRO',
+            `${accion}: "${name}" (${numEjercicios} ejercicios, coach: ${coachName})`
+        );
+
         res.status(201).json(await buildRoutine(saved));
     } catch (err) {
         console.error('Error guardando rutina:', err);
@@ -146,6 +158,16 @@ router.put('/:id/assign', async (req, res) => {
             [clientId, req.params.id]
         );
 
+
+        const rutina = await dbGet('SELECT name FROM routines WHERE id = ?', [req.params.id]);
+        const cliente = await dbGet('SELECT name, email FROM users WHERE id = ?', [clientId]);
+
+        logActivity(
+            (req.body.userEmail || 'coach'),
+            'REGISTRO',
+            `Rutina "${rutina ? rutina.name : req.params.id}" asignada a "${cliente ? cliente.name : clientId}"`
+        );
+
         res.json({ message: 'Rutina asignada correctamente.' });
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -155,7 +177,16 @@ router.put('/:id/assign', async (req, res) => {
 // DELETE /api/routines/:id
 router.delete('/:id', async (req, res) => {
     try {
+        const rutina = await dbGet('SELECT name, coach_name FROM routines WHERE id = ?', [req.params.id]);
+        
         await dbRun('DELETE FROM routines WHERE id = ?', [req.params.id]);
+
+        logActivity(
+            (req.query.userEmail || (rutina && rutina.coach_name) || 'coach'),
+            'ELIMINACION',
+            `Rutina eliminada: "${rutina ? rutina.name : req.params.id}"`
+        );
+
         res.json({ message: 'Rutina eliminada.' });
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -163,3 +194,4 @@ router.delete('/:id', async (req, res) => {
 });
 
 module.exports = router;
+
