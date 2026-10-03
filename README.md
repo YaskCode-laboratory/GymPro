@@ -282,3 +282,7 @@ npm start
 # 5. Abrir en el navegador
 # http://localhost:3000
 ```
+## Integrantes en el Equipo de Desarrollo
+- Audio Silva
+- Santiago Verges
+- Angel Trejo
