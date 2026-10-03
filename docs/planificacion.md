@@ -12,8 +12,8 @@ El proyecto se desarrolló en **4 sprints** de 3 semanas cada uno, cubriendo las
 |--------|---------|----------|-----------|
 | **Sprint 1** | 1-2 | Análisis, planificación + análisis de requisitos | Entregable I: propuesta |
 | **Sprint 2** | 2-3 | Plan de actividades + gestión de riesgos | Entregable II: Planificación |
-| **Sprint 2** | 7-9 | Modo entrenamiento + progreso | Demo intermedia |
-| **Sprint 3** | 10-12 | IA + responsive + pruebas | Entregable III: final |
+| **Sprint 2** | 4-5 | Selección de la metodología | Entregable III: Diagrama de Gantt - Metodología de Desarrollo |
+| **Sprint 4** | 10-12 | IA + responsive + pruebas | Entregable III: final |
 
 ---
 
