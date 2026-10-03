@@ -286,3 +286,19 @@ npm start
 - Audio Silva
 - Santiago Verges
 - Angel Trejo
+
+## 📊 Estado del proyecto
+
+| Módulo | Estado |
+|---|---|
+| Autenticación con roles | ✅ Completado |
+| CRUD usuarios / ejercicios / rutinas | ✅ Completado |
+| Modo entrenamiento guiado | ✅ Completado |
+| Progreso y estadísticas | ✅ Completado |
+| Chat con IA contextual | ✅ Completado |
+| Log de actividades | ✅ Completado |
+| Resumen semanal coach | ✅ Completado |
+| Responsive móvil | ✅ Completado |
+| Despliegue | ✅ Através de Render |
+
+**Versión actual:** `v1.0.0` — La cual es entrega final.
