@@ -176,6 +176,30 @@ Esto se llama **arquitectura cliente-servidor** y es la base de casi todas las a
 | **dotenv** | 16.x | Gestión de variables de entorno |
 | **@google/genai** | 2.5 | SDK oficial del cliente Gemini |
 
+
+
+### Frontend
+
+| Tecnología | Rol |
+|-----------|-----|
+| **HTML5** | Estructura semántica |
+| **CSS3** | Variables CSS, Flexbox, Grid, animaciones |
+| **JavaScript ES6+** | Lógica cliente, fetch API, FileReader, Canvas |
+
+### Integraciones
+
+| Servicio | Rol |
+|----------|-----|
+| **Google Gemini 2.5 Flash** | Modelo de IA para el chat contextualizado |
+
+### Herramientas de desarrollo
+
+| Herramienta | Uso |
+|-------------|-----|
+| **Sublime Text** | Editor principal |
+| **Git + GitHub** | Control de versiones |
+| **Google AI Studio** | Generación de API key de Gemini |
+
 ## Arquitectura del sistema
 ```
 ┌────────────────────────────────────────────────────────────┐
@@ -215,28 +239,6 @@ Esto se llama **arquitectura cliente-servidor** y es la base de casi todas las a
 │  └──────────────────┘    └───────────────────────────┘    │
 └────────────────────────────────────────────────────────────┘
 ```
-
-### Frontend
-
-| Tecnología | Rol |
-|-----------|-----|
-| **HTML5** | Estructura semántica |
-| **CSS3** | Variables CSS, Flexbox, Grid, animaciones |
-| **JavaScript ES6+** | Lógica cliente, fetch API, FileReader, Canvas |
-
-### Integraciones
-
-| Servicio | Rol |
-|----------|-----|
-| **Google Gemini 2.5 Flash** | Modelo de IA para el chat contextualizado |
-
-### Herramientas de desarrollo
-
-| Herramienta | Uso |
-|-------------|-----|
-| **Sublime Text** | Editor principal |
-| **Git + GitHub** | Control de versiones |
-| **Google AI Studio** | Generación de API key de Gemini |
 
 ## 🚀 Instalación
 
