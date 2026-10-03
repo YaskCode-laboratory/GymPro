@@ -10,8 +10,8 @@ El proyecto se desarrolló en **4 sprints** de 3 semanas cada uno, cubriendo las
 
 | Sprint | Semanas | Objetivo | Entregable |
 |--------|---------|----------|-----------|
-| **Sprint 0** | 1-2 | Análisis y planificación | Entregable I: propuesta |
-| **Sprint 1** | 3-6 | Backend + Auth + CRUD | Entregable II: planificación |
+| **Sprint 1** | 1-2 | Análisis, planificación + análisis de requisitos | Entregable I: propuesta |
+| **Sprint 2** | 2-3 | Plan de actividades + gestión de riesgos | Entregable II: Planificación |
 | **Sprint 2** | 7-9 | Modo entrenamiento + progreso | Demo intermedia |
 | **Sprint 3** | 10-12 | IA + responsive + pruebas | Entregable III: final |
 
