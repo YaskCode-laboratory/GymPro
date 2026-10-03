@@ -302,3 +302,12 @@ npm start
 | Despliegue | ✅ Através de Render |
 
 **Versión actual:** `v1.0.0` — La cual es entrega final.
+
+## 📚 Documentación adicional
+
+- [Requisitos](./docs/requisitos.md)
+- [Planificación y Gantt](./docs/planificacion-gantt.md)
+- [Diagramas UML](./docs/diagramas-uml.md)
+- [Arquitectura detallada](./docs/arquitectura.md)
+- [Pruebas y calidad](./docs/pruebas-calidad.md)
+- [Cierre del proyecto](./docs/cierre-proyecto.md)
