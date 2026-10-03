@@ -306,7 +306,7 @@ npm start
 ## 📚 Documentación adicional
 
 - [Requisitos](./docs/requisitos.md)
-- [Planificación y Gantt](./docs/planificacion-gantt.md)
+- [Planificación y Gantt](./docs/planificacion.md)
 - [Diagramas UML](./docs/diagramas-uml.md)
 - [Arquitectura detallada](./docs/arquitectura.md)
 - [Pruebas y calidad](./docs/pruebas-calidad.md)
