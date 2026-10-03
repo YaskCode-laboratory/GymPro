@@ -53,9 +53,9 @@ El proyecto se desarrolló en **4 sprints** de 3 semanas cada uno, cubriendo las
 
 ## 4. Diagrama de Gantt
 
-Ver `docs/03-diagramas/gantt.png`
+Ver `docs/gantt.png`
 
-
+[![Diagrama de Gantt](gantt.png)](gantt.png)
 
 ---
 
