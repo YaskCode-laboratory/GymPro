@@ -183,3 +183,6 @@ classDiagram
     ContextBuilder ..> Rutina : consulta
     ContextBuilder ..> SesionEntrenamiento : consulta
 ```
+
+## Diagrama de Casos de Uso
+[![Diagrama de casos de uso](/diagramas/casodeUsoUml.drawio.png)](/diagramas/casodeUsoUml.drawio.png)
