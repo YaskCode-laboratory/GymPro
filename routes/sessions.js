@@ -30,7 +30,7 @@ router.get('/', async (req, res) => {
                 fechaInicio: s.fecha_inicio,
                 fechaFin: s.fecha_fin,
                 duracionTotalSeg: s.duracion_total_seg,
-                duracionEfectivaSeg: s.duracion_efectiva_seg || 0,  // ← ✅ AQUÍ
+                duracionEfectivaSeg: s.duracion_efectiva_seg || 0,
                 completada: !!s.completed,
                 detalles: detalles.map(d => ({
                     ejercicioId: d.exercise_id,
@@ -70,7 +70,7 @@ router.get('/client/:clientId', async (req, res) => {
                 fechaInicio: s.fecha_inicio,
                 fechaFin: s.fecha_fin,
                 duracionTotalSeg: s.duracion_total_seg,
-                duracionEfectivaSeg: s.duracion_efectiva_seg || 0,  // ← ✅ AQUÍ
+                duracionEfectivaSeg: s.duracion_efectiva_seg || 0,
                 completada: !!s.completed,
                 detalles: detalles.map(d => ({
                     ejercicioId: d.exercise_id,
