@@ -1,1 +1,367 @@
+<h1 align="center">🎓 Cierre del Proyecto — GymPro</h1>
 
+<p align="center">
+  <em>Conclusiones, aprendizajes, recomendaciones y trabajo futuro.</em>
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/status-completado-brightgreen" alt="Status"/>
+  <img src="https://img.shields.io/badge/version-1.0.0-blue" alt="Version"/>
+  <img src="https://img.shields.io/badge/defensa-2026-purple" alt="Defensa"/>
+</p>
+
+---
+
+## 📖 Tabla de contenidos
+
+- [🎯 Resumen del Proyecto](#-resumen-del-proyecto)
+- [✅ Objetivos Alcanzados](#-objetivos-alcanzados)
+- [📊 Resultados Obtenidos](#-resultados-obtenidos)
+- [💡 Conclusiones](#-conclusiones)
+- [🎓 Aprendizajes Clave](#-aprendizajes-clave)
+- [🚀 Recomendaciones](#-recomendaciones)
+- [🔮 Trabajo Futuro](#-trabajo-futuro)
+- [🙏 Agradecimientos](#-agradecimientos)
+- [📚 Referencias](#-referencias)
+- [📞 Contacto](#-contacto)
+
+---
+
+## 🎯 Resumen del Proyecto
+
+**GymPro** nació como respuesta a la necesidad de digitalizar la gestión de
+rutinas de entrenamiento en gimnasios y para entrenadores personales. El
+proyecto buscó crear una alternativa accesible, gratuita y con soporte de IA
+contextualizada frente a soluciones comerciales como **Hevy**, **Strong**,
+**Gym WP** o **Ejercicios en Casa: Sin equipo**.
+
+Después de **17 semanas de trabajo** distribuidas en análisis, diseño,
+desarrollo, pruebas y despliegue, se obtuvo un sistema web completo con:
+
+- 🎭 **3 roles diferenciados** (Administrador, Entrenador, Cliente)
+- 🤖 **Asistente de IA** integrado con Google Gemini
+- 📊 **Seguimiento completo** del progreso físico
+- 📝 **Auditoría total** de actividades en archivo plano
+- 🎨 **Interfaz moderna** con tema oscuro deportivo
+- 🌐 **Desplegado en producción**: [gympro-24ly.onrender.com](https://gympro-24ly.onrender.com/)
+
+---
+
+## ✅ Objetivos Alcanzados
+
+### 🎯 Objetivo general
+
+> Desarrollar un sistema web que automatice la creación, asignación, ejecución
+> y seguimiento de rutinas de entrenamiento en gimnasios.
+
+**Estado: ✅ Completado al 100%**
+
+### 🎯 Objetivos específicos
+
+| # | Objetivo | Estado | Evidencia |
+|---|----------|:------:|-----------|
+| 1 | Implementar autenticación por roles con contraseñas cifradas | ✅ | bcrypt + 3 roles funcionales |
+| 2 | Permitir a instructores crear y asignar rutinas personalizadas | ✅ | Constructor visual + asignación |
+| 3 | Guiar al cliente durante la ejecución con cronómetros y objetivos | ✅ | Reproductor con 3 cronómetros |
+| 4 | Registrar el historial de sesiones con métricas de progreso | ✅ | Tabla `sessions` + `session_details` |
+| 5 | Integrar un asistente de IA consciente del contexto del usuario | ✅ | GymBot con Gemini 2.5 Flash |
+| 6 | Garantizar trazabilidad total mediante un sistema de auditoría | ✅ | `activity.log` con 5 actividades |
+
+**Todos los objetivos específicos fueron cumplidos satisfactoriamente.**
+
+---
+
+## 📊 Resultados Obtenidos
+
+### 📈 Métricas del proyecto
+
+| Métrica | Valor |
+|---------|-------|
+| 📅 **Duración total** | 17 semanas |
+| 📁 **Archivos creados** | 35+ |
+| 📝 **Líneas de código** | ~8,000 |
+| 🗄️ **Tablas en BD** | 7 |
+| 🔌 **Endpoints REST** | 25+ |
+| 🎨 **Pantallas/vistas** | 15+ |
+| 🤖 **Modelos IA integrados** | 1 (Gemini 2.5 Flash) |
+| 🧪 **Casos de prueba** | 34 (100% aprobados) |
+| 🐛 **Bugs corregidos** | 8 |
+| 📚 **Diagramas UML** | 7 |
+
+### 🎨 Entregables finales
+
+| # | Entregable | Formato | Estado |
+|---|-----------|---------|:------:|
+| 1 | Código fuente completo | Repositorio GitHub | ✅ |
+| 2 | Base de datos con esquema y seed | SQLite + SQL | ✅ |
+| 3 | Documentación técnica | Markdown | ✅ |
+| 4 | Diagramas UML | Mermaid + PlantUML | ✅ |
+| 5 | Manual de instalación | README.md | ✅ |
+| 6 | Informe de pruebas | README (sección) | ✅ |
+| 7 | Despliegue en producción | Render | ✅ |
+| 8 | Presentación para defensa | PDF/Slides | ✅ |
+
+### 🏆 Logros destacados
+
+- 🥇 **Sistema desplegado en producción** y accesible públicamente
+- 🥇 **100% de los casos de prueba aprobados**
+- 🥇 **Asistente de IA funcional** con contexto real de la BD
+- 🥇 **Auditoría completa** sin ruido de sincronización
+- 🥇 **Código modular** y documentado
+- 🥇 **Arquitectura escalable** (preparada para migrar a PostgreSQL)
+
+---
+
+## 💡 Conclusiones
+
+### 1. 🎯 Sobre el cumplimiento de objetivos
+
+Se desarrolló **GymPro**, un sistema web funcional que automatiza la gestión
+de rutinas y el entrenamiento guiado, sustituyendo los métodos manuales por
+una plataforma unificada de tres roles. Todos los objetivos planteados al
+inicio del proyecto fueron alcanzados.
+
+### 2. 🏗️ Sobre la arquitectura elegida
+
+La combinación de **Node.js + Express + SQLite** demostró ser suficiente para
+un proyecto de complejidad media. La arquitectura **cliente-servidor con
+separación MVC** permitió:
+
+- Mantener el código organizado y fácil de mantener
+- Migrar de `localStorage` a SQLite sin romper el frontend
+- Escalar horizontalmente si el proyecto crece
+
+### 3. 🤖 Sobre la integración con IA
+
+La incorporación de **Google Gemini** aportó un **valor diferencial** frente a
+las alternativas comerciales: el asistente **conoce la fecha actual, la rutina
+del usuario y su progreso**, brindando respuestas contextualizadas y no
+genéricas. Esto se logró mediante la **inyección dinámica de contexto** en el
+prompt del sistema.
+
+### 4. 📝 Sobre el sistema de auditoría
+
+La implementación de un **log en archivo plano** (`activity.log`) con formato
+`FECHA | USUARIO | ACTIVIDAD | DETALLE` cumple con requisitos de trazabilidad
+típicos de contextos institucionales. El middleware transversal que captura
+automáticamente las peticiones HTTP demuestra **madurez técnica** y
+pensamiento orientado a producción.
+
+### 5. 🔄 Sobre la metodología aplicada
+
+El **modelo incremental con enfoque ágil** permitió:
+
+- Entregas tempranas y funcionales en cada iteración
+- Retroalimentación continua del equipo
+- Detección y corrección temprana de bugs
+- Reducción del riesgo de "todo o nada" al final del proyecto
+
+### 6. 🎨 Sobre la experiencia de usuario
+
+El **tema oscuro deportivo** inspirado en Hevy, Strong y Nike Training,
+combinado con **cronómetros gigantes**, **chips de días** y **modales
+informativos**, logró una interfaz moderna, intuitiva y adecuada para el
+contexto de uso: **un gimnasio, en movimiento, con iluminación variable**.
+
+---
+
+## 🎓 Aprendizajes Clave
+
+### 👨‍💻 Técnicos
+
+| Área | Aprendizaje |
+|------|-------------|
+| **Backend** | Uso profesional de Express, middleware, REST y separación de rutas |
+| **Base de datos** | Diseño de esquemas relacionales con FK, CASCADE y SET NULL |
+| **IA generativa** | Integración de Gemini con contexto dinámico y prompts por rol |
+| **Seguridad** | Hash de contraseñas con bcrypt, gestión de API keys con `.env` |
+| **Frontend** | Fetch API, async/await, manipulación del DOM sin frameworks |
+| **Auditoría** | Implementación de logging con `fs.appendFile` y middleware transversal |
+
+### 🧠 Metodológicos
+
+- **Planificación por iteraciones**: cada feature entregada antes de empezar la siguiente
+- **Priorización MoSCoW**: primero lo crítico (auth, rutas), luego lo deseable (chat IA)
+- **Refactorización controlada**: migrar de `localStorage` a SQLite sin romper el front
+- **Documentación continua**: el README y los diagramas UML se actualizaron junto al código
+
+### 🤝 Blandos (Soft skills)
+
+- **Autogestión** del tiempo en un proyecto de 17 semanas
+- **Resolución de problemas** complejos (bugs de lógica temporal, caching, IA)
+- **Comunicación técnica** al documentar el sistema para futuras defensas
+- **Adaptabilidad** ante cambios de requisitos y alcance
+
+---
+
+## 🚀 Recomendaciones
+
+### 📌 Para el equipo de desarrollo
+
+1. **Migrar a PostgreSQL** si el sistema escala a más de 1,000 usuarios concurrentes.
+2. **Implementar JWT** para reemplazar el header `X-User-Email` por tokens firmados.
+3. **Añadir HTTPS obligatorio** en despliegues productivos con Nginx o Caddy.
+4. **Automatizar pruebas** con Jest + Supertest + Playwright antes de la siguiente versión.
+5. **Configurar CI/CD** con GitHub Actions para deployments automáticos.
+6. **Documentar la API con Swagger/OpenAPI** para facilitar integraciones futuras.
+
+### 📌 Para el usuario final (gimnasios y entrenadores)
+
+1. **Capacitar a los coaches** en el uso del constructor de rutinas.
+2. **Configurar días de entrenamiento realistas** (2–5 días por semana).
+3. **Aprovechar el resumen semanal** para detectar estancamientos tempranos.
+4. **Motivar a los alumnos** a usar el chat con IA para consultas frecuentes.
+5. **Revisar el `activity.log`** periódicamente para auditar el uso del sistema.
+
+### 📌 Para futuros desarrolladores
+
+1. **Leer primero la sección de Arquitectura** del README antes de modificar código.
+2. **Respetar la separación de capas**: cada archivo tiene una única responsabilidad.
+3. **Ejecutar el sistema en local** antes de proponer cambios significativos.
+4. **Añadir tests** al crear nuevas funcionalidades.
+5. **Mantener actualizado el `activity.log`** al añadir nuevas acciones.
+
+---
+
+## 🔮 Trabajo Futuro
+
+### 🚧 Corto plazo (3 meses)
+
+- [ ] **Endpoint y vista de auditoría** en el panel del administrador
+- [ ] **Notificaciones toast** reemplazando los `alert()` nativos
+- [ ] **Exportación de historial** a CSV/PDF por cliente
+- [ ] **Recorte interactivo del avatar** (drag & zoom estilo Instagram)
+
+### 🔄 Mediano plazo (6 meses)
+
+- [ ] **Autenticación con JWT** + refresh tokens
+- [ ] **Migración a PostgreSQL** para escalabilidad
+- [ ] **Chat coach-alumno** dentro de la app (WebSockets)
+- [ ] **Gráficos de progresión** de peso por ejercicio (SVG puro)
+- [ ] **PWA** con soporte offline parcial
+
+### 🚀 Largo plazo (12 meses)
+
+- [ ] **Modo multi-sede** para cadenas de gimnasios
+- [ ] **Integración con wearables** (Fitbit, Apple Watch, Garmin)
+- [ ] **Generación automática de rutinas** con IA a partir de parámetros
+- [ ] **Notificaciones push** con Service Workers
+- [ ] **App móvil nativa** (React Native o Flutter)
+- [ ] **Sistema de pagos** y membresías por suscripción
+- [ ] **Integración con calendarios** (Google Calendar, iCal)
+
+---
+
+## 🙏 Agradecimientos
+
+Este proyecto no habría sido posible sin el apoyo de:
+
+- 🎓 **Universidad del Zulia** — Facultad Experimental de Ciencias
+- 📚 **Profesor tutor** — Por su guía durante las 17 semanas de desarrollo
+- 👥 **Compañeros de equipo** — Por el trabajo colaborativo y la retroalimentación
+- 🌐 **Comunidad open source** — Por las herramientas y librerías utilizadas
+- 🤖 **Google AI Studio** — Por el acceso gratuito a Gemini 2.5 Flash
+- 💻 **GitHub** — Por el hosting del código y la posibilidad de desplegar en Render
+- 💪 **Usuarios beta** — Por sus comentarios y sugerencias durante el desarrollo
+
+---
+
+## 📚 Referencias
+
+### 📖 Bibliografía
+
+- **Pressman, R.** (2010). *Ingeniería del Software: Un enfoque práctico* (7ª ed.). McGraw-Hill.
+- **Sommerville, I.** (2011). *Ingeniería de Software* (9ª ed.). Pearson.
+- **Fowler, M.** (2003). *UML Distilled: A Brief Guide to the Standard Object Modeling Language* (3ª ed.). Addison-Wesley.
+- **Gamma, E., Helm, R., Johnson, R., & Vlissides, J.** (1994). *Design Patterns: Elements of Reusable Object-Oriented Software*. Addison-Wesley.
+
+### 🌐 Documentación oficial
+
+- [Node.js Documentation](https://nodejs.org/docs/)
+- [Express.js Guide](https://expressjs.com/)
+- [SQLite Documentation](https://www.sqlite.org/docs.html)
+- [Google Gemini API](https://ai.google.dev/docs)
+- [MDN Web Docs](https://developer.mozilla.org/)
+
+### 🛠️ Librerías utilizadas
+
+- [`express`](https://www.npmjs.com/package/express) — Framework HTTP
+- [`sqlite3`](https://www.npmjs.com/package/sqlite3) — Cliente SQLite
+- [`bcryptjs`](https://www.npmjs.com/package/bcryptjs) — Hash de contraseñas
+- [`@google/genai`](https://www.npmjs.com/package/@google/genai) — SDK oficial de Gemini
+- [`dotenv`](https://www.npmjs.com/package/dotenv) — Variables de entorno
+- [`cors`](https://www.npmjs.com/package/cors) — Habilitar CORS
+
+---
+
+## 📞 Contacto
+
+### 👨‍💻 Desarrolladores
+
+**[Audio Andrés Silva Barrios]**
+- 🎓 Universidad del Zulia — Licenciatura en Computación
+- 📧 [audioasilvab.06@gmail.com](mailto:tu-email@example.com)
+- 🐙 [@audioasilvab](https://github.com/audioasilvab)
+
+**[Santiago José Verges Lizardo]**
+- 🎓 Universidad del Zulia — Licenciatura en Computación
+- 📧 [compañero@example.com](mailto:compañero@example.com)
+- 🐙 [@compañero](https://github.com/compañero)
+
+### 🎓 Tutor académico
+
+**[Nombre del Tutor]**
+- 📚 Profesor de Ingeniería de Software
+- 🏫 Universidad del Zulia — Facultad Experimental de Ciencias
+- 📧 [tutor@example.com](mailto:tutor@example.com)
+
+### 🌐 Enlaces del proyecto
+
+| Recurso | Enlace |
+|---------|--------|
+| 🐙 **Repositorio GitHub** | [github.com/tu-usuario/gympro](https://github.com/tu-usuario/gympro) |
+| 🌐 **Demo en producción** | [gympro-24ly.onrender.com](https://gympro-24ly.onrender.com/) |
+| 📖 **Documentación** | [README.md](README.md) |
+| 🐛 **Reportar bugs** | [Issues](https://github.com/tu-usuario/gympro/issues) |
+| 💡 **Sugerencias** | [Discussions](https://github.com/tu-usuario/gympro/discussions) |
+
+---
+
+## 🏁 Estado Final del Proyecto
+
+```
+╔═══════════════════════════════════════════════════════════╗
+║                                                           ║
+║   ✅  PROYECTO COMPLETADO AL 100%                         ║
+║                                                           ║
+║   🎯  Todos los objetivos cumplidos                       ║
+║   🧪  34/34 casos de prueba aprobados                     ║
+║   🐛  8/8 bugs corregidos                                 ║
+║   🌐  Desplegado en producción                            ║
+║   📚  Documentación completa                              ║
+║                                                           ║
+║   🎓  Listo para defensa                                  ║
+║                                                           ║
+╚═══════════════════════════════════════════════════════════╝
+```
+
+---
+
+<div align="center">
+
+### 🎉 ¡Gracias por llegar hasta aquí!
+
+**GymPro** representa el esfuerzo, la dedicación y el aprendizaje de un
+proyecto académico completo. Esperamos que este sistema sea útil para
+gimnasios, entrenadores y personas que buscan mejorar su salud a través
+del entrenamiento guiado.
+
+**⭐ Si te gustó el proyecto, dale una estrella en GitHub ⭐**
+
+---
+
+**Hecho con ❤️ en Maracaibo, Venezuela**
+
+**Universidad del Zulia — 2026**
+
+</div>
