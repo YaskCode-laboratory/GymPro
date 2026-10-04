@@ -40,14 +40,13 @@ Esto se llama arquitectura cliente-servidor y es la base de casi todas las aplic
 └────────────────────────────────────────────────────────────┘
 ```
 
-## 🔌 API REST
-
-GymPro expone una **API REST** construida con Express que sirve al frontend. Todos los endpoints usan **JSON** como formato de intercambio de datos.
+El proyecto expone una **API REST** construida apartir de Express que sirve al frontend. Todos los endpoints usan **JSON** como formato de intercambio de datos.
 
 > 📍 **URL Base**: `http://localhost:3000/api`
+
 > 🌐 **En producción**: `https://gympro-24ly.onrender.com/api`
 
-### 📖 Convenciones
+### 📖 Nomenclatura
 
 - 🔓 **Público**: no requiere autenticación
 - 🔒 **Privado**: requiere sesión activa (actualmente se pasa el email del usuario en el header `X-User-Email`)
