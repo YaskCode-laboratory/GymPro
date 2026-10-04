@@ -32,7 +32,7 @@ router.post('/register', async (req, res) => {
             [id, name.trim(), email.trim().toLowerCase(), hashedPassword, role, avatar || null]
         );
 
-        // ✅ Loguear registro de nuevo usuario
+        // Loguear registro de nuevo usuario
         logActivity(email.toLowerCase(), 'REGISTRO', `Nuevo usuario: "${name}" (rol: ${role})`);
 
         res.status(201).json({
@@ -72,7 +72,7 @@ router.post('/login', async (req, res) => {
             return res.status(401).json({ error: 'Contraseña incorrecta.' });
         }
 
-        // ✅ Loguear login exitoso
+        // Loguear login exitoso
         logActivity(user.email, 'LOGIN', `Ingreso exitoso (rol: ${user.role})`);
 
         const { password: _, ...userSafe } = user;
