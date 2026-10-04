@@ -325,8 +325,6 @@ del entrenamiento guiado.
 
 ---
 
-**Hecho con ❤️ en Maracaibo, Venezuela**
-
 **Universidad del Zulia — 2026**
 
 </div>
