@@ -88,8 +88,6 @@ gympro/
 └── README.md                       # Archivo Readme.md
 ```
 
-Esto se llama **arquitectura cliente-servidor** y es la base de casi todas las aplicaciones web modernas.
-
 ### 🗺️ Descripción de carpetas principales
 
 | Carpeta | Propósito | Archivos clave |
