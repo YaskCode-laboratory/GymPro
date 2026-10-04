@@ -301,7 +301,7 @@ npm start
 | Responsive móvil | ✅ Completado |
 | Despliegue | ✅ Através de Render |
 
-**Versión actual:** `v1.0.0` — La cual es entrega final.
+**Versión actual:** `v1.0.0` — La cual representa la entrega final.
 
 ## 📚 Documentación adicional
 
