@@ -79,7 +79,7 @@ gympro/
 │       └── 📁 models/              # Representación orientada a objetos del gimnasio (Usuario, Rutina, Ejercicio...)
 │
 ├── 📁 docs/                        # Documentación y material de apoyo
-│   ├── diagrams/                   # Dibujos técnicos del sistema (UML, base de datos)
+│   ├── diagramas/                   # Dibujos técnicos del sistema (UML, base de datos)
 │   └── screenshots/                # Capturas de pantalla de la app
 │
 ├── .env                            # Configuración de variables del sistema (aquí se coloca la API key)
