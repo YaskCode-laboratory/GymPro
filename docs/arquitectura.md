@@ -44,7 +44,7 @@ El proyecto expone una **API REST** construida apartir de Express que sirve al f
 
 > 📍 **URL Base**: `http://localhost:3000/api`
 
-> 🌐 **En producción**: `https://gympro-24ly.onrender.com/api`
+> 🌐 **En producción (despliegue en Render)**: `https://gympro-24ly.onrender.com/api`
 
 ### 📖 Nomenclatura
 
