@@ -269,7 +269,7 @@ npm start
 
 - [Requisitos](./docs/requisitos.md)
 - [Planificación y Gantt](./docs/planificacion.md)
-- [Diagramas UML](./docs/diagramas-uml.md)
+- [Diagramas UML](./docs/diagramas.md)
 - [Arquitectura detallada](./docs/arquitectura.md)
 - [Pruebas y calidad](./docs/pruebas-calidad.md)
 - [Cierre del proyecto](./docs/cierre-proyecto.md)
