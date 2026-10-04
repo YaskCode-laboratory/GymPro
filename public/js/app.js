@@ -521,7 +521,7 @@ function handleLogout() {
     logout();
 }
 
-/**
+/** VISTA DESDE EL CELULAR
  * Renderiza el bottom navigation bar según el rol del usuario.
  */
 /**
