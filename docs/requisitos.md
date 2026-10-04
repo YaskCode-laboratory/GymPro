@@ -137,4 +137,4 @@ A partir del análisis de algunas aplicaciones, se identificaron las siguientes 
 - Una `session` tiene muchos `session_details` (1:N)
 - Un `user` tiene muchos `chat_messages` (1:N)
 
-Ver `docs/03-diagramas/clases.png` para el diagrama completo.
+[!(basededatosSQL.png)](basededatosSQL.png)
