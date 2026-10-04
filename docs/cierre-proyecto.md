@@ -286,8 +286,8 @@ Este proyecto no habría sido posible sin el apoyo de:
 | 🐙 **Repositorio GitHub** | [github.com/tu-usuario/gympro](https://github.com/tu-usuario/gympro) |
 | 🌐 **Demo en producción** | [gympro-24ly.onrender.com](https://gympro-24ly.onrender.com/) |
 | 📖 **Documentación** | [README.md](README.md) |
-| 🐛 **Reportar bugs** | [Issues](https://github.com/tu-usuario/gympro/issues) |
-| 💡 **Sugerencias** | [Discussions](https://github.com/tu-usuario/gympro/discussions) |
+| 🐛 **Reportar bugs** | [Issues](https://github.com/audioasilvab/GymPro/issues) |
+| 💡 **Sugerencias** | [Discussions](https://github.com/audioasilvab/GymPro/discussions) |
 
 ---
 
