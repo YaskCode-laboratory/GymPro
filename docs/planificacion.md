@@ -4,8 +4,6 @@
 
 El proyecto se desarrolló en **5 sprints** de 3 semanas cada uno, cubriendo las **18 semanas durante el semestre**.
 
----
-
 ## 2. Sprints y entregables
 
 | Sprint | Semana | Objetivo | Entregable |
@@ -59,23 +57,13 @@ El proyecto se desarrolló en **5 sprints** de 3 semanas cada uno, cubriendo las
 
 ## 4. Diagrama de Gantt
 
-Ver `docs/diagramas/gantt.png`
+Ver [aquí](https://share.goodday.work/fa6cef0c-0001-43f6-ad5e-4b5ee089d03b), el cual se uso GoodDay Work.
 
 [![Diagrama de Gantt](diagramas/gantt.png)](diagramas/gantt.png)
 
 ---
 
-## 5. Asignación de responsabilidades
-
-| Integrante | Rol | Responsabilidades |
-|-----------|-----|------------------|
-| *[Nombre 1]* | Full-stack Lead | Backend, base de datos, integración IA |
-| *[Nombre 2]* | Frontend Lead | UI/UX, estilos, responsive móvil |
-| *[Nombre 3]* | QA / Docs | Pruebas, documentación, UML |
-
----
-
-## 6. Análisis y gestión de riesgos
+## 5. Análisis y gestión de riesgos
 
 | ID | Riesgo | Probabilidad | Impacto | Mitigación |
 |----|--------|--------------|---------|------------|
@@ -92,10 +80,8 @@ Ver `docs/diagramas/gantt.png`
 
 ---
 
-## 7. Herramientas de gestión
+## 6. Herramientas de gestión
 
-- **Trello** para el tablero de tareas.
-- **GitHub Projects** para issues.
+- **Good Day Work** para el llevar los dias en los que se hizo cada fase del proyecto.
+- **GitHub** para subir proyecto y realizar cambios al mismo.
 - **Google Meet** para reuniones semanales.
-- **Discord** para comunicación diaria.
-- **GitHub Actions** para CI.
