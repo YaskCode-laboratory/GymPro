@@ -2,7 +2,7 @@
 
 ## 1. Cronograma general
 
-El proyecto se desarrolló bajo **5 sprints**, que posteriormente dieron su continuidad a la implementación del proyecto, cubriendo las **18 semanas durante el semestre**.
+El proyecto se desarrolló bajo **5 sprints**, que posteriormente dieron continuidad a la fase desarrollo/codificación del proyecto, cubriendo las **18 semanas durante el semestre**.
 
 ## 2. Sprints y entregables
 
