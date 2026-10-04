@@ -28,25 +28,24 @@ El proyecto se desarrolló en **5 sprints** de 3 semanas cada uno, cubriendo las
 - ✅ Solución que resuelve nuestra app frente a otras.
 - ✅ Requisitos funcionales y no funcionales.
 
-### Hito 2: Diseño UML (semana 3)
+### Hito 2: Diseño UML (semana 7-8)
 - ✅ Documentacion detallada por cada caso de uso y relacion con su requisito funcionales.
 - ✅ Diagrama de clases.
 - ✅ Diagramas de casos de uso.
 - ✅ Código en PlantUML de los diagramas Caso de uso y de Clases
-- ✅ 
-- ✅ 
+- ✅ Implementacion del codigo de los Objetos/Clases en Javascript
 
-### Hito 3: Backend MVP (semana 10)
+### Hito 3: Implementación y desarrollo de la app (semana 10-14)
 - ✅ Autenticación segun rol correspondiente.
 - ✅ Crear, actulizar, eliminar y modificar datos de usuarios, ejercicios, rutinas.
 - ✅ Implementación de las relaciones entre las tablas con SQLite.
 
-### Hito 4: Interfaz completa (semana 9)
+### Hito 4: Interfaz completa (semana 13)
 - ✅ Todos los dashboards.
 - ✅ Modo entrenamiento guiado.
 - ✅ Historial y progreso.
 
-### Hito 5: IA y pulido (semana 11)
+### Hito 5: IA y pulido (semana 13-14)
 - ✅ Chat con IA contextual.
 - ✅ Responsive móvil.
 - ✅ Log de actividades.
