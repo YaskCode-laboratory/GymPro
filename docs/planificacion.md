@@ -56,11 +56,15 @@ El proyecto se desarrolló bajo **5 sprints**, que posteriormente dieron continu
 
 ## 4. Diagrama de Gantt
 
-Ver [aquí](https://share.goodday.work/fa6cef0c-0001-43f6-ad5e-4b5ee089d03b), el cual se uso <img src="https://static.crozdesk.com/web_app_library/providers/logos/000/232/640/pub/goodday-1762786020-logo.png?1762786020" alt="Good Day Work" width="15"/> **GoodDay Work** plataforma moderna de gestión de trabajo, proyectos, productos y tareas diseñada para unir la planificación de alto nivel con la ejecución diaria de los equipos.
+La herramienta utilizada: <img src="https://static.crozdesk.com/web_app_library/providers/logos/000/232/640/pub/goodday-1762786020-logo.png?1762786020" alt="Good Day Work" width="15"/> **GoodDay Work** plataforma moderna de gestión de trabajo, proyectos, productos y tareas diseñada para unir la planificación de alto nivel con la ejecución diaria de los equipos.
 
 [![Diagrama de Gantt](diagramas/gantt.png)](diagramas/gantt.png)
 
----
+<div align="right">
+  
+  Diagrama completo ver [aquí](https://share.goodday.work/fa6cef0c-0001-43f6-ad5e-4b5ee089d03b)
+
+</div>
 
 ## 5. Análisis y gestión de riesgos
 
