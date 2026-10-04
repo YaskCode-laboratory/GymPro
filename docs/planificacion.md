@@ -35,7 +35,6 @@ El proyecto se desarrolló en **5 sprints** de 3 semanas cada uno, cubriendo las
 
 ### Hito 3: Implementación y desarrollo de la app (semana 10-14)
 - ✅ Autenticación segun rol correspondiente.
-- ✅ 
 - ✅ Crear, actulizar, eliminar y modificar datos de usuarios, ejercicios, rutinas.
 - ✅ Implementación de las relaciones entre las tablas con SQLite.
 
@@ -69,12 +68,10 @@ Ver [aquí](https://share.goodday.work/fa6cef0c-0001-43f6-ad5e-4b5ee089d03b), el
 |----|--------|--------------|---------|------------|
 | Personal | Falta de experiencia | Media | Medio | Documentación oficial + realización de prototipos |
 | R-03 | Pérdida de datos en local | Baja | Alto | Revisar lo ultimo subido a Github y extraer código fuente |
-| R-05 | Falta de tiempo | Alta | Alto | Priorizar requsitos del proyecto más importantes, extras después (diseño de los botones, organizacion de la interfaz...) |
+|  | Falta de tiempo | Alta | Alto | Priorizar requsitos del proyecto más importantes, extras después (diseño de los botones, organizacion de la interfaz...) |
 | R-06 | Incompatibilidad navegador | Baja | Bajo | Probar en otros navegadores: Chrome/Firefox/Safari |
 | R-07 | Fuga de API key | Baja | Crítico | Cancelar clave digital para que deje de funcionar por completo y generar una nueva |
-| R-08 | SQL injection | Baja | Alto | Queries parametrizadas (sqlite3 driver) |
-| R-09 | XSS | Media | Medio | Escape de HTML en el frontend |
-| R-10 | Obsolecencia tecnológica del grupo | Alta | Alta | El integrante que cuenta con el entorno tecnológico requerido actuará como integrador central, siendo responsable de aplicar los cambios en el software. Miembros del equipo enviarán sus propuestas de código para su posterior revisión, depuración y validación  |
+| Tecnología | Obsolecencia tecnológica del grupo | Alta | Alta | El integrante que cuenta con el entorno tecnológico requerido actuará como integrador central, siendo responsable de aplicar los cambios en el software. Miembros del equipo enviarán sus propuestas de código para su posterior revisión, depuración y validación  |
 
 ---
 
