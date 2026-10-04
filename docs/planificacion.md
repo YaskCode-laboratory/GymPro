@@ -2,7 +2,7 @@
 
 ## 1. Cronograma general
 
-El proyecto se desarrolló en **4 sprints** de 3 semanas cada uno, cubriendo las **12 semanas del semestre**.
+El proyecto se desarrolló en **5 sprints** de 3 semanas cada uno, cubriendo las **18 semanas durante el semestre**.
 
 ---
 
@@ -29,9 +29,12 @@ El proyecto se desarrolló en **4 sprints** de 3 semanas cada uno, cubriendo las
 - ✅ Requisitos funcionales y no funcionales.
 
 ### Hito 2: Diseño UML (semana 3)
+- ✅ Documentacion detallada por cada caso de uso y relacion con su requisito funcionales.
 - ✅ Diagrama de clases.
 - ✅ Diagramas de casos de uso.
-- ✅ Modelo de base de datos.
+- ✅ Código en PlantUML de los diagramas Caso de uso y de Clases
+- ✅ 
+- ✅ 
 
 ### Hito 3: Backend MVP (semana 10)
 - ✅ Autenticación segun rol correspondiente.
