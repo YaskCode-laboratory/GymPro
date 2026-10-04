@@ -8,13 +8,13 @@ El proyecto se desarrolló en **4 sprints** de 3 semanas cada uno, cubriendo las
 
 ## 2. Sprints y entregables
 
-| Sprint | Semanas | Objetivo | Entregable |
+| Sprint | Semana | Objetivo | Entregable |
 |--------|---------|----------|-----------|
 | **Sprint 1** | 1-2 | Análisis, planificación + análisis de requisitos | Entregable I: propuesta |
-| **Sprint 2** | 2-3 | Plan de actividades + gestión de riesgos | Entregable II: Planificación |
-| **Sprint 2** | 4-5 | Selección de la metodología | Entregable III: Diagrama de Gantt - Metodología de Desarrollo |
-| **Sprint 4** | 10-12 | Caso de uso UML | Entregable IV: Diagramas de UML de Casos de uso + descripción |
-| **Sprint 5** | 10-12 | Caso de clases UML | Entregable V: UML sobre Diagramas de clase + descripción + código |
+| **Sprint 2** | 2-4 | Plan de actividades + gestión de riesgos | Entregable II: Planificación |
+| **Sprint 2** | 4-7 | Selección de la metodología | Entregable III: Diagrama de Gantt - Metodología de Desarrollo |
+| **Sprint 4** | 7-8 | Caso de uso UML | Entregable IV: Diagramas de UML de Casos de uso + descripción |
+| **Sprint 5** | 8-9 | Caso de clases UML | Entregable V: UML sobre Diagramas de clase + descripción + código |
 
 ---
 
