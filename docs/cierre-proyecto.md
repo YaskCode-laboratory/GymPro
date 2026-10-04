@@ -271,14 +271,12 @@ Este proyecto no habría sido posible sin el apoyo de:
 - 📧 [angeltrejomarcelo@gmail.com](mailto:angeltrejomarcelo@gmail.com)
 - 🐙 [@compañero](https://github.com/compañero)
 
-angeltrejomarcelo@gmail.com
-
 ### 🎓 Tutor académico
 
 **[Yaskelly Yedra]**
 - 📚 Profesora de Ingeniería de Software
 - 🏫 Universidad del Zulia — Facultad Experimental de Ciencias
-- 📧 [tutor@example.com](mailto:tutor@example.com)
+- 📧 [profesorayedra@gmail.com](mailto:profesorayedra@gmail.com)
 
 ### 🌐 Enlaces del proyecto
 
