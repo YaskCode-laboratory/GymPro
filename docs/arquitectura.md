@@ -168,8 +168,11 @@ Catálogo global de ejercicios disponibles para armar rutinas.
 
 #### Ejemplo: Crear ejercicio
 
-```bash
-POST http://localhost:3000/api/exercises \
+``
+POST http://localhost:3000/api/exercises
+``
+
+```json
   {
     "id": "ej-1700000000",
     "name": "Sentadilla con Barra",
@@ -212,11 +215,12 @@ Creación, edición y asignación de rutinas de entrenamiento.
 
 #### Ejemplo: Crear una rutina
 
-```bash
-POST http://localhost:3000/api/routines \
-  -H "Content-Type: application/json" \
-  -H "X-User-Email: coach@gym.com" \
-  -d '{
+``
+POST http://localhost:3000/api/routines
+``
+
+```json
+ {
     "name": "Fuerza Piernas",
     "coachId": "coach-1",
     "coachName": "Carlos Méndez",
@@ -237,7 +241,7 @@ POST http://localhost:3000/api/routines \
         "mediaUrl": "https://ejemplo.com/sentadilla.jpg"
       }
     ]
-  }'
+  }
 ```
 
 **Respuesta (201)**:
@@ -256,13 +260,14 @@ POST http://localhost:3000/api/routines \
 
 #### Ejemplo: Asignar rutina a un cliente
 
-```bash
-PUT http://localhost:3000/api/routines/rutina-1700000000/assign \
-  -H "Content-Type: application/json" \
-  -H "X-User-Email: coach@gym.com" \
-  -d '{
-    "clientId": "924dd10d-1cd3-4f9d-8429-c2e8d7504a06"
-  }'
+```
+PUT http://localhost:3000/api/routines/rutina-1700000000/assign
+```
+
+```json
+{
+  "clientId": "924dd10d-1cd3-4f9d-8429-c2e8d7504a06"
+}
 ```
 
 **Respuesta (200)**:
@@ -286,11 +291,12 @@ Guardado y consulta del historial de entrenamientos ejecutados.
 
 #### Ejemplo: Guardar una sesión
 
-```bash
-POST http://localhost:3000/api/sessions \
-  -H "Content-Type: application/json" \
-  -H "X-User-Email: cliente@gym.com" \
-  -d '{
+``
+POST http://localhost:3000/api/sessions
+``
+
+```json
+{
     "id": "sesion-1700000000",
     "clienteId": "924dd10d-1cd3-4f9d-8429-c2e8d7504a06",
     "rutinaId": "rutina-1700000000",
@@ -311,7 +317,7 @@ POST http://localhost:3000/api/sessions \
         "saltada": false
       }
     ]
-  }'
+  }
 ```
 
 **Respuesta (201)**:
@@ -324,10 +330,9 @@ POST http://localhost:3000/api/sessions \
 
 #### Ejemplo: Consultar historial de un cliente
 
-```bash
-http://localhost:3000/api/sessions/client/924dd10d-1cd3-4f9d-8429-c2e8d7504a06 \
-  -H "X-User-Email: coach@gym.com"
-```
+``
+http://localhost:3000/api/sessions/client/924dd10d-1cd3-4f9d-8429-c2e8d7504a06
+``
 
 **Respuesta (200)** — array de sesiones con sus detalles:
 ```json
@@ -371,13 +376,15 @@ Endpoints para interactuar con el chat de Inteligencia Artificial (GymBot / Coac
 
 #### Ejemplo: Enviar mensaje a la IA
 
-```bash
-POST http://localhost:3000/api/ai/chat \
-  "Content-Type: application/json" \
-  '{
+``
+POST http://localhost:3000/api/ai/chat
+``
+
+```json
+{
     "userId": "924dd10d-1cd3-4f9d-8429-c2e8d7504a06",
     "message": "¿Qué ejercicios tengo hoy?"
-  }'
+  }
 ```
 
 **Respuesta (200)**:
@@ -389,10 +396,9 @@ POST http://localhost:3000/api/ai/chat \
 
 #### Ejemplo: Obtener historial de chat
 
-```bash
-http://localhost:3000/api/ai/history/924dd10d-1cd3-4f9d-8429-c2e8d7504a06 \
-  "X-User-Email: cliente@gym.com"
-```
+``
+http://localhost:3000/api/ai/history/924dd10d-1cd3-4f9d-8429-c2e8d7504a06
+``
 
 **Respuesta (200)**:
 ```json
