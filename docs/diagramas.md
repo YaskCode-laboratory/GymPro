@@ -185,5 +185,4 @@ classDiagram
 ```
 
 ## Diagrama de Casos de Uso
-[![Diagrama de casos de uso](diagramas/casodeUsoUml.drawio.png)](diagramas/casodeUsoUml.drawio.png)
-[![Diagrama de Gantt](diagramas/gantt.png)](diagramas/gantt.png)
+[![Diagrama de casos de uso](diagramas/umlCasoUso.png)](diagramas/umlCasoUso.png)
