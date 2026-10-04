@@ -221,7 +221,7 @@ contexto de uso: **un gimnasio, en movimiento, con iluminación variable**.
 Este proyecto no habría sido posible sin el apoyo de:
 
 - 🎓 **Universidad del Zulia** — Facultad Experimental de Ciencias
-- 📚 **Profesora Yaskelly** — Por ser guía durante el semestre. 
+- 📚 **Profesora Yaskelly** — por compartir su experiencia y conocimiento, y por formarnos no solo como desarrolladores, sino como profesionales capaces de enfrentar proyectos reales. 
 - 👥 **Compañeros de equipo** — Por el trabajo y la retroalimentación
 - 🌐 **Comunidad open source** — Por las herramientas y librerías utilizadas
 - 🤖 **Google AI Studio** — Por el acceso gratuito a Gemini 2.5 Flash
