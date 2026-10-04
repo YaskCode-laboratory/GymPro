@@ -378,20 +378,6 @@ Sección "Mi Historial y Progreso" con:
 
 ---
 
-### 🤖 5. Chat con Inteligencia Artificial
-
-#### 5.1 GymBot en Acción — Conciencia Temporal
-
-Ejemplo real del asistente respondiendo con:
-- **Fecha actual correcta** (domingo, 4 de octubre de 2026)
-- **Conocimiento de la rutina** del cliente
-- **Validación de días**: identifica que hoy NO toca entrenar
-- **Recomendación personalizada**: descansar y recuperarse
-
-![Chat IA - Consciencia Temporal](docs/screenshots/12-ai-chat-aware.png)
-
----
-
 ### 📊 6. Modal de Progreso Detallado (Vista del Coach)
 
 #### 6.1 Detalle Completo de una Sesión
