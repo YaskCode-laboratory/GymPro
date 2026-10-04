@@ -39,7 +39,7 @@ desarrollo, pruebas y despliegue, se obtuvo un sistema web completo con:
 |---|----------|:------:|-----------|
 | 1 | Implementar autenticación por roles con contraseñas cifradas | ✅ | bcrypt + 3 roles funcionales |
 | 2 | Permitir a instructores crear y asignar rutinas personalizadas | ✅ | Constructor visual + asignación |
-| 3 | Guiar al cliente durante la ejecución con cronómetros y objetivos | ✅ | Reproductor con 3 cronómetros |
+| 3 | Guiar al cliente durante la ejecución con cronómetros y objetivos | ✅ | Reproductor con cronómetros |
 | 4 | Registrar el historial de sesiones con métricas de progreso | ✅ | Tabla `sessions` + `session_details` |
 | 5 | Integrar un asistente de IA consciente del contexto del usuario | ✅ | GymBot con Gemini 2.5 Flash |
 | 6 | Garantizar trazabilidad total mediante un sistema de auditoría | ✅ | `activity.log` con 5 actividades |
