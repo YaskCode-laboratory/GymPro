@@ -244,7 +244,7 @@ Este proyecto no habría sido posible sin el apoyo de:
 ### 🛠️ Librerías utilizadas
 
 - [`express`](https://www.npmjs.com/package/express) — Framework HTTP
-- [`sqlite3`](https://www.npmjs.com/package/sqlite3) — Cliente SQLite
+- [`sqlite`](https://www.npmjs.com/package/sqlite) — Cliente SQLite
 - [`bcryptjs`](https://www.npmjs.com/package/bcryptjs) — Hash de contraseñas
 - [`@google/genai`](https://www.npmjs.com/package/@google/genai) — SDK oficial de Gemini
 - [`dotenv`](https://www.npmjs.com/package/dotenv) — Variables de entorno
