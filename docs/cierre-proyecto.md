@@ -269,7 +269,7 @@ Este proyecto no habría sido posible sin el apoyo de:
 
 **[Santiago José Verges Lizardo]**
 - 🎓 Universidad del Zulia — Licenciatura en Computación
-- 📧 [compañero@example.com](mailto:compañero@example.com)
+- 📧 [sthiagoverges@gmail.com](mailto:sthiagoverges@gmail.com)
 - 🐙 [@compañero](https://github.com/compañero)
 
 ### 🎓 Tutor académico
