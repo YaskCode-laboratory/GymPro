@@ -1,4 +1,4 @@
-# Planificación del Proyecto — GymPro
+# Planificación del Proyecto
 
 ## 1. Cronograma general
 
