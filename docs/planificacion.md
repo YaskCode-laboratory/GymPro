@@ -56,7 +56,7 @@ El proyecto se desarrolló bajo **5 sprints**, que posteriormente dieron continu
 
 ## 4. Diagrama de Gantt
 
-La herramienta utilizada - <img src="https://static.crozdesk.com/web_app_library/providers/logos/000/232/640/pub/goodday-1762786020-logo.png?1762786020" alt="Good Day Work" width="15"/> **GoodDay Work** plataforma moderna de gestión de trabajo, proyectos, productos y tareas diseñada para unir la planificación de alto nivel con la ejecución diaria de los equipos.
+La herramienta utilizada - <img src="https://static.crozdesk.com/web_app_library/providers/logos/000/232/640/pub/goodday-1762786020-logo.png?1762786020" alt="Good Day Work" width="14" /> **GoodDay Work** plataforma moderna de gestión de trabajo, proyectos, productos y tareas diseñada para unir la planificación de alto nivel con la ejecución diaria de los equipos.
 
 [![Diagrama de Gantt](diagramas/gantt.png)](diagramas/gantt.png)
 
