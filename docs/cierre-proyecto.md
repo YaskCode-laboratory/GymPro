@@ -1,11 +1,5 @@
 <h1>🎓 Cierre del Proyecto</h1>
 
-<p>
-  <em>Conclusiones, aprendizajes, recomendaciones y trabajo futuro.</em>
-</p>
-
-## 🎯 Resumen del Proyecto
-
 **GymPro** nació como respuesta a la necesidad de digitalizar la gestión de
 rutinas de entrenamiento en gimnasios y para entrenadores personales. El
 proyecto buscó crear una alternativa accesible, gratuita y con soporte de IA
