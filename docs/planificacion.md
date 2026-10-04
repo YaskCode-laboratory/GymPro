@@ -65,15 +65,13 @@ Ver [aquí](https://share.goodday.work/fa6cef0c-0001-43f6-ad5e-4b5ee089d03b), el
 
 ## 5. Análisis y gestión de riesgos
 
-| ID | Riesgo | Probabilidad | Impacto | Mitigación |
+|  | Riesgo | Probabilidad | Impacto | Mitigación |
 |----|--------|--------------|---------|------------|
-| R-01 | Falta de experiencia con IA | Media | Medio | Documentación oficial de Gemini + prototipo temprano |
-| R-02 | Conflictos Git | Alta | Bajo | Uso de ramas feature/* + PRs |
-| R-03 | Pérdida de datos | Baja | Alto | Backup del .db + commits frecuentes |
-| R-04 | Cuota de IA agotada | Media | Medio | Fallback si API falla + caché de respuestas |
-| R-05 | Falta de tiempo | Alta | Alto | Priorizar MVP primero, extras después |
-| R-06 | Incompatibilidad navegador | Baja | Bajo | Testing en Chrome/Firefox/Safari |
-| R-07 | Fuga de API key | Baja | Crítico | Solo backend, .env, .gitignore |
+| Personal | Falta de experiencia | Media | Medio | Documentación oficial + realización de prototipos |
+| R-03 | Pérdida de datos en local | Baja | Alto | Revisar lo ultimo subido a Github y extraer código fuente |
+| R-05 | Falta de tiempo | Alta | Alto | Priorizar requsitos del proyecto más importantes, extras después (diseño de los botones, organizacion de la interfaz...) |
+| R-06 | Incompatibilidad navegador | Baja | Bajo | Probar en otros navegadores: Chrome/Firefox/Safari |
+| R-07 | Fuga de API key | Baja | Crítico | Cancelar clave digital para que deje de funcionar por completo y generar una nueva |
 | R-08 | SQL injection | Baja | Alto | Queries parametrizadas (sqlite3 driver) |
 | R-09 | XSS | Media | Medio | Escape de HTML en el frontend |
 | R-10 | Dependencias rotas | Baja | Bajo | package-lock.json versionado |
