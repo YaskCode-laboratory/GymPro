@@ -37,20 +37,21 @@ El proyecto se desarrolló en **5 sprints** de 3 semanas cada uno, cubriendo las
 
 ### Hito 3: Implementación y desarrollo de la app (semana 10-14)
 - ✅ Autenticación segun rol correspondiente.
+- ✅ 
 - ✅ Crear, actulizar, eliminar y modificar datos de usuarios, ejercicios, rutinas.
 - ✅ Implementación de las relaciones entre las tablas con SQLite.
 
-### Hito 4: Interfaz completa (semana 13)
+### Hito 4: Interfaz completa (semana 14)
 - ✅ Todos los dashboards.
 - ✅ Modo entrenamiento guiado.
 - ✅ Historial y progreso.
 
-### Hito 5: IA y pulido (semana 13-14)
+### Hito 5: IA y pulido (semana 14-16)
 - ✅ Chat con IA contextual.
 - ✅ Responsive móvil.
 - ✅ Log de actividades.
 
-### Hito 6: Entrega final (semana 12)
+### Hito 6: Entrega final (semana 18)
 - ✅ Documentación completa.
 - ✅ Pruebas.
 
@@ -58,7 +59,7 @@ El proyecto se desarrolló en **5 sprints** de 3 semanas cada uno, cubriendo las
 
 ## 4. Diagrama de Gantt
 
-Ver `docs/gantt.png`
+Ver `docs/diagramas/gantt.png`
 
 [![Diagrama de Gantt](diagramas/gantt.png)](diagramas/gantt.png)
 
