@@ -244,10 +244,168 @@ npm start
 # 5. Abrir en el navegador
 # http://localhost:3000
 ```
-## Integrantes en el Equipo de Desarrollo
+## Integrantes del Equipo de Desarrollo
 - Audio Silva
 - Santiago Verges
 - Angel Trejo
+
+## 📸 Evidencias y Capturas del Sistema
+
+Galería completa de la aplicación en funcionamiento, organizada por flujo de uso.
+
+---
+
+### 🔐 1. Autenticación — Pantalla de Inicio de Sesión
+
+Interfaz principal de acceso con validación de credenciales, selector de rol implícito y opción de registro para nuevos usuarios.
+
+![Pantalla de Login](docs/screenshots/01-login.png)
+
+---
+
+### 👑 2. Panel del Administrador
+
+#### 2.1 Métricas Globales y Gestión de Usuarios
+
+Vista principal del administrador con:
+- **4 métricas globales**: clientes, instructores, rutinas creadas y sesiones realizadas
+- **Tabla CRUD de usuarios** con avatar, email, rol y acciones (editar/eliminar)
+- **Diferenciación de roles** con badges de colores (Administrador, Instructor, Cliente)
+
+![Panel Admin - Métricas y Usuarios](docs/screenshots/02-admin-dashboard.png)
+
+#### 2.2 Catálogo Oficial de Ejercicios
+
+Banco global de ejercicios disponibles para que los instructores armen sus rutinas:
+- Cada ejercicio muestra **imagen/thumbnail**, **nombre**, **grupo muscular** y **tipo** (Por Tiempo / Por Repeticiones)
+- **Descripción técnica** de cada ejercicio
+- Botón para agregar nuevos ejercicios al catálogo
+
+![Banco de Ejercicios](docs/screenshots/03-admin-exercises.png)
+
+---
+
+### 💪 3. Panel del Instructor / Coach
+
+#### 3.1 Gestor de Rutinas
+
+Vista principal del coach con todas las rutinas creadas:
+- **Nombre y días programados** de cada rutina
+- **Cantidad de ejercicios** con badge informativo
+- **Cliente asignado** (o plantilla sin asignar)
+- Botones de **Editar** y **Eliminar**
+- Botón para **crear nueva rutina**
+
+![Panel Coach - Gestor de Rutinas](docs/screenshots/04-coach-routines.png)
+
+#### 3.2 Lista de Alumnos
+
+Panel de gestión de alumnos con:
+- **Avatar y datos de cada cliente** (nombre, email)
+- **Rutina asignada actualmente** (o "Sin rutina asignada")
+- **Contador de entrenamientos completados**
+- Acciones rápidas: **Asignar Rutina** y **Ver Progreso**
+
+![Panel Coach - Lista de Alumnos](docs/screenshots/05-coach-clients.png)
+
+#### 3.3 Modal de Creación de Rutina (Parte 1)
+
+Formulario del constructor de rutinas con:
+- **Nombre de la rutina** y **descripción/objetivo**
+- **Selector múltiple de días** con chips interactivos (Lun, Mar, Mié, Jue, Vie, Sáb, Dom)
+- **Asignación directa a un alumno** desde un dropdown
+- **Sección para agregar ejercicios** con series, reps, peso y descanso
+
+![Modal Crear Rutina - Info Básica](docs/screenshots/06-coach-create-routine-1.png)
+
+#### 3.4 Modal de Creación de Rutina (Parte 2)
+
+Sección inferior del constructor con:
+- **Formulario de agregar ejercicio**: selector del catálogo + series, reps, peso y descanso
+- **Tabla de ejercicios añadidos** con orden, series, objetivo, descanso y botón de eliminar
+- Validación visual del orden de los ejercicios
+
+![Modal Crear Rutina - Ejercicios Añadidos](docs/screenshots/07-coach-create-routine-2.png)
+
+#### 3.5 Modal de Edición de Rutina
+
+Vista del mismo constructor al **editar una rutina existente**:
+- Todos los campos **precargados** con los datos actuales
+- **Días ya seleccionados** con chips en estado activo
+- Ejercicios listados con sus configuraciones actuales
+
+![Modal Editar Rutina](docs/screenshots/08-coach-edit-routine.png)
+
+---
+
+### 🏃 4. Panel del Cliente / Alumno
+
+#### 4.1 Dashboard Principal y Chat con IA
+
+Vista principal del cliente con:
+- **Saludo personalizado** con nombre y rol
+- **Chat flotante con GymBot** abierto, respondiendo de forma contextualizada (sabe qué día es y si toca entrenar)
+- **Rutina asignada** con días programados
+- **Aviso de día incorrecto**: *"Hoy no toca entrenar esta rutina"* con botón bloqueado
+
+![Dashboard Cliente con Chat IA](docs/screenshots/09-client-dashboard.png)
+
+#### 4.2 Reproductor de Entrenamiento Activo
+
+Modo entrenamiento guiado con:
+- **Barra superior** con nombre de rutina y cronómetro general
+- **Badge de grupo muscular** y tipo de ejercicio
+- **Contador de series** (Serie 1 de 3)
+- **Imagen demostrativa** del ejercicio
+- **Cronómetro gigante** con tiempo del ejercicio (azul cian)
+- **Tarjeta de objetivos**: reps objetivo, peso sugerido y campo editable de peso real
+- **Controles secundarios**: agregar serie extra y saltar ejercicio
+- **Botón gigante "Completar Serie"** con gradiente verde
+
+![Reproductor de Entrenamiento](docs/screenshots/10-client-workout-player.png)
+
+#### 4.3 Historial y Progreso del Cliente
+
+Sección "Mi Historial y Progreso" con:
+- **Contadores acumulados**: sesiones completadas y tiempo total entrenado
+- **Tarjeta de sesión** con fecha, series hechas y chips de:
+  - 🕐 **Duración total** (cian)
+  - 💪 **Tiempo efectivo** (verde)
+  - 💤 **Descanso** (naranja)
+- **Desglose por ejercicio** con series hechas y peso máximo
+
+![Historial y Progreso](docs/screenshots/11-client-history.png)
+
+---
+
+### 🤖 5. Chat con Inteligencia Artificial
+
+#### 5.1 GymBot en Acción — Conciencia Temporal
+
+Ejemplo real del asistente respondiendo con:
+- **Fecha actual correcta** (domingo, 4 de octubre de 2026)
+- **Conocimiento de la rutina** del cliente
+- **Validación de días**: identifica que hoy NO toca entrenar
+- **Recomendación personalizada**: descansar y recuperarse
+
+![Chat IA - Consciencia Temporal](docs/screenshots/12-ai-chat-aware.png)
+
+---
+
+### 📊 6. Modal de Progreso Detallado (Vista del Coach)
+
+#### 6.1 Detalle Completo de una Sesión
+
+Modal del coach mostrando el progreso detallado del alumno:
+- **Totales acumulados**: duración total, tiempo efectivo y descanso
+- **Tabla detallada** con:
+  - Ejercicio
+  - Número de serie
+  - Peso real usado
+  - Tiempo por serie
+  - Estado (Completada / Saltada)
+
+![Modal Progreso Detallado](docs/screenshots/13-coach-progress-modal.png)
 
 ## 📊 Estado del proyecto
 
