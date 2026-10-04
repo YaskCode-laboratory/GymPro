@@ -56,7 +56,7 @@ El proyecto se desarrolló bajo **5 sprints**, que posteriormente dieron continu
 
 ## 4. Diagrama de Gantt
 
-La herramienta utilizada: <img src="https://static.crozdesk.com/web_app_library/providers/logos/000/232/640/pub/goodday-1762786020-logo.png?1762786020" alt="Good Day Work" width="15"/> **GoodDay Work** plataforma moderna de gestión de trabajo, proyectos, productos y tareas diseñada para unir la planificación de alto nivel con la ejecución diaria de los equipos.
+La herramienta utilizada - <img src="https://static.crozdesk.com/web_app_library/providers/logos/000/232/640/pub/goodday-1762786020-logo.png?1762786020" alt="Good Day Work" width="15"/> **GoodDay Work** plataforma moderna de gestión de trabajo, proyectos, productos y tareas diseñada para unir la planificación de alto nivel con la ejecución diaria de los equipos.
 
 [![Diagrama de Gantt](diagramas/gantt.png)](diagramas/gantt.png)
 
@@ -68,13 +68,13 @@ La herramienta utilizada: <img src="https://static.crozdesk.com/web_app_library/
 
 ## 5. Análisis y gestión de riesgos
 
-|  | Riesgo | Probabilidad | Impacto | Mitigación |
+| Tipo | Riesgo | Probabilidad | Impacto | Mitigación |
 |----|--------|--------------|---------|------------|
-| Personal | Falta de experiencia | Media | Medio | Documentación oficial + realización de prototipos |
-| R-03 | Pérdida de datos en local | Baja | Alto | Revisar lo ultimo subido a Github y extraer código fuente |
-|  | Falta de tiempo | Alta | Alto | Priorizar requsitos del proyecto más importantes, extras después (diseño de los botones, organizacion de la interfaz...) |
-| R-06 | Incompatibilidad navegador | Baja | Bajo | Probar en otros navegadores: Chrome/Firefox/Safari |
-| R-07 | Fuga de API key | Baja | Crítico | Cancelar clave digital para que deje de funcionar por completo y generar una nueva |
+| Requisitos | Falta de experiencia | Media | Medio | Documentación oficial + realización de prototipos |
+| Tecnología | Pérdida de datos en local | Baja | Alto | Revisar lo ultimo subido a Github y extraer código fuente |
+| Organizacional | Falta de tiempo | Alta | Alto | Priorizar requsitos del proyecto más importantes, extras después (diseño de los botones, organizacion de la interfaz...) |
+| Tecnología | Incompatibilidad navegador | Baja | Bajo | Probar en otros navegadores: Chrome/Firefox/Safari |
+| Organizacional | Fuga de API key | Baja | Crítico | Cancelar clave digital para que deje de funcionar por completo y generar una nueva |
 | Tecnología | Obsolecencia tecnológica del grupo | Alta | Alta | El integrante que cuenta con el entorno tecnológico requerido actuará como integrador central, siendo responsable de aplicar los cambios en el software. Miembros del equipo enviarán sus propuestas de código para su posterior revisión, depuración y validación  |
 
 ---
