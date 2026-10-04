@@ -1,4 +1,4 @@
-<h1>🧪 Pruebas y Calidad</h1>
+<h1>Pruebas y Calidad</h1>
 
 ## 🎯 Estrategia de Pruebas
 
