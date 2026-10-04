@@ -10,7 +10,7 @@ El proyecto se desarrolló en **4 sprints** de 3 semanas cada uno, cubriendo las
 
 | Sprint | Semana | Objetivo | Entregable |
 |--------|---------|----------|-----------|
-| **Sprint 1** | 1-2 | Análisis, planificación + análisis de requisitos | Entregable I: propuesta |
+| **Sprint 1** | 1-2 | Análisis, planificación + análisis de requisitos | Entregable I: propuesta + área wellness seleccionada |
 | **Sprint 2** | 2-4 | Plan de actividades + gestión de riesgos | Entregable II: Planificación |
 | **Sprint 2** | 4-7 | Selección de la metodología | Entregable III: Diagrama de Gantt - Metodología de Desarrollo |
 | **Sprint 4** | 7-8 | Caso de uso UML | Entregable IV: Diagramas de UML de Casos de uso + descripción |
