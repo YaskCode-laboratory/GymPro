@@ -131,7 +131,7 @@ Casos ejecutados manualmente sobre la aplicación en funcionamiento.
 
 ## 🔬 Pruebas Unitarias
 
-### 🧩 Funciones críticas testeadas manualmente + GitHub Copilot
+### 🧩 Funciones críticas testeadas manualmente
 
 <details>
 <summary><strong>1. <code>normalizeDayName()</code></strong> — Normalización de días</summary>
@@ -355,13 +355,3 @@ El sistema maneja correctamente estos escenarios límite:
 - [x] Repositorio de GitHub actualizado con este README
 
 </details>
-
----
-
-<p align="center">
-  🧪 <strong>Calidad garantizada</strong> — 34/34 casos aprobados
-</p>
-
-<p align="right">
-  <em>Última actualización: octubre 2026</em>
-</p>
