@@ -20,20 +20,23 @@ El proyecto se desarrolló en **4 sprints** de 3 semanas cada uno, cubriendo las
 
 ## 3. Actividades e hitos
 
-### Hito 1: Análisis (semana 2)
+### Hito 1: Análisis + Planificación (semana 1-2)
 - ✅ Definición del problema.
+- ✅ Area wellness seleccionada.
+- ✅ Comparación entre aplicaciones correspondientes al wellness propuesto.
+- ✅ Problemas o desventajas que tienen las apps.
+- ✅ Solución que resuelve nuestra app frente a otras.
 - ✅ Requisitos funcionales y no funcionales.
-- ✅ Casos de uso.
 
 ### Hito 2: Diseño UML (semana 3)
 - ✅ Diagrama de clases.
 - ✅ Diagramas de casos de uso.
 - ✅ Modelo de base de datos.
 
-### Hito 3: Backend MVP (semana 6)
-- ✅ Autenticación con roles.
-- ✅ CRUD usuarios, ejercicios, rutinas.
-- ✅ Base de datos SQLite.
+### Hito 3: Backend MVP (semana 10)
+- ✅ Autenticación segun rol correspondiente.
+- ✅ Crear, actulizar, eliminar y modificar datos de usuarios, ejercicios, rutinas.
+- ✅ Implementación de las relaciones entre las tablas con SQLite.
 
 ### Hito 4: Interfaz completa (semana 9)
 - ✅ Todos los dashboards.
@@ -48,7 +51,6 @@ El proyecto se desarrolló en **4 sprints** de 3 semanas cada uno, cubriendo las
 ### Hito 6: Entrega final (semana 12)
 - ✅ Documentación completa.
 - ✅ Pruebas.
-- ✅ CI con GitHub Actions.
 
 ---
 
