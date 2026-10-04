@@ -1,4 +1,4 @@
-# Requisitos del Sistema — GymPro
+# Requisitos del Sistema
 
 ## 1. Necesidades identificadas
 
