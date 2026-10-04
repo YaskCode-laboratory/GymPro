@@ -74,7 +74,7 @@ Ver [aquí](https://share.goodday.work/fa6cef0c-0001-43f6-ad5e-4b5ee089d03b), el
 | R-07 | Fuga de API key | Baja | Crítico | Cancelar clave digital para que deje de funcionar por completo y generar una nueva |
 | R-08 | SQL injection | Baja | Alto | Queries parametrizadas (sqlite3 driver) |
 | R-09 | XSS | Media | Medio | Escape de HTML en el frontend |
-| R-10 | Dependencias rotas | Baja | Bajo | package-lock.json versionado |
+| R-10 | Obsolecencia tecnológica del grupo | Alta | Alta | El integrante que cuenta con el entorno tecnológico requerido actuará como integrador central, siendo responsable de aplicar los cambios en el software. Miembros del equipo enviarán sus propuestas de código para su posterior revisión, depuración y validación  |
 
 ---
 
