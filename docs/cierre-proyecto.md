@@ -1,31 +1,8 @@
-<h1 align="center">🎓 Cierre del Proyecto — GymPro</h1>
+<h1>🎓 Cierre del Proyecto</h1>
 
-<p align="center">
+<p>
   <em>Conclusiones, aprendizajes, recomendaciones y trabajo futuro.</em>
 </p>
-
-<p align="center">
-  <img src="https://img.shields.io/badge/status-completado-brightgreen" alt="Status"/>
-  <img src="https://img.shields.io/badge/version-1.0.0-blue" alt="Version"/>
-  <img src="https://img.shields.io/badge/defensa-2026-purple" alt="Defensa"/>
-</p>
-
----
-
-## 📖 Tabla de contenidos
-
-- [🎯 Resumen del Proyecto](#-resumen-del-proyecto)
-- [✅ Objetivos Alcanzados](#-objetivos-alcanzados)
-- [📊 Resultados Obtenidos](#-resultados-obtenidos)
-- [💡 Conclusiones](#-conclusiones)
-- [🎓 Aprendizajes Clave](#-aprendizajes-clave)
-- [🚀 Recomendaciones](#-recomendaciones)
-- [🔮 Trabajo Futuro](#-trabajo-futuro)
-- [🙏 Agradecimientos](#-agradecimientos)
-- [📚 Referencias](#-referencias)
-- [📞 Contacto](#-contacto)
-
----
 
 ## 🎯 Resumen del Proyecto
 
@@ -35,7 +12,7 @@ proyecto buscó crear una alternativa accesible, gratuita y con soporte de IA
 contextualizada frente a soluciones comerciales como **Hevy**, **Strong**,
 **Gym WP** o **Ejercicios en Casa: Sin equipo**.
 
-Después de **17 semanas de trabajo** distribuidas en análisis, diseño,
+Después de **18 semanas de trabajo** distribuidas en análisis, diseño,
 desarrollo, pruebas y despliegue, se obtuvo un sistema web completo con:
 
 - 🎭 **3 roles diferenciados** (Administrador, Entrenador, Cliente)
@@ -77,12 +54,11 @@ desarrollo, pruebas y despliegue, se obtuvo un sistema web completo con:
 
 | Métrica | Valor |
 |---------|-------|
-| 📅 **Duración total** | 17 semanas |
+| 📅 **Duración total** | 18 semanas |
 | 📁 **Archivos creados** | 35+ |
 | 📝 **Líneas de código** | ~8,000 |
 | 🗄️ **Tablas en BD** | 7 |
 | 🔌 **Endpoints REST** | 25+ |
-| 🎨 **Pantallas/vistas** | 15+ |
 | 🤖 **Modelos IA integrados** | 1 (Gemini 2.5 Flash) |
 | 🧪 **Casos de prueba** | 34 (100% aprobados) |
 | 🐛 **Bugs corregidos** | 8 |
@@ -128,7 +104,6 @@ un proyecto de complejidad media. La arquitectura **cliente-servidor con
 separación MVC** permitió:
 
 - Mantener el código organizado y fácil de mantener
-- Migrar de `localStorage` a SQLite sin romper el frontend
 - Escalar horizontalmente si el proyecto crece
 
 ### 3. 🤖 Sobre la integración con IA
@@ -181,13 +156,12 @@ contexto de uso: **un gimnasio, en movimiento, con iluminación variable**.
 ### 🧠 Metodológicos
 
 - **Planificación por iteraciones**: cada feature entregada antes de empezar la siguiente
-- **Priorización MoSCoW**: primero lo crítico (auth, rutas), luego lo deseable (chat IA)
-- **Refactorización controlada**: migrar de `localStorage` a SQLite sin romper el front
+- **Priorización**: primero lo crítico (auth, rutas), luego lo deseable (chat IA)
 - **Documentación continua**: el README y los diagramas UML se actualizaron junto al código
 
 ### 🤝 Blandos (Soft skills)
 
-- **Autogestión** del tiempo en un proyecto de 17 semanas
+- **Autogestión** del tiempo en un proyecto de 18 semanas
 - **Resolución de problemas** complejos (bugs de lógica temporal, caching, IA)
 - **Comunicación técnica** al documentar el sistema para futuras defensas
 - **Adaptabilidad** ante cambios de requisitos y alcance
@@ -199,11 +173,8 @@ contexto de uso: **un gimnasio, en movimiento, con iluminación variable**.
 ### 📌 Para el equipo de desarrollo
 
 1. **Migrar a PostgreSQL** si el sistema escala a más de 1,000 usuarios concurrentes.
-2. **Implementar JWT** para reemplazar el header `X-User-Email` por tokens firmados.
-3. **Añadir HTTPS obligatorio** en despliegues productivos con Nginx o Caddy.
-4. **Automatizar pruebas** con Jest + Supertest + Playwright antes de la siguiente versión.
-5. **Configurar CI/CD** con GitHub Actions para deployments automáticos.
-6. **Documentar la API con Swagger/OpenAPI** para facilitar integraciones futuras.
+2. **Automatizar pruebas** con Jest + Supertest + Playwright antes de la siguiente versión.
+3. **Documentar la API con Swagger/OpenAPI** para facilitar integraciones futuras.
 
 ### 📌 Para el usuario final (gimnasios y entrenadores)
 
@@ -234,7 +205,6 @@ contexto de uso: **un gimnasio, en movimiento, con iluminación variable**.
 
 ### 🔄 Mediano plazo (6 meses)
 
-- [ ] **Autenticación con JWT** + refresh tokens
 - [ ] **Migración a PostgreSQL** para escalabilidad
 - [ ] **Chat coach-alumno** dentro de la app (WebSockets)
 - [ ] **Gráficos de progresión** de peso por ejercicio (SVG puro)
@@ -248,7 +218,7 @@ contexto de uso: **un gimnasio, en movimiento, con iluminación variable**.
 - [ ] **Notificaciones push** con Service Workers
 - [ ] **App móvil nativa** (React Native o Flutter)
 - [ ] **Sistema de pagos** y membresías por suscripción
-- [ ] **Integración con calendarios** (Google Calendar, iCal)
+- [ ] **Integración con calendarios** (Google Calendar)
 
 ---
 
@@ -257,23 +227,17 @@ contexto de uso: **un gimnasio, en movimiento, con iluminación variable**.
 Este proyecto no habría sido posible sin el apoyo de:
 
 - 🎓 **Universidad del Zulia** — Facultad Experimental de Ciencias
-- 📚 **Profesor tutor** — Por su guía durante las 17 semanas de desarrollo
-- 👥 **Compañeros de equipo** — Por el trabajo colaborativo y la retroalimentación
+- 📚 **Profesora Yaskelly** — Por ser guía durante el semestre. 
+- 👥 **Compañeros de equipo** — Por el trabajo y la retroalimentación
 - 🌐 **Comunidad open source** — Por las herramientas y librerías utilizadas
 - 🤖 **Google AI Studio** — Por el acceso gratuito a Gemini 2.5 Flash
 - 💻 **GitHub** — Por el hosting del código y la posibilidad de desplegar en Render
-- 💪 **Usuarios beta** — Por sus comentarios y sugerencias durante el desarrollo
 
 ---
 
 ## 📚 Referencias
 
 ### 📖 Bibliografía
-
-- **Pressman, R.** (2010). *Ingeniería del Software: Un enfoque práctico* (7ª ed.). McGraw-Hill.
-- **Sommerville, I.** (2011). *Ingeniería de Software* (9ª ed.). Pearson.
-- **Fowler, M.** (2003). *UML Distilled: A Brief Guide to the Standard Object Modeling Language* (3ª ed.). Addison-Wesley.
-- **Gamma, E., Helm, R., Johnson, R., & Vlissides, J.** (1994). *Design Patterns: Elements of Reusable Object-Oriented Software*. Addison-Wesley.
 
 ### 🌐 Documentación oficial
 
@@ -310,8 +274,8 @@ Este proyecto no habría sido posible sin el apoyo de:
 
 ### 🎓 Tutor académico
 
-**[Nombre del Tutor]**
-- 📚 Profesor de Ingeniería de Software
+**[Yaskelly Yedra]**
+- 📚 Profesora de Ingeniería de Software
 - 🏫 Universidad del Zulia — Facultad Experimental de Ciencias
 - 📧 [tutor@example.com](mailto:tutor@example.com)
 
