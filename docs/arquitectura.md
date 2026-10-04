@@ -131,7 +131,7 @@ Gestión completa de usuarios del sistema (mayormente para el administrador).
 #### Ejemplo: Listar solo clientes
 
 ```bash
-  http://localhost:3000/api/users?role=client
+http://localhost:3000/api/users?role=client
 ```
 
 **Respuesta (200)**:
