@@ -1,4 +1,4 @@
-<h1>🎓 Cierre del Proyecto</h1>
+<h1>Cierre del Proyecto</h1>
 
 **GymPro** nació como respuesta a la necesidad de digitalizar la gestión de
 rutinas de entrenamiento en gimnasios y para entrenadores personales. El
@@ -56,7 +56,7 @@ desarrollo, pruebas y despliegue, se obtuvo un sistema web completo con:
 | 🤖 **Modelos IA integrados** | 1 (Gemini 2.5 Flash) |
 | 🧪 **Casos de prueba** | 34 (100% aprobados) |
 | 🐛 **Bugs corregidos** | 8 |
-| 📚 **Diagramas UML** | 7 |
+| 📚 **Diagramas UML** | 2 |
 
 ### 🎨 Entregables finales
 
@@ -69,7 +69,7 @@ desarrollo, pruebas y despliegue, se obtuvo un sistema web completo con:
 | 5 | Manual de instalación | README.md | ✅ |
 | 6 | Informe de pruebas | README (sección) | ✅ |
 | 7 | Despliegue en producción | Render | ✅ |
-| 8 | Presentación para defensa | PDF/Slides | ✅ |
+| 8 | Presentación para defensa | Slides | ✅ |
 
 ### 🏆 Logros destacados
 
@@ -269,7 +269,6 @@ Este proyecto no habría sido posible sin el apoyo de:
 **[Angel Enrique Trejo Marcelo]**
 - 🎓 Universidad del Zulia — Licenciatura en Computación
 - 📧 [angeltrejomarcelo@gmail.com](mailto:angeltrejomarcelo@gmail.com)
-- 🐙 [@compañero](https://github.com/compañero)
 
 ### 🎓 Tutor académico
 
