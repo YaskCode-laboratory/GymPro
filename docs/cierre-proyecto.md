@@ -276,6 +276,7 @@ Este proyecto no habría sido posible sin el apoyo de:
 - 📚 Profesora de Ingeniería de Software
 - 🏫 Universidad del Zulia — Facultad Experimental de Ciencias
 - 📧 [profesorayedra@gmail.com](mailto:profesorayedra@gmail.com)
+- 🐙 [@yaskelly](https://github.com/yaskelly)
 
 ### 🌐 Enlaces del proyecto
 
