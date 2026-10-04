@@ -270,7 +270,14 @@ Este proyecto no habría sido posible sin el apoyo de:
 **[Santiago José Verges Lizardo]**
 - 🎓 Universidad del Zulia — Licenciatura en Computación
 - 📧 [sthiagoverges@gmail.com](mailto:sthiagoverges@gmail.com)
+- 🐙 [@Judgetstation](https://github.com/Judgetstation)
+
+**[Angel Enrique Trejo Marcelo]**
+- 🎓 Universidad del Zulia — Licenciatura en Computación
+- 📧 [angeltrejomarcelo@gmail.com](mailto:angeltrejomarcelo@gmail.com)
 - 🐙 [@compañero](https://github.com/compañero)
+
+angeltrejomarcelo@gmail.com
 
 ### 🎓 Tutor académico
 
