@@ -4,7 +4,7 @@ const cors = require('cors');
 
 // Inicializar DB (ejecuta schema + seed)
 require('./db/database');
-require('dotenv').config();
+require('dotenv').config({ path: '.env.example' });
 const auditMiddleware = require('./middlewares/auditMiddleware');
 
 const app = express();
