@@ -82,7 +82,7 @@ gympro/
 │   ├── diagramas/                   # Dibujos técnicos del sistema (UML, base de datos)
 │   └── screenshots/                # Capturas de pantalla de la app
 │
-├── .env                            # Configuración de variables del sistema (aquí se coloca la API key)
+├── .env.example                    # Configuración de variables del sistema (aquí se coloca la API key)
 ├── package.json                    # Lista de dependencias y comandos del proyecto
 ├── server.js                       # Arranca el servidor
 └── README.md                       # Archivo Readme.md
