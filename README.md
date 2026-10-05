@@ -210,7 +210,7 @@ gympro/
 
 ### 🔐 Preparación de la API de GEMINI IA en variables de entorno (`.env`)
 
-Luego abre el archivo `.env.example` con tu editor y rellena los campos, sin secretos reales para que cualquiera pueda replicar la configuración.:
+Luego abre el archivo `.env.example` con tu editor y rellena los campos, puedes cambiar los valores que trae por defecto y configurarlos a su manera:
 
 ```bash
 # API Key de Google Gemini (Google AI STUDIO)
