@@ -8,7 +8,8 @@ const authMiddleware = require('../middlewares/authMiddleware');
 
 const router = express.Router();
 
-const JWT_SECRET = process.env.JWT_SECRET;
+const { getOrCreateJwtSecret } = require('../services/jwtSecret');
+const JWT_SECRET = getOrCreateJwtSecret();
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '8h';
 
 function generateToken(user) {
@@ -31,9 +32,7 @@ function generateToken(user) {
 router.post('/register', async (req, res) => {
     try {
         const { name, email, password } = req.body;
-
-        // ✅ Forzar siempre rol "client"
-        const role = 'client';
+        const role = 'client';      // Forzar siempre rol "client"
 
         if (!name || !email || !password) {
             return res.status(400).json({ error: 'Todos los campos son requeridos.' });
