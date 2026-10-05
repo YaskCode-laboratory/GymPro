@@ -63,6 +63,7 @@ gympro/
 │   ├── aiService.js                # Se comunica con Google Gemini (la IA)
 │   ├── contextBuilder.js           # Le da datos reales al chat (tu rutina, tu progreso) para que la IA responda bien
 │   ├── prompts.js                  # Define la personalidad y reglas de cada asistente IA
+│   ├── jwtSecret.js                # Genera/persiste el JWT_SECRET automáticamente
 │   └── logger.js                   # Escribe el archivo de auditoría (activity.log)
 │
 ├── 📁 public/                      # Todo lo que ve el usuario en el navegador
