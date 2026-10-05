@@ -1,10 +1,13 @@
 const express = require('express');
 const { dbRun, dbGet, dbAll } = require('../db/database');
 const { logActivity } = require('../services/logger');
+const authMiddleware = require('../middlewares/authMiddleware');
+const { requireRole } = require('../middlewares/roleMiddleware');
 
 const router = express.Router();
 
-// Helper: arma la rutina con sus ejercicios
+router.use(authMiddleware);
+
 async function buildRoutine(rutinaRow) {
     const ejercicios = await dbAll(
         `SELECT * FROM routine_exercises WHERE routine_id = ? ORDER BY order_index ASC`,
@@ -33,7 +36,8 @@ async function buildRoutine(rutinaRow) {
     };
 }
 
-// GET /api/routines  (?coachId=...&clientId=...)
+// GET /api/routines
+// Admin: todas | Coach: las suyas | Cliente: solo la asignada a él
 router.get('/', async (req, res) => {
     try {
         const { coachId, clientId } = req.query;
@@ -41,8 +45,18 @@ router.get('/', async (req, res) => {
         const params = [];
         const conditions = [];
 
-        if (coachId) { conditions.push('coach_id = ?'); params.push(coachId); }
-        if (clientId) { conditions.push('assigned_to_client_id = ?'); params.push(clientId); }
+        if (req.user.role === 'client') {
+            conditions.push('assigned_to_client_id = ?');
+            params.push(req.user.id);
+        } else if (req.user.role === 'coach') {
+            conditions.push('coach_id = ?');
+            params.push(req.user.id);
+        } else {
+            // Admin: aplicar filtros opcionales
+            if (coachId) { conditions.push('coach_id = ?'); params.push(coachId); }
+            if (clientId) { conditions.push('assigned_to_client_id = ?'); params.push(clientId); }
+        }
+
         if (conditions.length) sql += ' WHERE ' + conditions.join(' AND ');
         sql += ' ORDER BY created_at DESC';
 
@@ -62,14 +76,20 @@ router.get('/:id', async (req, res) => {
     try {
         const r = await dbGet('SELECT * FROM routines WHERE id = ?', [req.params.id]);
         if (!r) return res.status(404).json({ error: 'Rutina no encontrada.' });
+
+        // Cliente solo ve su propia rutina
+        if (req.user.role === 'client' && r.assigned_to_client_id !== req.user.id) {
+            return res.status(403).json({ error: 'No puedes ver esta rutina.' });
+        }
+
         res.json(await buildRoutine(r));
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
 });
 
-// POST /api/routines  (crear o actualizar)
-router.post('/', async (req, res) => {
+// POST /api/routines (solo admin y coach)
+router.post('/', requireRole('admin', 'coach'), async (req, res) => {
     try {
         const {
             id, name, coachId, coachName,
@@ -78,25 +98,32 @@ router.post('/', async (req, res) => {
 
         const rutinaId = id || ('rutina-' + Date.now());
 
-        // Upsert de la rutina
+        // Un coach solo puede crear rutinas a su nombre
+        const finalCoachId = req.user.role === 'coach' ? req.user.id : coachId;
+        const finalCoachName = req.user.role === 'coach' ? req.user.name : coachName;
+
         const existing = await dbGet('SELECT id FROM routines WHERE id = ?', [rutinaId]);
         if (existing) {
+            // Verificar que el coach solo edite sus propias rutinas
+            const rutina = await dbGet('SELECT coach_id FROM routines WHERE id = ?', [rutinaId]);
+            if (req.user.role === 'coach' && rutina.coach_id !== req.user.id) {
+                return res.status(403).json({ error: 'No puedes editar rutinas de otros coaches.' });
+            }
+
             await dbRun(
                 `UPDATE routines SET name = ?, coach_id = ?, coach_name = ?,
                  assigned_to_client_id = ?, days = ?, description = ? WHERE id = ?`,
-                [name, coachId, coachName, assignedToClientId || null, dias, description, rutinaId]
+                [name, finalCoachId, finalCoachName, assignedToClientId || null, dias, description, rutinaId]
             );
-            // Borrar ejercicios previos y reinsertar
             await dbRun('DELETE FROM routine_exercises WHERE routine_id = ?', [rutinaId]);
         } else {
             await dbRun(
                 `INSERT INTO routines (id, name, coach_id, coach_name, assigned_to_client_id, days, description)
                  VALUES (?, ?, ?, ?, ?, ?, ?)`,
-                [rutinaId, name, coachId, coachName, assignedToClientId || null, dias, description]
+                [rutinaId, name, finalCoachId, finalCoachName, assignedToClientId || null, dias, description]
             );
         }
 
-        // Insertar ejercicios
         if (Array.isArray(ejercicios)) {
             for (let i = 0; i < ejercicios.length; i++) {
                 const e = ejercicios[i];
@@ -105,18 +132,10 @@ router.post('/', async (req, res) => {
                      (routine_id, exercise_id, name, muscle_group, tipo, series, reps, peso_sugerido, descanso_seg, tiempo_objetivo_seg, media_url, order_index)
                      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
                     [
-                        rutinaId,
-                        e.ejercicioId,
-                        e.nombre,
-                        e.muscleGroup || '',
-                        e.tipo,
-                        e.series,
-                        e.reps || 0,
-                        e.peso_sugerido || 0,
-                        e.descanso_seg || 60,
-                        e.tiempo_objetivo_seg || 0,
-                        e.mediaUrl || '',
-                        i
+                        rutinaId, e.ejercicioId, e.nombre, e.muscleGroup || '',
+                        e.tipo, e.series, e.reps || 0, e.peso_sugerido || 0,
+                        e.descanso_seg || 60, e.tiempo_objetivo_seg || 0,
+                        e.mediaUrl || '', i
                     ]
                 );
             }
@@ -124,14 +143,13 @@ router.post('/', async (req, res) => {
 
         const saved = await dbGet('SELECT * FROM routines WHERE id = ?', [rutinaId]);
 
-        // Determinar si es creación o edición
         const accion = existing ? 'Rutina editada' : 'Rutina creada';
         const numEjercicios = Array.isArray(ejercicios) ? ejercicios.length : 0;
 
         logActivity(
-            (req.body.userEmail || coachName || 'coach'),
+            req.user.email,
             'REGISTRO',
-            `${accion}: "${name}" (${numEjercicios} ejercicios, coach: ${coachName})`
+            `${accion}: "${name}" (${numEjercicios} ejercicios)`
         );
 
         res.status(201).json(await buildRoutine(saved));
@@ -141,31 +159,34 @@ router.post('/', async (req, res) => {
     }
 });
 
-// PUT /api/routines/:id/assign  (asignar a cliente)
-router.put('/:id/assign', async (req, res) => {
+// PUT /api/routines/:id/assign (solo admin y coach)
+router.put('/:id/assign', requireRole('admin', 'coach'), async (req, res) => {
     try {
         const { clientId } = req.body;
 
-        // Desasignar cualquier rutina previa de este cliente
+        const rutina = await dbGet('SELECT name, coach_id FROM routines WHERE id = ?', [req.params.id]);
+        if (!rutina) return res.status(404).json({ error: 'Rutina no encontrada.' });
+
+        if (req.user.role === 'coach' && rutina.coach_id !== req.user.id) {
+            return res.status(403).json({ error: 'No puedes asignar rutinas de otros coaches.' });
+        }
+
         await dbRun(
             'UPDATE routines SET assigned_to_client_id = NULL WHERE assigned_to_client_id = ?',
             [clientId]
         );
 
-        // Asignar la nueva
         await dbRun(
             'UPDATE routines SET assigned_to_client_id = ? WHERE id = ?',
             [clientId, req.params.id]
         );
 
-
-        const rutina = await dbGet('SELECT name FROM routines WHERE id = ?', [req.params.id]);
         const cliente = await dbGet('SELECT name, email FROM users WHERE id = ?', [clientId]);
 
         logActivity(
-            (req.body.userEmail || 'coach'),
+            req.user.email,
             'REGISTRO',
-            `Rutina "${rutina ? rutina.name : req.params.id}" asignada a "${cliente ? cliente.name : clientId}"`
+            `Rutina "${rutina.name}" asignada a "${cliente ? cliente.name : clientId}"`
         );
 
         res.json({ message: 'Rutina asignada correctamente.' });
@@ -174,17 +195,22 @@ router.put('/:id/assign', async (req, res) => {
     }
 });
 
-// DELETE /api/routines/:id
-router.delete('/:id', async (req, res) => {
+// DELETE /api/routines/:id (solo admin y coach)
+router.delete('/:id', requireRole('admin', 'coach'), async (req, res) => {
     try {
-        const rutina = await dbGet('SELECT name, coach_name FROM routines WHERE id = ?', [req.params.id]);
-        
+        const rutina = await dbGet('SELECT name, coach_id FROM routines WHERE id = ?', [req.params.id]);
+        if (!rutina) return res.status(404).json({ error: 'Rutina no encontrada.' });
+
+        if (req.user.role === 'coach' && rutina.coach_id !== req.user.id) {
+            return res.status(403).json({ error: 'No puedes eliminar rutinas de otros coaches.' });
+        }
+
         await dbRun('DELETE FROM routines WHERE id = ?', [req.params.id]);
 
         logActivity(
-            (req.query.userEmail || (rutina && rutina.coach_name) || 'coach'),
+            req.user.email,
             'ELIMINACION',
-            `Rutina eliminada: "${rutina ? rutina.name : req.params.id}"`
+            `Rutina eliminada: "${rutina.name}"`
         );
 
         res.json({ message: 'Rutina eliminada.' });
@@ -194,4 +220,3 @@ router.delete('/:id', async (req, res) => {
 });
 
 module.exports = router;
-
