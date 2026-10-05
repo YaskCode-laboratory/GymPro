@@ -48,6 +48,8 @@ gympro/
 │
 ├── 📁 middlewares/                 # Revisa cada acción del usuario y deja un registro para auditoría.
 │   └── auditMiddleware.js          # Anota en un archivo .log TODO lo que hacen los usuarios
+│   ├── authMiddleware.js           # Verifica el JWT en rutas protegidas
+│   └── roleMiddleware.js           # Valida el rol del usuario por operación
 │
 ├── 📁 routes/                      # Acciones que el frontend puede pedirle al servidor
 │   ├── auth.js                     # Entrar, registrarse y salir de la app
