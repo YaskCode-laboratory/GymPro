@@ -210,38 +210,44 @@ gympro/
 
 ### 🔐 Preparación de la API de GEMINI IA en variables de entorno (`.env`)
 
-Luego abre el archivo `.env.example` con tu editor y rellena los campos:
-
-### `.env.example`
+Luego abre el archivo `.env.example` con tu editor y rellena los campos, sin secretos reales para que cualquiera pueda replicar la configuración.:
 
 ```bash
-# API Key de Google Gemini
+# API Key de Google Gemini (Google AI STUDIO)
 GEMINI_API_KEY=tu_api_key_real
 
-# Modelo de IA
+# Modelo a usar
+# Opciones comunes: gemini-2.5-flash, gemini-2.5-pro, gemini-1.5-flash
+# - flash: más rápido y económico (recomendado)
+# - pro:   más potente pero más caro
 AI_MODEL=gemini-2.5-flash
+
+# Valores típicos: 500 (respuestas cortas), 800 (equilibrado), 1500 (detalladas)
 AI_MAX_TOKENS=800
+
+# Creatividad del modelo (0.0 = determinista, 1.0 = muy creativo)
+# - 0.2  respuestas técnicas y precisas
+# - 0.7  balance entre precisión y naturalidad
+# - 1.0  muy creativo (puede divagar)
 AI_TEMPERATURE=0.7
 
-# Puerto
-PORT=3000
+# Puerto del servidor (opcional, por defecto 3000 y configurable)
+PORT=5000
 
-# Secreto JWT (¡CAMBIAR EN PRODUCCIÓN!)
-JWT_SECRET=secreto_largo_y_aleatorio
-JWT_EXPIRES_IN=8h
-```
+# Para firmar los JWT, solo escribe una
+JWT_SECRET=cambia_esto_por_un_secreto_largo_y_aleatorio_de_32_o_mas_caracteres
 
-Plantilla sin secretos reales para que cualquiera pueda replicar la configuración.
-
-
-```bash
-# API Key de Google Gemini (obligatoria para el chat IA)
-GEMINI_API_KEY=tu_api_key_aqui
-
-# Modelo de IA a usar (opcional)
-AI_MODEL=gemini-2.5-flash
-AI_MAX_TOKENS=800
-AI_TEMPERATURE=0.7
+# Tiempo de expiración del token
+# Acepta formato: s (segundos), m (minutos), h (horas), d (días)
+#
+#  Valores típicos:
+#   15s   solo para pruebas de expiración
+#   1h    sesiones cortas (más seguro)
+#   4h    sesión media jornada
+#   8h    jornada laboral completa (recomendable)
+#   24h   sesión extendida
+#   7d    "recordarme" en móvil
+JWT_EXPIRES_IN=15s
 ```
 
 ### Clonar y ejecutar proyecto
