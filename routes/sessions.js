@@ -1,17 +1,30 @@
 const express = require('express');
-const crypto = require('crypto');
 const { dbRun, dbGet, dbAll } = require('../db/database');
 const { logActivity } = require('../services/logger');
+const authMiddleware = require('../middlewares/authMiddleware');
+const { requireRole } = require('../middlewares/roleMiddleware');
 
 const router = express.Router();
 
-// GET /api/sessions  (?clientId=...)
+router.use(authMiddleware);
+
+// GET /api/sessions
 router.get('/', async (req, res) => {
     try {
         const { clientId } = req.query;
         let sql = 'SELECT * FROM sessions';
         const params = [];
-        if (clientId) { sql += ' WHERE client_id = ?'; params.push(clientId); }
+        const conditions = [];
+
+        if (req.user.role === 'client') {
+            conditions.push('client_id = ?');
+            params.push(req.user.id);
+        } else if (clientId) {
+            conditions.push('client_id = ?');
+            params.push(clientId);
+        }
+
+        if (conditions.length) sql += ' WHERE ' + conditions.join(' AND ');
         sql += ' ORDER BY created_at DESC';
 
         const sessions = await dbAll(sql, params);
@@ -52,9 +65,16 @@ router.get('/', async (req, res) => {
 // GET /api/sessions/client/:clientId
 router.get('/client/:clientId', async (req, res) => {
     try {
+        const { clientId } = req.params;
+
+        // Cliente solo puede ver su propio historial
+        if (req.user.role === 'client' && req.user.id !== clientId) {
+            return res.status(403).json({ error: 'No puedes ver el historial de otros usuarios.' });
+        }
+
         const sessions = await dbAll(
             'SELECT * FROM sessions WHERE client_id = ? ORDER BY created_at DESC',
-            [req.params.clientId]
+            [clientId]
         );
         const result = [];
         for (const s of sessions) {
@@ -89,16 +109,17 @@ router.get('/client/:clientId', async (req, res) => {
     }
 });
 
-// POST /api/sessions  (guardar sesión completa con detalles)
-router.post('/', async (req, res) => {
+// POST /api/sessions (solo client)
+router.post('/', requireRole('client'), async (req, res) => {
     try {
         const {
-            id, clienteId, rutinaId, rutinaNombre,
+            id, rutinaId, rutinaNombre,
             fechaInicio, fechaFin, duracionTotalSeg,
-            duracionEfectivaSeg, // ← NUEVO
-            completada, detalles
+            duracionEfectivaSeg, completada, detalles
         } = req.body;
 
+        // ✅ Forzar que el clienteId sea el del usuario autenticado
+        const clienteId = req.user.id;
         const sessionId = id || ('sesion-' + Date.now());
 
         await dbRun(
@@ -132,7 +153,7 @@ router.post('/', async (req, res) => {
         }
 
         logActivity(
-            (req.body.userEmail || clienteId),
+            req.user.email,
             'REGISTRO',
             `Sesión completada: "${rutinaNombre}" (${Math.round(duracionTotalSeg / 60)} min, ${Array.isArray(detalles) ? detalles.length : 0} series)`
         );
