@@ -1,14 +1,17 @@
 const express = require('express');
 const { dbRun, dbGet, dbAll } = require('../db/database');
 const { logActivity } = require('../services/logger');
+const authMiddleware = require('../middlewares/authMiddleware');
+const { requireRole } = require('../middlewares/roleMiddleware');
 
 const router = express.Router();
+
+router.use(authMiddleware);
 
 // GET /api/exercises
 router.get('/', async (req, res) => {
     try {
         const rows = await dbAll('SELECT * FROM exercises ORDER BY name ASC');
-        // Mapear a camelCase para el frontend
         const exercises = rows.map(r => ({
             id: r.id,
             name: r.name,
@@ -30,21 +33,17 @@ router.get('/:id', async (req, res) => {
         const r = await dbGet('SELECT * FROM exercises WHERE id = ?', [req.params.id]);
         if (!r) return res.status(404).json({ error: 'Ejercicio no encontrado.' });
         res.json({
-            id: r.id,
-            name: r.name,
-            muscleGroup: r.muscle_group,
-            type: r.type,
-            description: r.description,
-            mediaUrl: r.media_url,
-            defaultRestSec: r.default_rest_sec
+            id: r.id, name: r.name, muscleGroup: r.muscle_group,
+            type: r.type, description: r.description,
+            mediaUrl: r.media_url, defaultRestSec: r.default_rest_sec
         });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
 });
 
-// POST /api/exercises
-router.post('/', async (req, res) => {
+// POST /api/exercises (solo admin)
+router.post('/', requireRole('admin'), async (req, res) => {
     try {
         const { id, name, muscleGroup, type, description, mediaUrl, defaultRestSec } = req.body;
         const exId = id || ('ej-' + Date.now());
@@ -55,11 +54,7 @@ router.post('/', async (req, res) => {
             [exId, name, muscleGroup, type, description || '', mediaUrl || '', defaultRestSec || 60]
         );
 
-        logActivity(
-            (req.body.adminEmail || 'admin'),
-            'REGISTRO',
-            `Nuevo ejercicio: "${name}" (${muscleGroup}, tipo: ${type})`
-        );
+        logActivity(req.user.email, 'REGISTRO', `Nuevo ejercicio: "${name}"`);
 
         res.status(201).json({
             id: exId, name, muscleGroup, type,
