@@ -260,15 +260,13 @@ cd gympro
 # 2. Instalar dependencias
 npm install
 
-# 3. Configurar variables de entorno
-cp .env.example .env
-# Edita .env y coloca tu API key de Gemini
+# 3. Configurar variables de entorno: editar .env.example
 
 # 4. Iniciar el servidor
 npm start
 
 # 5. Abrir en el navegador
-# http://localhost:3000
+# http://localhost:5000
 ```
 ## Integrantes del Equipo de Desarrollo
 - Audio Silva
