@@ -210,7 +210,29 @@ gympro/
 
 ### 🔐 Preparación de la API de GEMINI IA en variables de entorno (`.env`)
 
-Luego abre el archivo `.env` con tu editor y coloca tu API key de Gemini:
+Luego abre el archivo `.env.example` con tu editor y rellena los campos:
+
+### `.env.example`
+
+```bash
+# API Key de Google Gemini
+GEMINI_API_KEY=tu_api_key_real
+
+# Modelo de IA
+AI_MODEL=gemini-2.5-flash
+AI_MAX_TOKENS=800
+AI_TEMPERATURE=0.7
+
+# Puerto
+PORT=3000
+
+# Secreto JWT (¡CAMBIAR EN PRODUCCIÓN!)
+JWT_SECRET=secreto_largo_y_aleatorio
+JWT_EXPIRES_IN=8h
+```
+
+Plantilla sin secretos reales para que cualquiera pueda replicar la configuración.
+
 
 ```bash
 # API Key de Google Gemini (obligatoria para el chat IA)
