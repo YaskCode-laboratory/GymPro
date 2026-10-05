@@ -1,22 +1,46 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
+const jwt = require('jsonwebtoken');
 const { dbRun, dbGet } = require('../db/database');
 const { logActivity } = require('../services/logger');
+const authMiddleware = require('../middlewares/authMiddleware');
 
 const router = express.Router();
 
+const JWT_SECRET = process.env.JWT_SECRET;
+const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '8h';
+
+function generateToken(user) {
+    return jwt.sign(
+        {
+            id: user.id,
+            email: user.email,
+            role: user.role,
+            name: user.name
+        },
+        JWT_SECRET,
+        { expiresIn: JWT_EXPIRES_IN }
+    );
+}
+
+// ============================================
 // POST /api/auth/register
+// REGISTRO PÚBLICO — SOLO CREA ROL "client"
+// ============================================
 router.post('/register', async (req, res) => {
     try {
-        const { name, email, password, role, avatar } = req.body;
+        const { name, email, password } = req.body;
 
-        if (!name || !email || !password || !role) {
+        // ✅ Forzar siempre rol "client"
+        const role = 'client';
+
+        if (!name || !email || !password) {
             return res.status(400).json({ error: 'Todos los campos son requeridos.' });
         }
 
-        if (!['admin', 'coach', 'client'].includes(role)) {
-            return res.status(400).json({ error: 'Rol no válido.' });
+        if (password.length < 6) {
+            return res.status(400).json({ error: 'La contraseña debe tener al menos 6 caracteres.' });
         }
 
         const existing = await dbGet('SELECT id FROM users WHERE LOWER(email) = LOWER(?)', [email]);
@@ -29,15 +53,14 @@ router.post('/register', async (req, res) => {
 
         await dbRun(
             'INSERT INTO users (id, name, email, password, role, avatar) VALUES (?, ?, ?, ?, ?, ?)',
-            [id, name.trim(), email.trim().toLowerCase(), hashedPassword, role, avatar || null]
+            [id, name.trim(), email.trim().toLowerCase(), hashedPassword, role, null]
         );
 
-        // Loguear registro de nuevo usuario
-        logActivity(email.toLowerCase(), 'REGISTRO', `Nuevo usuario: "${name}" (rol: ${role})`);
+        logActivity(email.toLowerCase(), 'REGISTRO', `Nuevo cliente: "${name}"`);
 
         res.status(201).json({
             message: 'Usuario registrado exitosamente.',
-            user: { id, name, email: email.toLowerCase(), role, avatar: avatar || null }
+            user: { id, name, email: email.toLowerCase(), role, avatar: null }
         });
     } catch (err) {
         console.error('Error en /register:', err);
@@ -45,7 +68,10 @@ router.post('/register', async (req, res) => {
     }
 });
 
+// ============================================
 // POST /api/auth/login
+// Devuelve JWT + datos del usuario
+// ============================================
 router.post('/login', async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -60,25 +86,25 @@ router.post('/login', async (req, res) => {
         );
 
         if (!user) {
-            // Loguear intento fallido
             logActivity(email, 'LOGIN', 'FALLIDO - correo no registrado');
-            return res.status(401).json({ error: 'El correo no está registrado.' });
+            return res.status(401).json({ error: 'El correo no está registrado en el sistema.' });
         }
 
         const validPassword = bcrypt.compareSync(password, user.password);
         if (!validPassword) {
-            // Loguear intento fallido
             logActivity(email, 'LOGIN', 'FALLIDO - contraseña incorrecta');
-            return res.status(401).json({ error: 'Contraseña incorrecta.' });
+            return res.status(401).json({ error: 'La contraseña es incorrecta.' });
         }
 
-        // Loguear login exitoso
+        const token = generateToken(user);
+
         logActivity(user.email, 'LOGIN', `Ingreso exitoso (rol: ${user.role})`);
 
         const { password: _, ...userSafe } = user;
 
         res.json({
             message: 'Login exitoso.',
+            token,
             user: userSafe
         });
     } catch (err) {
@@ -87,15 +113,23 @@ router.post('/login', async (req, res) => {
     }
 });
 
-// POST /api/auth/logout
-router.post('/logout', async (req, res) => {
+// ============================================
+// POST /api/auth/logout (protegido)
+// ============================================
+router.post('/logout', authMiddleware, async (req, res) => {
     try {
-        const { userEmail } = req.body;
-        logActivity(userEmail || 'anonimo', 'LOGOUT', 'Sesión cerrada');
+        logActivity(req.user.email, 'LOGOUT', 'Sesión cerrada');
         res.json({ message: 'Logout registrado.' });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
+});
+
+// ============================================
+// GET /api/auth/me (protegido)
+// ============================================
+router.get('/me', authMiddleware, async (req, res) => {
+    res.json({ user: req.user });
 });
 
 module.exports = router;
