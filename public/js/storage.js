@@ -193,12 +193,12 @@ function getSesionesByClientId(clientId) {
 async function saveSesion(sesion) {
     const payload = {
         id: sesion.id,
-        clienteId: sesion.clienteId,
         rutinaId: sesion.rutinaId,
         rutinaNombre: sesion.rutinaNombre,
         fechaInicio: sesion.fechaInicio,
         fechaFin: sesion.fechaFin,
         duracionTotalSeg: sesion.duracionTotalSeg,
+        duracionEfectivaSeg: sesion.duracionEfectivaSeg,
         completada: sesion.completada,
         detalles: sesion.detalles
     };
