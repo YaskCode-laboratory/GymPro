@@ -1,5 +1,6 @@
 # Arquitectura del sistema
-Esto se llama arquitectura cliente-servidor y es la base de casi todas las aplicaciones web modernas.
+
+GymPro sigue una arquitectura **cliente-servidor en 3 capas** con autenticación basada en **JSON Web Tokens (JWT)** y control de acceso por roles.
 
 ```
 ┌────────────────────────────────────────────────────────────┐
@@ -7,18 +8,25 @@ Esto se llama arquitectura cliente-servidor y es la base de casi todas las aplic
 │  ┌──────────────────────────────────────────────────────┐  │
 │  │  Vista (HTML + CSS)  ─  Controlador (JS vanilla)     │  │
 │  │         ↓                    ↓                       │  │
-│  │         └──────► api.js (fetch) ──────┐              │  │
-│  └────────────────────────────────────────┼─────────────┘  │
-└───────────────────────────────────────────┼────────────────┘
-                                            │ HTTP / JSON
-                                            ▼
+│  │         └──────► api.js (fetch + JWT) ───┐           │  │
+│  │                                          │           │  │
+│  │  Timer de expiración de sesión (15s-8h) │           │  │
+│  └──────────────────────────────────────────┼───────────┘  │
+└─────────────────────────────────────────────┼──────────────┘
+                                              │ HTTP / JSON
+                                              │ Authorization: Bearer <token>
+                                              ▼
 ┌────────────────────────────────────────────────────────────┐
 │              SERVIDOR (Node.js + Express)                  │
 │  ┌──────────────────────────────────────────────────────┐  │
-│  │   Middleware (CORS, JSON, Audit, Auth)               │  │
+│  │   Middleware Pipeline                                │  │
+│  │   1. CORS + JSON parser                              │  │
+│  │   2. auditMiddleware (activity.log)                  │  │
+│  │   3. authMiddleware (verifica JWT)    ← 🔒           │  │
+│  │   4. requireRole('admin'|'coach'...) ← 🔒           │  │
 │  └──────────────────────────────────────────────────────┘  │
 │  ┌──────────────────────────────────────────────────────┐  │
-│  │   Rutas REST                                         │  │
+│  │   Rutas REST protegidas                              │  │
 │  │   /api/auth      /api/users     /api/exercises       │  │
 │  │   /api/routines  /api/sessions  /api/ai              │  │
 │  └──────────────────────────────────────────────────────┘  │
@@ -40,16 +48,187 @@ Esto se llama arquitectura cliente-servidor y es la base de casi todas las aplic
 └────────────────────────────────────────────────────────────┘
 ```
 
-El proyecto expone una **API REST** construida apartir de Express que sirve al frontend. Todos los endpoints usan **JSON** como formato de intercambio de datos.
+El proyecto expone una **API REST** construida sobre Express que sirve al frontend. Todos los endpoints usan **JSON** como formato de intercambio de datos.
 
 > 📍 **URL Base**: `http://localhost:3000/api`
+>
+> 🌐 **En producción (Render)**: `https://gympro-24ly.onrender.com/api`
 
-> 🌐 **En producción (despliegue en Render)**: `https://gympro-24ly.onrender.com/api`
+---
+
+## 🔐 Sistema de Autenticación y Autorización
+
+GymPro implementa un sistema de seguridad basado en **JSON Web Tokens (JWT)** y **Control de Acceso Basado en Roles (RBAC)**.
+
+### 🎯 Modelo de seguridad
+
+| Capa | Mecanismo | Implementación |
+|------|-----------|----------------|
+| **Contraseñas** | bcrypt (10 rondas) | `bcryptjs` en `routes/auth.js` |
+| **Sesión** | JWT firmado con HS256 | `jsonwebtoken` + `JWT_SECRET` |
+| **Expiración** | Configurable vía `.env` | `JWT_EXPIRES_IN` (ej: `15s`, `8h`, `1d`) |
+| **Autenticación** | Middleware en cada ruta protegida | `middlewares/authMiddleware.js` |
+| **Autorización** | Middleware de roles por operación | `middlewares/roleMiddleware.js` |
+| **Registro público** | Restringido a `client` | `routes/auth.js` ignora el campo `role` |
+| **Auditoría** | Registro de todas las acciones | `services/logger.js` → `activity.log` |
+
+### 🔄 Flujo completo de autenticación
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│ 1. Usuario envía credenciales: POST /api/auth/login         │
+└───────────────────────────┬─────────────────────────────────┘
+                            ▼
+┌─────────────────────────────────────────────────────────────┐
+│ 2. Servidor valida con bcrypt.compareSync()                 │
+│    - Si es incorrecto → 401 + log "FALLIDO"                 │
+│    - Si es correcto → continúa                              │
+└───────────────────────────┬─────────────────────────────────┘
+                            ▼
+┌─────────────────────────────────────────────────────────────┐
+│ 3. Servidor firma un JWT con:                               │
+│    { id, email, role, name } + expiración JWT_EXPIRES_IN    │
+└───────────────────────────┬─────────────────────────────────┘
+                            ▼
+┌─────────────────────────────────────────────────────────────┐
+│ 4. Frontend guarda el token en localStorage                 │
+└───────────────────────────┬─────────────────────────────────┘
+                            ▼
+┌─────────────────────────────────────────────────────────────┐
+│ 5. Cada petición envía:                                     │
+│    Authorization: Bearer <token>                            │
+└───────────────────────────┬─────────────────────────────────┘
+                            ▼
+┌─────────────────────────────────────────────────────────────┐
+│ 6. authMiddleware verifica el token                         │
+│    - Inválido/expirado → 401                                │
+│    - Válido → adjunta req.user y continúa                   │
+└───────────────────────────┬─────────────────────────────────┘
+                            ▼
+┌─────────────────────────────────────────────────────────────┐
+│ 7. requireRole() valida permisos por operación              │
+│    - Sin permisos → 403                                     │
+│    - Con permisos → ejecuta el handler                      │
+└───────────────────────────┬─────────────────────────────────┘
+                            ▼
+┌─────────────────────────────────────────────────────────────┐
+│ 8. Frontend programa un timer de expiración                 │
+│    - Al expirar: alert + limpieza + recarga automática      │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### 🛡️ Middlewares de seguridad
+
+#### `authMiddleware.js` — Verificación de JWT
+
+```javascript
+async function authMiddleware(req, res, next) {
+    const authHeader = req.headers['authorization'] || '';
+
+    if (!authHeader.startsWith('Bearer ')) {
+        return res.status(401).json({
+            error: 'Token de autenticación requerido.'
+        });
+    }
+
+    const token = authHeader.slice(7);
+
+    try {
+        const payload = jwt.verify(token, JWT_SECRET);
+        const user = await dbGet(
+            'SELECT id, name, email, role, avatar FROM users WHERE id = ?',
+            [payload.id]
+        );
+        if (!user) return res.status(401).json({ error: 'Usuario no encontrado.' });
+
+        req.user = user;
+        next();
+    } catch (err) {
+        if (err.name === 'TokenExpiredError') {
+            return res.status(401).json({ error: 'Sesión expirada. Inicia sesión nuevamente.' });
+        }
+        return res.status(401).json({ error: 'Token inválido.' });
+    }
+}
+```
+
+#### `roleMiddleware.js` — Autorización por rol
+
+```javascript
+function requireRole(...rolesPermitidos) {
+    return function (req, res, next) {
+        if (!req.user) {
+            return res.status(401).json({ error: 'No autenticado.' });
+        }
+        if (!rolesPermitidos.includes(req.user.role)) {
+            return res.status(403).json({
+                error: 'No tienes permisos para realizar esta acción.',
+                required: rolesPermitidos,
+                current: req.user.role
+            });
+        }
+        next();
+    };
+}
+```
+
+### 🔒 Registro público restringido
+
+Por seguridad, el endpoint público `POST /api/auth/register` **solo crea usuarios con rol `client`**. Cualquier intento de enviar `role: "admin"` o `role: "coach"` es ignorado silenciosamente.
+
+```javascript
+router.post('/register', async (req, res) => {
+    const { name, email, password } = req.body;
+    const role = 'client';  // ✅ Forzado
+    // ... el resto del registro
+});
+```
+
+Los roles elevados **solo pueden asignarse** desde el panel del administrador:
+
+```javascript
+router.post('/', authMiddleware, requireRole('admin'), async (req, res) => {
+    const { name, email, password, role } = req.body;
+    // Admin puede asignar cualquier rol
+});
+```
+
+### ⏱️ Expiración automática de sesión
+
+El frontend **decodifica el payload del JWT** para conocer su fecha exacta de expiración y programa un temporizador (`setTimeout`) que:
+
+1. Detecta automáticamente cuándo el token deja de ser válido.
+2. Muestra un alert: *"Tu sesión ha expirado por inactividad"*.
+3. Limpia el token y el estado del usuario.
+4. **Recarga automáticamente la página** para volver al login.
+
+Esto se complementa con la validación del backend en cada petición, creando una **doble capa de seguridad**:
+
+| Capa | Cuándo actúa | Archivo |
+|------|--------------|---------|
+| **Proactiva (cliente)** | Al cumplirse el tiempo de expiración | `public/js/app.js` |
+| **Reactiva (servidor)** | Al recibir cualquier petición con token expirado | `middlewares/authMiddleware.js` |
+
+### 📝 Variables de entorno requeridas
+
+```bash
+# Secreto para firmar los JWT (obligatorio)
+# Genera uno con: node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+JWT_SECRET=secreto_largo_y_aleatorio_de_32_o_mas_caracteres
+
+# Tiempo de expiración (acepta s, m, h, d)
+JWT_EXPIRES_IN=8h
+```
+
+---
+
+## 📡 API REST
 
 ### 📖 Nomenclatura
 
 - 🔓 **Público**: no requiere autenticación
-- 🔒 **Privado**: requiere sesión activa (actualmente se pasa el email del usuario en el header `X-User-Email`)
+- 🔒 **Autenticado**: requiere header `Authorization: Bearer <token>`
+- 🔒 **Rol específico**: requiere token + rol adecuado
 - Todas las respuestas son **JSON**
 - Los errores siguen el formato: `{ "error": "Descripción del problema" }`
 
@@ -57,26 +236,50 @@ El proyecto expone una **API REST** construida apartir de Express que sirve al f
 
 ### 🔐 Autenticación (`/api/auth`)
 
-Endpoints para registro, inicio y cierre de sesión.
-
 | Método | Endpoint | Acceso | Descripción |
 |--------|----------|:------:|-------------|
-| `POST` | `/auth/register` | 🔓 Público | Registrar un nuevo usuario con rol |
-| `POST` | `/auth/login` | 🔓 Público | Iniciar sesión con email y contraseña |
-| `POST` | `/auth/logout` | 🔓 Público | Registrar el cierre de sesión en el log |
+| `POST` | `/auth/register` | 🔓 Público | Registrar usuario (solo crea `client`) |
+| `POST` | `/auth/login` | 🔓 Público | Iniciar sesión, devuelve JWT |
+| `POST` | `/auth/logout` | 🔒 Autenticado | Registrar cierre de sesión |
+| `GET` | `/auth/me` | 🔒 Autenticado | Devolver el usuario del token actual |
 
-#### Ejemplo: Registrar usuario
+#### Ejemplo: Iniciar sesión
 
 ```json
 {
-    "name": "Juan Pérez",
-    "email": "juan@example.com",
-    "password": "mi_contraseña_segura",
-    "role": "client"
-  }
+  "email": "cliente@gym.com",
+  "password": "123456"
+}
 ```
 
-**Respuesta exitosa (201)**:
+**Respuesta (200):**
+```json
+{
+  "message": "Login exitoso.",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "user": {
+    "id": "924dd10d-1cd3-4f9d-8429-c2e8d7504a06",
+    "name": "Juan Pérez",
+    "email": "cliente@gym.com",
+    "role": "client",
+    "avatar": null
+  }
+}
+```
+
+#### Ejemplo: Registro público
+
+```json
+{
+  "name": "Juan Pérez",
+  "email": "juan@example.com",
+  "password": "mi_contraseña_segura"
+}
+```
+
+> ⚠️ Aunque envíes un campo `role`, será ignorado. Siempre se crea como `client`.
+
+**Respuesta (201):**
 ```json
 {
   "message": "Usuario registrado exitosamente.",
@@ -90,330 +293,177 @@ Endpoints para registro, inicio y cierre de sesión.
 }
 ```
 
-#### Ejemplo: Iniciar sesión
-
-```json
-{
-    "email": "cliente@gym.com",
-    "password": "123456"
-  }
-```
-
-**Respuesta exitosa (200)**:
-```json
-{
-  "message": "Login exitoso.",
-  "user": {
-    "id": "924dd10d-1cd3-4f9d-8429-c2e8d7504a06",
-    "name": "Juan Pérez",
-    "email": "cliente@gym.com",
-    "role": "client",
-    "avatar": null
-  }
-}
-```
-
 ---
 
 ### 👥 Usuarios (`/api/users`)
 
-Gestión completa de usuarios del sistema (mayormente para el administrador).
-
 | Método | Endpoint | Acceso | Descripción |
 |--------|----------|:------:|-------------|
-| `GET` | `/users` | 🔒 Privado | Listar todos los usuarios (opcional `?role=client`) |
-| `GET` | `/users/:id` | 🔒 Privado | Obtener un usuario específico por su ID |
-| `POST` | `/users` | 🔒 Admin | Crear un usuario |
-| `PUT` | `/users/:id` | 🔒 Admin | Actualizar los datos de un usuario |
-| `PUT` | `/users/:id/avatar` | 🔒 Privado | Actualizar solo la foto de perfil |
-| `DELETE` | `/users/:id` | 🔒 Admin | Eliminar un usuario |
+| `GET` | `/users` | 🔒 Autenticado | Admin: todos · Coach: clientes · Cliente: él mismo |
+| `GET` | `/users/:id` | 🔒 Autenticado | Con control de acceso por rol |
+| `POST` | `/users` | 🔒 **Solo admin** | Crear usuario con cualquier rol |
+| `PUT` | `/users/:id` | 🔒 Autenticado | Admin: cualquiera · Cliente: él mismo (sin cambiar rol) |
+| `PUT` | `/users/:id/avatar` | 🔒 Autenticado | Solo el propio usuario o admin |
+| `DELETE` | `/users/:id` | 🔒 **Solo admin** | Eliminar usuario |
 
-#### Ejemplo: Listar solo clientes
+#### Ejemplo: Crear usuario (como admin)
 
-```bash
-http://localhost:3000/api/users?role=client
-```
-
-**Respuesta (200)**:
 ```json
-[
-  {
-    "id": "924dd10d-1cd3-4f9d-8429-c2e8d7504a06",
-    "name": "Juan Pérez",
-    "email": "cliente@gym.com",
-    "role": "client",
-    "avatar": "data:image/jpeg;base64,/9j/4AAQ..."
-  },
-  {
-    "id": "4ca2c198-9a48-4e21-bf50-7155d55bd6c4",
-    "name": "Ana",
-    "email": "ana@gmail.com",
-    "role": "client",
-    "avatar": null
-  }
-]
+{
+  "name": "María López",
+  "email": "maria@gym.com",
+  "password": "123456",
+  "role": "coach"
+}
 ```
+
+**Respuesta (201):**
+```json
+{
+  "id": "6deeabac-85ae-4055-8cff-ba285f07ecb8",
+  "name": "María López",
+  "email": "maria@gym.com",
+  "role": "coach",
+  "avatar": null
+}
+```
+
+> ❌ **Si un coach o cliente intenta crear usuarios**, el servidor responde:
+> ```json
+> {
+>   "error": "No tienes permisos para realizar esta acción.",
+>   "required": ["admin"],
+>   "current": "coach"
+> }
+> ```
 
 ---
 
 ### 🏋️ Ejercicios (`/api/exercises`)
 
-Catálogo global de ejercicios disponibles para armar rutinas.
-
 | Método | Endpoint | Acceso | Descripción |
 |--------|----------|:------:|-------------|
-| `GET` | `/exercises` | 🔒 Privado | Listar todos los ejercicios del catálogo |
-| `GET` | `/exercises/:id` | 🔒 Privado | Obtener un ejercicio específico |
-| `POST` | `/exercises` | 🔒 Admin | Agregar un nuevo ejercicio al catálogo |
+| `GET` | `/exercises` | 🔒 Autenticado | Listar catálogo |
+| `GET` | `/exercises/:id` | 🔒 Autenticado | Obtener un ejercicio |
+| `POST` | `/exercises` | 🔒 **Solo admin** | Agregar ejercicio al catálogo |
 
 #### Ejemplo: Crear ejercicio
 
-``
-POST http://localhost:3000/api/exercises
-``
-
-```json
-  {
-    "id": "ej-1700000000",
-    "name": "Sentadilla con Barra",
-    "muscleGroup": "Piernas / Glúteos",
-    "type": "reps",
-    "description": "Baja flexionando rodillas a 90 grados manteniendo la espalda recta.",
-    "mediaUrl": "https://ejemplo.com/sentadilla.jpg",
-    "defaultRestSec": 60
-  }'
-```
-
-**Respuesta (201)**:
 ```json
 {
   "id": "ej-1700000000",
   "name": "Sentadilla con Barra",
   "muscleGroup": "Piernas / Glúteos",
   "type": "reps",
-  "description": "Baja flexionando rodillas a 90 grados...",
+  "description": "Baja flexionando rodillas a 90 grados manteniendo la espalda recta.",
   "mediaUrl": "https://ejemplo.com/sentadilla.jpg",
   "defaultRestSec": 60
 }
 ```
 
-> 💡 El campo `type` puede ser `"reps"` (por repeticiones) o `"time"` (por tiempo, tipo plancha).
+> 💡 El campo `type` puede ser `"reps"` o `"time"`.
 
 ---
 
 ### 📋 Rutinas (`/api/routines`)
 
-Creación, edición y asignación de rutinas de entrenamiento.
-
 | Método | Endpoint | Acceso | Descripción |
 |--------|----------|:------:|-------------|
-| `GET` | `/routines` | 🔒 Privado | Listar rutinas (opcional `?coachId=...` o `?clientId=...`) |
-| `GET` | `/routines/:id` | 🔒 Privado | Obtener una rutina con sus ejercicios configurados |
-| `POST` | `/routines` | 🔒 Coach/Admin | Crear o actualizar una rutina completa |
-| `PUT` | `/routines/:id/assign` | 🔒 Coach/Admin | Asignar una rutina a un cliente específico |
-| `DELETE` | `/routines/:id` | 🔒 Coach/Admin | Eliminar una rutina |
+| `GET` | `/routines` | 🔒 Autenticado | Admin: todas · Coach: las suyas · Cliente: la asignada |
+| `GET` | `/routines/:id` | 🔒 Autenticado | Con control de acceso por rol |
+| `POST` | `/routines` | 🔒 **Admin, Coach** | Crear/actualizar rutina |
+| `PUT` | `/routines/:id/assign` | 🔒 **Admin, Coach** | Asignar rutina a un cliente |
+| `DELETE` | `/routines/:id` | 🔒 **Admin, Coach** | Eliminar (solo las propias si es coach) |
 
-#### Ejemplo: Crear una rutina
+#### Ejemplo: Crear rutina (como coach)
 
-``
-POST http://localhost:3000/api/routines
-``
-
-```json
- {
-    "name": "Fuerza Piernas",
-    "coachId": "coach-1",
-    "coachName": "Carlos Méndez",
-    "assignedToClientId": null,
-    "dias": "Lunes, Jueves",
-    "description": "Rutina de hipertrofia para tren inferior",
-    "ejercicios": [
-      {
-        "ejercicioId": "ej-1",
-        "nombre": "Sentadilla con Barra",
-        "muscleGroup": "Piernas",
-        "tipo": "reps",
-        "series": 4,
-        "reps": 8,
-        "peso_sugerido": 60,
-        "descanso_seg": 90,
-        "tiempo_objetivo_seg": 0,
-        "mediaUrl": "https://ejemplo.com/sentadilla.jpg"
-      }
-    ]
-  }
-```
-
-**Respuesta (201)**:
 ```json
 {
-  "id": "rutina-1700000000",
   "name": "Fuerza Piernas",
-  "coachId": "coach-1",
-  "coachName": "Carlos Méndez",
   "assignedToClientId": null,
   "dias": "Lunes, Jueves",
   "description": "Rutina de hipertrofia para tren inferior",
-  "ejercicios": [ /* ... */ ]
+  "ejercicios": [
+    {
+      "ejercicioId": "ej-1",
+      "nombre": "Sentadilla con Barra",
+      "muscleGroup": "Piernas",
+      "tipo": "reps",
+      "series": 4,
+      "reps": 8,
+      "peso_sugerido": 60,
+      "descanso_seg": 90,
+      "tiempo_objetivo_seg": 0,
+      "mediaUrl": "https://..."
+    }
+  ]
 }
 ```
 
-#### Ejemplo: Asignar rutina a un cliente
-
-```
-PUT http://localhost:3000/api/routines/rutina-1700000000/assign
-```
-
-```json
-{
-  "clientId": "924dd10d-1cd3-4f9d-8429-c2e8d7504a06"
-}
-```
-
-**Respuesta (200)**:
-```json
-{
-  "message": "Rutina asignada correctamente."
-}
-```
+> 🔒 Aunque envíes `coachId` o `coachName`, el backend los reemplaza por los del usuario autenticado. **Un coach no puede crear rutinas a nombre de otro.**
 
 ---
 
 ### 🏆 Sesiones (`/api/sessions`)
 
-Guardado y consulta del historial de entrenamientos ejecutados.
-
 | Método | Endpoint | Acceso | Descripción |
 |--------|----------|:------:|-------------|
-| `GET` | `/sessions` | 🔒 Privado | Listar todas las sesiones (opcional `?clientId=...`) |
-| `GET` | `/sessions/client/:clientId` | 🔒 Privado | Historial completo de un cliente específico |
-| `POST` | `/sessions` | 🔒 Cliente | Guardar una sesión de entrenamiento completa |
+| `GET` | `/sessions` | 🔒 Autenticado | Admin: todas · Cliente: solo las suyas |
+| `GET` | `/sessions/client/:clientId` | 🔒 Autenticado | Admin/Coach: cualquiera · Cliente: solo el suyo |
+| `POST` | `/sessions` | 🔒 **Solo client** | Guardar sesión completada |
 
-#### Ejemplo: Guardar una sesión
-
-``
-POST http://localhost:3000/api/sessions
-``
+#### Ejemplo: Guardar sesión
 
 ```json
 {
-    "id": "sesion-1700000000",
-    "clienteId": "924dd10d-1cd3-4f9d-8429-c2e8d7504a06",
-    "rutinaId": "rutina-1700000000",
-    "rutinaNombre": "Fuerza Piernas",
-    "fechaInicio": "2026-10-04T15:00:00.000Z",
-    "fechaFin": "2026-10-04T15:45:00.000Z",
-    "duracionTotalSeg": 2700,
-    "duracionEfectivaSeg": 2100,
-    "completada": true,
-    "detalles": [
-      {
-        "ejercicioId": "ej-1",
-        "ejercicioNombre": "Sentadilla con Barra",
-        "serieNum": 1,
-        "tiempoEjercicioSeg": 45,
-        "pesoReal": 60,
-        "completada": true,
-        "saltada": false
-      }
-    ]
-  }
-```
-
-**Respuesta (201)**:
-```json
-{
-  "message": "Sesión guardada.",
-  "id": "sesion-1700000000"
+  "rutinaId": "rutina-1700000000",
+  "rutinaNombre": "Fuerza Piernas",
+  "fechaInicio": "2026-10-04T15:00:00.000Z",
+  "fechaFin": "2026-10-04T15:45:00.000Z",
+  "duracionTotalSeg": 2700,
+  "duracionEfectivaSeg": 2100,
+  "completada": true,
+  "detalles": [
+    {
+      "ejercicioId": "ej-1",
+      "ejercicioNombre": "Sentadilla con Barra",
+      "serieNum": 1,
+      "tiempoEjercicioSeg": 45,
+      "pesoReal": 60,
+      "completada": true,
+      "saltada": false
+    }
+  ]
 }
 ```
 
-#### Ejemplo: Consultar historial de un cliente
-
-``
-http://localhost:3000/api/sessions/client/924dd10d-1cd3-4f9d-8429-c2e8d7504a06
-``
-
-**Respuesta (200)** — array de sesiones con sus detalles:
-```json
-[
-  {
-    "id": "sesion-1700000000",
-    "clienteId": "924dd10d-...",
-    "rutinaId": "rutina-1700000000",
-    "rutinaNombre": "Fuerza Piernas",
-    "fechaInicio": "2026-10-04T15:00:00.000Z",
-    "fechaFin": "2026-10-04T15:45:00.000Z",
-    "duracionTotalSeg": 2700,
-    "duracionEfectivaSeg": 2100,
-    "completada": true,
-    "detalles": [
-      {
-        "ejercicioId": "ej-1",
-        "ejercicioNombre": "Sentadilla con Barra",
-        "serieNum": 1,
-        "tiempoEjercicioSeg": 45,
-        "pesoReal": 60,
-        "completada": true,
-        "saltada": false
-      }
-    ]
-  }
-]
-```
+> 🔒 Aunque envíes un `clienteId`, el backend lo **ignora** y usa el `id` del usuario autenticado.
 
 ---
 
 ### 🤖 Asistente IA (`/api/ai`)
 
-Endpoints para interactuar con el chat de Inteligencia Artificial (GymBot / CoachIA).
-
 | Método | Endpoint | Acceso | Descripción |
 |--------|----------|:------:|-------------|
-| `POST` | `/ai/chat` | 🔒 Cliente | Enviar un mensaje al asistente IA |
-| `GET` | `/ai/history/:userId` | 🔒 Privado | Obtener el historial de conversación |
-| `DELETE` | `/ai/history/:userId` | 🔒 Privado | Borrar el historial de conversación |
+| `POST` | `/ai/chat` | 🔒 **Solo client** | Enviar mensaje al asistente |
+| `GET` | `/ai/history/:userId` | 🔒 Autenticado | Solo el propio historial |
+| `DELETE` | `/ai/history/:userId` | 🔒 Autenticado | Solo el propio historial |
 
-#### Ejemplo: Enviar mensaje a la IA
-
-``
-POST http://localhost:3000/api/ai/chat
-``
+#### Ejemplo: Enviar mensaje
 
 ```json
 {
-    "userId": "924dd10d-1cd3-4f9d-8429-c2e8d7504a06",
-    "message": "¿Qué ejercicios tengo hoy?"
-  }
-```
-
-**Respuesta (200)**:
-```json
-{
-  "reply": "¡Hola Juan! Hoy es viernes, 4 de octubre de 2026. Tu rutina \"Fuerza Piernas\" está programada para Lunes y Jueves, así que **hoy no te toca entrenar piernas**. Aprovecha para descansar, hidratarte bien y estirar. Mañana tampoco toca, pero el próximo lunes vuelves con todo. 💪"
+  "message": "¿Qué ejercicios tengo hoy?"
 }
 ```
 
-#### Ejemplo: Obtener historial de chat
+> 🔒 El `userId` se toma del JWT, no del body.
 
-``
-http://localhost:3000/api/ai/history/924dd10d-1cd3-4f9d-8429-c2e8d7504a06
-``
-
-**Respuesta (200)**:
+**Respuesta (200):**
 ```json
-[
-  {
-    "role": "user",
-    "content": "¿Qué ejercicios tengo hoy?",
-    "created_at": "2026-10-04 15:00:12"
-  },
-  {
-    "role": "assistant",
-    "content": "¡Hola Juan! Hoy es viernes...",
-    "created_at": "2026-10-04 15:00:15"
-  }
-]
+{
+  "reply": "¡Hola Juan! Hoy es viernes, 4 de octubre de 2026. Tu rutina \"Fuerza Piernas\" está programada para Lunes y Jueves..."
+}
 ```
 
 ---
@@ -422,25 +472,42 @@ http://localhost:3000/api/ai/history/924dd10d-1cd3-4f9d-8429-c2e8d7504a06
 
 | Código | Significado | Cuándo aparece |
 |:------:|-------------|----------------|
-| `200` | OK | Petición exitosa (GET, PUT) |
-| `201` | Created | Recurso creado exitosamente (POST) |
-| `304` | Not Modified | Recurso sin cambios (caché del navegador) |
-| `400` | Bad Request | Faltan campos obligatorios |
-| `401` | Unauthorized | Credenciales inválidas o sesión no activa |
-| `403` | Forbidden | Rol sin permisos para esa acción |
+| `200` | OK | Petición exitosa |
+| `201` | Created | Recurso creado exitosamente |
+| `304` | Not Modified | Recurso sin cambios (caché) |
+| `400` | Bad Request | Faltan campos o datos inválidos |
+| `401` | Unauthorized | Token ausente, inválido o expirado |
+| `403` | Forbidden | Rol sin permisos |
 | `404` | Not Found | Recurso no existe |
-| `409` | Conflict | Email ya registrado o duplicado |
+| `409` | Conflict | Email duplicado |
 | `500` | Server Error | Error interno del servidor |
 
 ---
 
-### 🔒 Sobre la autenticación
+### 🎭 Matriz de permisos por rol
 
-Actualmente el sistema usa una **autenticación simplificada** donde el email del usuario se envía en el header `X-User-Email`. Esto es suficiente para un proyecto académico, pero en producción se recomienda migrar a **JWT (JSON Web Tokens)** con expiración y refresh tokens.
+| Recurso / Operación | 👑 Admin | 💪 Coach | 🏃 Cliente |
+|---------------------|:--------:|:--------:|:----------:|
+| Login / Registro | ✅ | ✅ | ✅ |
+| Ver `/users` | ✅ todos | ✅ clientes | ✅ él mismo |
+| Crear usuario | ✅ | ❌ | ❌ |
+| Editar usuario | ✅ cualquiera | ❌ | ✅ él mismo |
+| Eliminar usuario | ✅ | ❌ | ❌ |
+| Ver `/exercises` | ✅ | ✅ | ✅ |
+| Crear ejercicio | ✅ | ❌ | ❌ |
+| Ver `/routines` | ✅ todas | ✅ las suyas | ✅ la asignada |
+| Crear/editar rutina | ✅ | ✅ las suyas | ❌ |
+| Asignar rutina | ✅ | ✅ las suyas | ❌ |
+| Ver `/sessions` | ✅ todas | ✅ por cliente | ✅ las suyas |
+| Guardar sesión | ❌ | ❌ | ✅ |
+| Chat IA | ❌ | ❌ | ✅ |
+| Ver métricas globales | ✅ | ❌ | ❌ |
 
-### 📈 Estadísticas de uso de la API
+---
 
-El sistema registra **todas las peticiones** en el archivo `activity.log` con este formato:
+### 📈 Auditoría
+
+El sistema registra **todas las peticiones** en el archivo `activity.log`:
 
 ```
 FECHA Y HORA | USUARIO | ACTIVIDAD | DETALLE
@@ -449,8 +516,6 @@ FECHA Y HORA | USUARIO | ACTIVIDAD | DETALLE
 2026-10-04 15:05:30 | coach@gym.com   | REGISTRO | Rutina "Full Body" asignada a "Juan Pérez"
 ```
 
-Las actividades registradas son:
-
 | Actividad | Descripción |
 |-----------|-------------|
 | `LOGIN` | Inicio de sesión (exitoso o fallido) |
@@ -458,3 +523,58 @@ Las actividades registradas son:
 | `CONSULTA` | Cada petición GET exitosa |
 | `REGISTRO` | Cada creación o edición (POST, PUT) |
 | `ELIMINACION` | Cada borrado (DELETE) |
+
+---
+
+## 🔐 Gestión de secretos
+
+### `.env` (NUNCA se sube a Git)
+
+```bash
+# API Key de Google Gemini
+GEMINI_API_KEY=tu_api_key_real
+
+# Modelo de IA
+AI_MODEL=gemini-2.5-flash
+AI_MAX_TOKENS=800
+AI_TEMPERATURE=0.7
+
+# Puerto
+PORT=3000
+
+# Secreto JWT (¡CAMBIAR EN PRODUCCIÓN!)
+JWT_SECRET=secreto_largo_y_aleatorio
+JWT_EXPIRES_IN=8h
+```
+
+### `.env.example` (SÍ se sube a Git)
+
+Plantilla sin secretos reales para que cualquiera pueda replicar la configuración.
+
+### `.gitignore`
+
+```
+.env
+.env.local
+.env.*.local
+node_modules/
+gympro.db
+activity.log
+```
+
+---
+
+## 🚀 Roadmap de seguridad
+
+- [x] Autenticación con **JWT** firmado
+- [x] Middleware de verificación de token (`authMiddleware`)
+- [x] Middleware de autorización por rol (`requireRole`)
+- [x] Registro público restringido a `client`
+- [x] Expiración automática de sesión (cliente + servidor)
+- [x] Contraseñas con bcrypt
+- [x] API key aislada en `.env`
+- [x] `.env` excluido del repositorio
+- [x] Auditoría de actividades en `activity.log`
+- [ ] *(Futuro)* Refresh tokens
+- [ ] *(Futuro)* Rate limiting con `express-rate-limit`
+- [ ] *(Futuro)* Helmet.js para cabeceras HTTP seguras
