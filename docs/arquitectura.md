@@ -58,7 +58,7 @@ El proyecto expone una **API REST** construida sobre Express que sirve al fronte
 
 ## 🔐 Sistema de Autenticación y Autorización
 
-GymPro implementa un sistema de seguridad basado en **JSON Web Tokens (JWT)** y **Control de Acceso Basado en Roles (RBAC)**.
+El proyecto implementa un sistema de seguridad basado en **JSON Web Tokens (JWT)** y **Control de Acceso Basado en Roles (RBAC)**.
 
 ### 🎯 Modelo de seguridad
 
@@ -525,31 +525,6 @@ FECHA Y HORA | USUARIO | ACTIVIDAD | DETALLE
 | `ELIMINACION` | Cada borrado (DELETE) |
 
 ---
-
-## 🔐 Gestión de secretos
-
-### `.env` (NUNCA se sube a Git)
-
-```bash
-# API Key de Google Gemini
-GEMINI_API_KEY=tu_api_key_real
-
-# Modelo de IA
-AI_MODEL=gemini-2.5-flash
-AI_MAX_TOKENS=800
-AI_TEMPERATURE=0.7
-
-# Puerto
-PORT=3000
-
-# Secreto JWT (¡CAMBIAR EN PRODUCCIÓN!)
-JWT_SECRET=secreto_largo_y_aleatorio
-JWT_EXPIRES_IN=8h
-```
-
-### `.env.example` (SÍ se sube a Git)
-
-Plantilla sin secretos reales para que cualquiera pueda replicar la configuración.
 
 ### `.gitignore`
 
