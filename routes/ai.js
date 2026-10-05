@@ -1,44 +1,27 @@
-/**
- * RUTAS DE IA (ai.js)
- * Endpoint: POST /api/ai/chat
- */
-
 const express = require('express');
 const { dbRun, dbGet, dbAll } = require('../db/database');
 const { getAIResponse } = require('../services/aiService');
 const { buildClientContext } = require('../services/contextBuilder');
 const { buildClientSystemPrompt } = require('../services/prompts');
+const authMiddleware = require('../middlewares/authMiddleware');
+const { requireRole } = require('../middlewares/roleMiddleware');
 
 const router = express.Router();
 
-// ============================================
-// POST /api/ai/chat
-// Body: { userId, message }
-// ============================================
-router.post('/chat', async (req, res) => {
-    try {
-        const { userId, message } = req.body;
+router.use(authMiddleware);
 
-        if (!userId || !message || message.trim() === '') {
-            return res.status(400).json({ error: 'userId y message son requeridos.' });
+// POST /api/ai/chat (solo client)
+router.post('/chat', requireRole('client'), async (req, res) => {
+    try {
+        const { message } = req.body;
+        const user = req.user;
+
+        if (!message || message.trim() === '') {
+            return res.status(400).json({ error: 'El mensaje es requerido.' });
         }
 
-        // Limitar longitud del mensaje (evita gastar tokens innecesarios)
         const cleanMessage = message.trim().slice(0, 800);
 
-        // 1. Buscar al usuario
-        const user = await dbGet(
-            'SELECT id, name, email, role FROM users WHERE id = ?',
-            [userId]
-        );
-        if (!user) return res.status(404).json({ error: 'Usuario no encontrado.' });
-
-        // 2. Solo clientes por ahora
-        if (user.role !== 'client') {
-            return res.status(403).json({ error: 'Este chat aún no está disponible para tu rol.' });
-        }
-
-        // 3. Cargar los últimos 10 mensajes (contexto conversacional)
         const history = await dbAll(
             `SELECT role, content FROM chat_messages
              WHERE user_id = ?
@@ -46,26 +29,22 @@ router.post('/chat', async (req, res) => {
              LIMIT 10`,
             [user.id]
         );
-        history.reverse(); // orden cronológico
+        history.reverse();
 
-        // 4. Construir contexto dinámico + prompt del sistema
         const ctx = await buildClientContext(user);
         const systemPrompt = buildClientSystemPrompt(user, ctx);
 
-        // 5. Guardar mensaje del usuario
         await dbRun(
             'INSERT INTO chat_messages (user_id, role, content) VALUES (?, ?, ?)',
             [user.id, 'user', cleanMessage]
         );
 
-        // 6. Llamar a Gemini
         const aiReply = await getAIResponse({
             systemPrompt,
             history,
             userMessage: cleanMessage
         });
 
-        // 7. Guardar respuesta del asistente
         await dbRun(
             'INSERT INTO chat_messages (user_id, role, content) VALUES (?, ?, ?)',
             [user.id, 'assistant', aiReply]
@@ -78,18 +57,22 @@ router.post('/chat', async (req, res) => {
     }
 });
 
-// ============================================
 // GET /api/ai/history/:userId
-// ============================================
 router.get('/history/:userId', async (req, res) => {
     try {
+        const { userId } = req.params;
+
+        if (req.user.id !== userId) {
+            return res.status(403).json({ error: 'No puedes ver el historial de otros usuarios.' });
+        }
+
         const messages = await dbAll(
             `SELECT role, content, created_at
              FROM chat_messages
              WHERE user_id = ?
              ORDER BY created_at ASC
              LIMIT 100`,
-            [req.params.userId]
+            [userId]
         );
         res.json(messages);
     } catch (err) {
@@ -97,12 +80,16 @@ router.get('/history/:userId', async (req, res) => {
     }
 });
 
-// ============================================
 // DELETE /api/ai/history/:userId
-// ============================================
 router.delete('/history/:userId', async (req, res) => {
     try {
-        await dbRun('DELETE FROM chat_messages WHERE user_id = ?', [req.params.userId]);
+        const { userId } = req.params;
+
+        if (req.user.id !== userId) {
+            return res.status(403).json({ error: 'No puedes borrar el historial de otros.' });
+        }
+
+        await dbRun('DELETE FROM chat_messages WHERE user_id = ?', [userId]);
         res.json({ message: 'Historial borrado.' });
     } catch (err) {
         res.status(500).json({ error: err.message });
