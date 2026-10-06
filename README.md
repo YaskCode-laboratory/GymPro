@@ -254,7 +254,7 @@ JWT_SECRET=cambia_esto_por_un_secreto_largo_y_aleatorio_de_32_o_mas_caracteres
 JWT_EXPIRES_IN=15s
 ```
 
-**Nota:** En producción cambiala de `.env.example` a `.env`, mientras tanto sino le haces cambios, trata de usala para solo pruebas.
+**Nota:** En producción cambiala de `.env.example` a `.env`, mientras tanto sino le haces cambios, tratala de usar para solo entornos pruebas (solo referencial y ejemplo).
 
 ### Clonar y ejecutar proyecto
 
