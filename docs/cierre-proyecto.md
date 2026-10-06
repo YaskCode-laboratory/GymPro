@@ -132,6 +132,18 @@ combinado con **cronómetros gigantes**, **chips de días** y **modales
 informativos**, logró una interfaz moderna, intuitiva y adecuada para el
 contexto de uso: **un gimnasio, en movimiento, con iluminación variable**.
 
+### 7. 🔒 Sobre la seguridad implementada
+
+Tras la revisión de transferencia, se implementó un **sistema de seguridad completo** con JWT, middleware de autenticación y autorización por roles. Esto elevó el proyecto de un prototipo académico a una aplicación con estándares de producción:
+
+- **Autenticación real**: token firmado con expiración configurable.
+- **Autorización granular**: cada operación valida el rol del usuario.
+- **Registro público restringido**: los usuarios no pueden auto-asignarse roles elevados.
+- **Expiración automática**: la sesión se cierra de forma transparente y segura.
+- **Gestión de secretos**: `.env` fuera del repositorio, `.env.example` como plantilla.
+
+Este cambio demostró que **la seguridad no es un extra, sino un requisito fundamental** desde las primeras etapas del diseño.
+
 ---
 
 ## 🎓 Aprendizajes Clave
