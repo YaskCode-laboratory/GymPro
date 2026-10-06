@@ -145,6 +145,9 @@ contexto de uso: **un gimnasio, en movimiento, con iluminación variable**.
 | **IA generativa** | Integración de Gemini con contexto dinámico y prompts por rol |
 | **Seguridad** | Hash de contraseñas con bcrypt, gestión de API keys con `.env` |
 | **Frontend** | Fetch API, async/await, manipulación del DOM sin frameworks |
+| **Seguridad** | Implementación de JWT, middleware de autenticación y autorización por roles (RBAC) |
+| **Variables de entorno** | Gestión de secretos con `.env`, `.env.example` y `.gitignore` |
+| **Expiración de sesión** | Decodificación de JWT en cliente + temporizador + recarga automática |
 | **Auditoría** | Implementación de logging con `fs.appendFile` y middleware transversal |
 
 ### 🧠 Metodológicos
