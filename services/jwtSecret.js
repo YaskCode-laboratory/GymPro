@@ -11,7 +11,7 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 
-const ENV_PATH = path.join(__dirname, '..', '.env.example');
+const ENV_PATH = path.join(__dirname, '..', '.env.example');        /* En producción cambiala de .env.example a .env */
 
 /**
  * Genera un secreto aleatorio de 64 caracteres hexadecimales (256 bits).
