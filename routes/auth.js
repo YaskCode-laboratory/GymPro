@@ -8,8 +8,7 @@ const authMiddleware = require('../middlewares/authMiddleware');
 
 const router = express.Router();
 
-const { getOrCreateJwtSecret } = require('../services/jwtSecret');
-const JWT_SECRET = getOrCreateJwtSecret();
+const JWT_SECRET = process.env.JWT_SECRET;
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '8h';
 
 function generateToken(user) {
