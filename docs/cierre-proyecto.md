@@ -56,7 +56,7 @@ desarrollo, pruebas y despliegue, se obtuvo un sistema web completo con:
 | 🤖 **Modelos IA integrados** | 1 (Gemini 2.5 Flash) |
 | 🧪 **Casos de prueba** | 34 (100% aprobados) |
 | 🐛 **Bugs corregidos** | 8 |
-| 📚 **Diagramas UML** | 2 |
+| 📚 **Diagramas UML** | 3 |
 
 ### 🎨 Entregables finales
 
