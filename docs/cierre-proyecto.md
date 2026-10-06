@@ -264,6 +264,7 @@ Este proyecto no habría sido posible sin el apoyo de:
 - [`@google/genai`](https://www.npmjs.com/package/@google/genai) — SDK oficial de Gemini
 - [`dotenv`](https://www.npmjs.com/package/dotenv) — Variables de entorno
 - [`cors`](https://www.npmjs.com/package/cors) — Habilitar CORS
+- [`jsonwebtoken`](https://www.npmjs.com/package/jsonwebtoken) — Generación y verificación de JWT
 
 ---
 
