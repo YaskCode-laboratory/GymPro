@@ -136,6 +136,73 @@ Casos ejecutados manualmente sobre la aplicación en funcionamiento.
 
 ---
 
+---
+
+## 🔐 Pruebas de Seguridad (JWT + Roles)
+
+Casos específicos que validan el sistema de autenticación y autorización implementado.
+
+### 🔑 Autenticación
+
+| ID | Caso | Resultado esperado | Estado |
+|----|------|-------------------|:------:|
+| PS-01 | Petición sin token → `/api/users` | `401 Token de autenticación requerido` | ✅ |
+| PS-02 | Petición con token falso → `/api/users` | `401 Token inválido` | ✅ |
+| PS-03 | Petición con token expirado | `401 Sesión expirada` + recarga del frontend | ✅ |
+| PS-04 | Token válido → `/api/users` (admin) | `200` + lista de usuarios | ✅ |
+| PS-05 | Esperar expiración sin interactuar | Alert + recarga automática | ✅ |
+
+### 🎭 Autorización por roles
+
+| ID | Caso | Resultado esperado | Estado |
+|----|------|-------------------|:------:|
+| PS-06 | Cliente intenta `POST /api/users` | `403 No tienes permisos` | ✅ |
+| PS-07 | Cliente intenta `DELETE /api/users/:id` | `403 No tienes permisos` | ✅ |
+| PS-08 | Coach intenta `DELETE /api/users/:id` | `403 No tienes permisos` | ✅ |
+| PS-09 | Coach intenta `POST /api/exercises` | `403 No tienes permisos` | ✅ |
+| PS-10 | Cliente intenta `POST /api/routines` | `403 No tienes permisos` | ✅ |
+| PS-11 | Admin intenta `POST /api/sessions` | `403 No tienes permisos` (solo client) | ✅ |
+
+### 🚫 Validaciones cruzadas
+
+| ID | Caso | Resultado esperado | Estado |
+|----|------|-------------------|:------:|
+| PS-12 | Cliente A intenta ver historial de Cliente B | `403 No puedes ver el historial de otros` | ✅ |
+| PS-13 | Coach A intenta editar rutina de Coach B | `403 No puedes editar rutinas de otros coaches` | ✅ |
+| PS-14 | Coach A intenta eliminar rutina de Coach B | `403 No puedes eliminar rutinas de otros coaches` | ✅ |
+| PS-15 | Cliente intenta modificar avatar de otro usuario | `403 No puedes cambiar el avatar de otro usuario` | ✅ |
+| PS-16 | Admin intenta eliminar su propia cuenta | `400 No puedes eliminar tu propia cuenta` | ✅ |
+
+### 🔒 Registro público
+
+| ID | Caso | Resultado esperado | Estado |
+|----|------|-------------------|:------:|
+| PS-17 | Registro con `role: "admin"` | Se crea como `client` (ignorado) | ✅ |
+| PS-18 | Registro con `role: "coach"` | Se crea como `client` (ignorado) | ✅ |
+| PS-19 | Registro sin campo `role` | Se crea como `client` | ✅ |
+| PS-20 | Registro con email duplicado | `409 Este correo ya está registrado` | ✅ |
+
+### 🧪 Pruebas de expiración de sesión
+
+| ID | Caso | Resultado esperado | Estado |
+|----|------|-------------------|:------:|
+| PS-21 | `JWT_EXPIRES_IN=15s` → esperar 16s sin hacer nada | Alert + recarga automática | ✅ |
+| PS-22 | `JWT_EXPIRES_IN=1m` → esperar 1m sin hacer nada | Alert + recarga automática | ✅ |
+| PS-23 | `JWT_EXPIRES_IN=8h` → sesión normal | Sesión activa todo el día | ✅ |
+| PS-24 | Logout manual antes de expirar | NO aparece alert "Sesión expirada" | ✅ |
+| PS-25 | Recargar página antes de expirar | Timer se reprograma correctamente | ✅ |
+
+### 📊 Cobertura de seguridad
+
+| Categoría | Casos | Aprobados | Cobertura |
+|-----------|:-----:|:---------:|:---------:|
+| Autenticación | 5 | 5 | 🟢 100% |
+| Autorización por roles | 6 | 6 | 🟢 100% |
+| Validaciones cruzadas | 5 | 5 | 🟢 100% |
+| Registro público | 4 | 4 | 🟢 100% |
+| Expiración de sesión | 5 | 5 | 🟢 100% |
+| **TOTAL** | **25** | **25** | **🟢 100%** |
+
 ## 🔬 Pruebas Unitarias
 
 ### 🧩 Funciones críticas testeadas manualmente
