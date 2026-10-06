@@ -176,6 +176,7 @@ gympro/
 | **cors** | 2.8 | Habilitar peticiones cross-origin |
 | **dotenv** | 16.x | Gestión de variables de entorno |
 | **@google/genai** | 2.5 | SDK oficial del cliente Gemini |
+| **jsonwebtoken** | 9.0.3 | Crear, firmar y verificar tokens de tipo JWT (JSON Web Token) |
 
 
 
