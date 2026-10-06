@@ -45,7 +45,6 @@ async function refreshAllData() {
         return true;
     } catch (err) {
         console.error('❌ Error cargando datos del servidor:', err);
-        alert('No se pudo conectar con el servidor. Verifica que el backend esté corriendo.');
         return false;
     }
 }
