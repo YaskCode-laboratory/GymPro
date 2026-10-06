@@ -186,3 +186,68 @@ classDiagram
 
 ## Diagrama de Casos de Uso
 [![Diagrama de casos de uso](diagramas/umlCasoUso.png)](diagramas/umlCasoUso.png)
+
+## Diagrama de Secuencia
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor U as Usuario
+    participant FE as Frontend
+    participant API as api.js + JWT
+    participant AUTH as authMiddleware
+    participant ROLE as requireRole
+    participant RT as Express Routes
+    participant DB as SQLite
+    participant LOG as logger.js
+
+    Note over U,LOG: 1. Login
+    U->>FE: Ingresa email + contraseña
+    FE->>RT: POST /api/auth/login
+    RT->>DB: SELECT user WHERE email = ?
+    DB-->>RT: user + password_hash
+    RT->>RT: bcrypt.compareSync()
+    RT->>RT: jwt.sign({id, role}, JWT_SECRET)
+    RT->>LOG: logActivity("LOGIN")
+    RT-->>FE: { token, user }
+    FE->>FE: setToken(token)
+    FE->>FE: scheduleSessionExpiration()
+    FE-->>U: Dashboard según rol
+
+    Note over U,LOG: 2. Petición protegida
+    U->>FE: Clic "Ver progreso"
+    FE->>API: fetch con Authorization: Bearer
+    API->>AUTH: Verificar token
+    AUTH->>AUTH: jwt.verify()
+    AUTH->>DB: SELECT user WHERE id = ?
+    DB-->>AUTH: user
+    AUTH->>ROLE: requireRole('admin', 'coach')
+    ROLE->>RT: next()
+    RT->>DB: SELECT sessions
+    DB-->>RT: []
+    RT-->>FE: 200 JSON
+    FE-->>U: Progreso renderizado
+
+    Note over U,LOG: 3. Ejecución de entrenamiento
+    U->>FE: Clic "Iniciar Entrenamiento"
+    FE->>FE: startWorkoutExecution()
+    loop Cada serie
+        U->>FE: Completar serie
+        FE->>FE: Guardar peso real
+        FE->>FE: Iniciar descanso
+    end
+    FE->>API: POST /api/sessions
+    API->>AUTH: Verificar token
+    AUTH->>ROLE: requireRole('client')
+    ROLE->>RT: next()
+    RT->>DB: INSERT INTO sessions
+    RT->>DB: INSERT INTO session_details
+    RT->>LOG: logActivity("REGISTRO")
+    RT-->>FE: 201 Created
+    FE-->>U: Historial actualizado
+
+    Note over U,LOG: 4. Expiración
+    FE->>FE: setTimeout(expiración)
+    FE->>FE: handleSessionExpired()
+    FE-->>U: alert + location.reload()
+```
