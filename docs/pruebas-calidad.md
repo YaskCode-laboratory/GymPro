@@ -116,16 +116,23 @@ Casos ejecutados manualmente sobre la aplicación en funcionamiento.
 | PNF-13 | Inyección SQL | Uso de sentencias preparadas | ✅ |
 | PNF-14 | XSS en contenido de usuario | Renderizado con `textContent` | ✅ |
 | PNF-15 | CORS | Configurado con `cors()` | ✅ |
+| PNF-16 | JWT firmado con HS256 | Tokens inválidos rechazados con 401 | ✅ |
+| PNF-17 | Autorización por rol | Operaciones restringidas devuelven 403 | ✅ |
+| PNF-18 | Registro público restringido | POST /auth/register solo crea `client` | ✅ |
+| PNF-19 | Expiración de sesión | Al expirar, alert + recarga automática | ✅ |
+| PNF-20 | .env fuera del repo | `git ls-files | grep .env` no lo lista | ✅ |
+| PNF-21 | Rutas protegidas sin token | 401 Unauthorized | ✅ |
+| PNF-22 | Rutas protegidas con token inválido | 401 Token inválido | ✅ |
 
 ### 📝 Auditoría
 
 | ID | Aspecto | Criterio | Estado |
 |----|---------|----------|:------:|
-| PNF-16 | Registro de LOGIN | Cada login escribe línea en `activity.log` | ✅ |
-| PNF-17 | Registro de LOGOUT | Cada logout escribe línea en `activity.log` | ✅ |
-| PNF-18 | Registro de REGISTRO | Cada POST/PUT escribe línea | ✅ |
-| PNF-19 | Registro de ELIMINACION | Cada DELETE escribe línea | ✅ |
-| PNF-20 | Sin ruido de sincronización | Los GET automáticos NO se loguean | ✅ |
+| PNF-23 | Registro de LOGIN | Cada login escribe línea en `activity.log` | ✅ |
+| PNF-24 | Registro de LOGOUT | Cada logout escribe línea en `activity.log` | ✅ |
+| PNF-25 | Registro de REGISTRO | Cada POST/PUT escribe línea | ✅ |
+| PNF-26 | Registro de ELIMINACION | Cada DELETE escribe línea | ✅ |
+| PNF-27 | Sin ruido de sincronización | Los GET automáticos NO se loguean | ✅ |
 
 ---
 
