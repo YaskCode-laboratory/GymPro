@@ -531,8 +531,6 @@ FECHA Y HORA | USUARIO | ACTIVIDAD | DETALLE
 
 ```
 .env
-.env.local
-.env.*.local
 node_modules/
 gympro.db
 activity.log
