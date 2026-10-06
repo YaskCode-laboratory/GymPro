@@ -77,6 +77,36 @@ A partir del análisis de algunas aplicaciones, se identificaron las siguientes 
 - Redimensionado automático.
 - Almacenado como Base64.
 
+### RF-11: Autenticación con JWT
+- Generación de token firmado en el login.
+- Token con expiración configurable (`JWT_EXPIRES_IN`).
+- Header `Authorization: Bearer <token>` en cada petición protegida.
+- Endpoint `/api/auth/me` para validar el token actual.
+
+### RF-12: Autorización por roles
+- Middleware `authMiddleware` que valida el JWT.
+- Middleware `roleMiddleware` con `requireRole(...roles)`.
+- Validación por operación sensible:
+  - Admin: gestión global de usuarios, ejercicios y rutinas.
+  - Coach: gestión de sus propias rutinas.
+  - Cliente: ejecución de sus rutinas y consulta de su historial.
+
+### RF-13: Registro público restringido
+- Endpoint público `/api/auth/register` **solo crea usuarios con rol `client`**.
+- El campo `role` enviado por el cliente es ignorado.
+- Los roles elevados (`admin`, `coach`) solo pueden asignarse desde el panel del administrador.
+
+### RF-14: Expiración automática de sesión
+- El frontend decodifica el `exp` del JWT.
+- Programa un temporizador para detectar la expiración.
+- Al expirar: alert + limpieza de sesión + recarga automática.
+- Logout manual cancela el temporizador.
+
+### RF-15: Auditoría ampliada
+- Registro de intentos fallidos de login (correo no registrado, contraseña incorrecta).
+- Registro de accesos denegados por rol (`403`).
+- Registro de expiraciones de sesión.
+
 ---
 
 ## 3. Requisitos no funcionales
@@ -93,6 +123,14 @@ A partir del análisis de algunas aplicaciones, se identificaron las siguientes 
 | RNF-08 | Disponibilidad | Funciona sin conexión a IA (fallback) |
 | RNF-09 | Compatibilidad | Navegadores modernos (Chrome, Firefox, Safari) |
 | RNF-10 | Documentación | README + docs/ con toda la información |
+| RNF-11 | Seguridad | Autenticación con JWT firmado (HS256) |
+| RNF-12 | Seguridad | Expiración configurable del token |
+| RNF-13 | Seguridad | Middleware de validación de token en rutas protegidas |
+| RNF-14 | Seguridad | Middleware de autorización por rol |
+| RNF-15 | Seguridad | Registro público restringido a `client` |
+| RNF-16 | Seguridad | `.env` fuera del repositorio |
+| RNF-17 | Seguridad | `.env.example` como plantilla pública |
+| RNF-18 | Seguridad | Un usuario solo accede a sus propios recursos |
 
 ---
 
