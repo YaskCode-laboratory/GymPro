@@ -214,7 +214,8 @@ Esto se complementa con la validación del backend en cada petición, creando un
 ```bash
 # Secreto para firmar los JWT (obligatorio)
 # Genera uno con: node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
-JWT_SECRET=secreto_largo_y_aleatorio_de_32_o_mas_caracteres
+# El servidor NO arrancará mientras este vacío.
+JWT_SECRET=
 
 # Tiempo de expiración (acepta s, m, h, d)
 JWT_EXPIRES_IN=8h
