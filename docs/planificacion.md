@@ -52,6 +52,17 @@ El proyecto se desarrolló bajo **5 sprints**, que posteriormente dieron continu
 - ✅ Documentación completa.
 - ✅ Pruebas.
 
+### Hito 7: Correcciones de seguridad antes de Aprobación del proyecto
+- ✅ Implementación de **JWT** con firma y expiración configurable.
+- ✅ Middleware `authMiddleware` (verificación de token).
+- ✅ Middleware `roleMiddleware` (autorización por rol).
+- ✅ Protección de todas las rutas sensibles.
+- ✅ Restricción del registro público a rol `client`.
+- ✅ Expiración automática de sesión en el cliente.
+- ✅ Gestión de variables de entorno (`.env.example` + `.gitignore`).
+- ✅ Rotación de la API key de Gemini.
+- ✅ Documentación actualizada en el README y `docs/`.
+
 ---
 
 ## 4. Diagrama de Gantt
