@@ -254,7 +254,29 @@ JWT_SECRET=cambia_esto_por_un_secreto_largo_y_aleatorio_de_32_o_mas_caracteres
 JWT_EXPIRES_IN=15s
 ```
 
-**Nota:** En producción cambiala de `.env.example` a `.env`, mientras tanto sino le haces cambios, tratala de usar para solo entornos pruebas (solo referencial y ejemplo).
+**Nota:** En producción cambiala de `.env.example` a `.env`; realiza los siquientes cambios en los archivos `server.js` y `services/jwtSecret.js`:
+
+En `server.js`:
+
+```javascript
+// De esto
+require('dotenv').config({ path: '.env.example' });
+
+// A esto (automáticamente lo busca por .env)
+require('dotenv').config();
+```
+
+Y en `services/jwtSecret.js`:
+
+```javascript
+// De esto
+const ENV_PATH = path.join(__dirname, '..', '.env.example');
+
+// A esto (colocarle por nombre .env)
+const ENV_PATH = path.join(__dirname, '..', '.env');
+```
+
+**Mientras tanto sino le haces cambios**, tratala de usar para solo hacer pruebas en el código (solo referencial, funcional y para solo ejemplo).
 
 ### Clonar y ejecutar proyecto
 
